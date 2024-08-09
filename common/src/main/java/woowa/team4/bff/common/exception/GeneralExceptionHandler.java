@@ -2,6 +2,7 @@ package woowa.team4.bff.common.exception;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpMediaTypeException;
@@ -40,7 +41,7 @@ public class GeneralExceptionHandler {
      */
     private ResponseEntity<ApiResult<?>> newResponse(String message, HttpStatus status) {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         return new ResponseEntity<>(ApiUtils.error(message, status), headers, status);
     }
 
