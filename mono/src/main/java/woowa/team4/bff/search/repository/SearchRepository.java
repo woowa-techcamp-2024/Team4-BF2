@@ -22,7 +22,7 @@ public class SearchRepository {
     }
 
     public List<Restaurant> findAllByRestaurantName(String restaurantName) {
-        return restaurantEsRepository.findAllByRestaurantNameContaining(restaurantName).stream()
+        return restaurantEsRepository.findByRestaurantNameContaining(restaurantName).stream()
                 .map(restaurantMapper::toDomain)
                 .collect(Collectors.toList());
     }

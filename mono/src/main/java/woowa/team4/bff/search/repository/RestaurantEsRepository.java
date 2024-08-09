@@ -6,8 +6,7 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 import woowa.team4.bff.search.document.RestaurantDocument;
 
 public interface RestaurantEsRepository extends ElasticsearchRepository<RestaurantDocument, String> {
-    @Query("{\"match\": {\"restaurant_name\": {\"query\": \"?0\"}}}")
-    List<RestaurantDocument> findAllByRestaurantNameContaining(String restaurantName);
+    List<RestaurantDocument> findByRestaurantNameContaining(String restaurantName);
 
     RestaurantDocument findByRestaurantId(String restaurantId);
 }
