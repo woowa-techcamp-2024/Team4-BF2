@@ -34,6 +34,8 @@ dependencies {
     // util
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    // module
+    implementation project(":common")
 }
 
 tasks.named('test') {
