@@ -3,6 +3,7 @@ package woowa.team4.bff.search.service;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import woowa.team4.bff.common.aop.MethodLogging;
 import woowa.team4.bff.search.domain.Restaurant;
 import woowa.team4.bff.search.repository.SearchRepository;
 import woowa.team4.bff.search.service.command.CreateRestaurantCommand;
@@ -14,6 +15,7 @@ import woowa.team4.bff.search.service.command.UpdateRestaurantCommand;
 public class SearchService {
     private final SearchRepository searchRepository;
 
+    @MethodLogging
     public String addRestaurant(CreateRestaurantCommand command) {
         Restaurant restaurant = Restaurant.builder()
                 .restaurantId(command.restaurantId())
@@ -27,6 +29,7 @@ public class SearchService {
         return searchRepository.save(restaurant);
     }
 
+    @MethodLogging
     public List<Restaurant> search(SearchRestaurantCommand command){
         return searchRepository.findAllByRestaurantName(command.restaurantName());
     }
