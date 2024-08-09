@@ -9,7 +9,9 @@ repositories {
 }
 
 dependencies {
+    // web
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    // util
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 }
 
