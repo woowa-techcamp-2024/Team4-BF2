@@ -34,18 +34,10 @@ dependencies {
     // util
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    // module
+    implementation project(":common")
 }
 
 tasks.named('test') {
     useJUnitPlatform()
-}
-
-project(':common') {
-    bootJar {
-        enabled = false
-    }
-
-    jar {
-        enabled = true
-    }
 }
