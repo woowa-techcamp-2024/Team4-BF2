@@ -5,8 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import woowa.team4.bff.menu.category.dto.create.MenuCategoryCreateDto;
+import woowa.team4.bff.menu.category.dto.update.MenuCategoryUpdateDto;
 import woowa.team4.bff.menu.category.entity.MenuCategory;
 import woowa.team4.bff.menu.category.event.MenuCategoryCreateEvent;
+import woowa.team4.bff.menu.category.event.MenuCategoryUpdateEvent;
+import woowa.team4.bff.menu.category.exception.MenuCategoryNotFoundException;
 import woowa.team4.bff.menu.category.repository.MenuCategoryRepository;
 
 @Service
@@ -25,5 +28,15 @@ public class MenuCategoryService {
         menuCategoryRepository.save(menuCategory);
         eventPublisher.publishEvent(MenuCategoryCreateEvent.from(menuCategory));
         return menuCategory.getUuid();
+    }
+
+    @Transactional
+    public MenuCategoryUpdateDto updateMenuCategory(MenuCategoryUpdateDto dto) {
+        MenuCategory menuCategory = menuCategoryRepository.findByUuid(dto.getUuid())
+                .orElseThrow(() -> new MenuCategoryNotFoundException(dto.getUuid()));
+        menuCategory.setName(dto.getName());
+        menuCategory.setDescription(dto.getDescription());
+        eventPublisher.publishEvent(MenuCategoryUpdateEvent.from(menuCategory));
+        return MenuCategoryUpdateDto.from(menuCategory);
     }
 }
