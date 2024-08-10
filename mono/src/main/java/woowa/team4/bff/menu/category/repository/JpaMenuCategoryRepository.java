@@ -7,5 +7,4 @@ import woowa.team4.bff.menu.category.entity.MenuCategory;
 @Component
 public interface JpaMenuCategoryRepository extends JpaRepository<MenuCategory, Long> {
 
-    MenuCategory save(MenuCategory menuCategory);
 }
