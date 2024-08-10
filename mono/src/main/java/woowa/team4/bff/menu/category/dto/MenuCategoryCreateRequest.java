@@ -1,6 +1,6 @@
 package woowa.team4.bff.menu.category.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,9 +10,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class MenuCategoryCreateRequest {
 
-    @NotNull
+    @NotBlank
     private String name;
-    @NotNull
+    @NotBlank
     private String description;
 
     public MenuCategoryDto toMenuCategoryDto(final String restaurantUuid) {
