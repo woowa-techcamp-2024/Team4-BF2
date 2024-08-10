@@ -1,14 +1,12 @@
 package woowa.team4.bff.menu.category.event;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 import woowa.team4.bff.menu.category.entity.MenuCategory;
 
 @Getter
-@Setter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MenuCategoryCreatedEvent {
 
-    private MenuCategory menuCategory;
+    private final MenuCategory menuCategory;
 }

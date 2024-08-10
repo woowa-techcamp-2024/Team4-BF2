@@ -18,6 +18,6 @@ public class MenuCategoryRepositoryImpl implements MenuCategoryRepository {
     public MenuCategory save(MenuCategory menuCategory) {
         MenuCategoryCreatedEvent event = new MenuCategoryCreatedEvent(menuCategory);
         eventPublisher.publishEvent(event);
-        return event.getMenuCategory();
+        return menuCategory;
     }
 }

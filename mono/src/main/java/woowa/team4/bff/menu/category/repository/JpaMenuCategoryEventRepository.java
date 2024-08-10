@@ -18,7 +18,6 @@ public class JpaMenuCategoryEventRepository implements MenuCategoryEventReposito
     @Transactional
     public void handleMenuCategoryCreatedEvent(MenuCategoryCreatedEvent event) {
         MenuCategory menuCategory = event.getMenuCategory();
-        MenuCategory saveMenuCategory = jpaMenuCategoryRepository.save(menuCategory);
-        event.setMenuCategory(saveMenuCategory);
+        jpaMenuCategoryRepository.save(menuCategory);
     }
 }
