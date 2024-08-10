@@ -2,6 +2,7 @@ package woowa.team4.bff.menu.category.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,22 +14,24 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "menu_categories")
 @Getter
 @Setter
+@EntityListeners(AuditingEntityListener.class)
 public class MenuCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "menuCategory_id")
-    private String menuCategoryId;
+    @Column(name = "uuid")
+    private String uuid;
 
-    @Column(name = "restaurant_id")
-    private Long restaurantId;
+    @Column(name = "restaurant_uuid")
+    private String restaurantUuid;
 
     private String name;
 
@@ -44,6 +47,6 @@ public class MenuCategory {
 
     @PrePersist
     public void prePersist() {
-        this.menuCategoryId = "menu_category_" + UUID.randomUUID();
+        this.uuid = "menu_category_" + UUID.randomUUID();
     }
 }
