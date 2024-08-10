@@ -3,7 +3,6 @@ package woowa.team4.bff.menu.category.controller;
 import static woowa.team4.bff.common.utils.ApiUtils.*;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +26,7 @@ public class MenuCategoryController {
     @PostMapping("/{restaurantUuid}")
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResult<MenuCategoryCreateResponse> createCategory(
-            @PathVariable @NotNull String restaurantUuid,
+            @PathVariable String restaurantUuid,
             @Valid @RequestBody MenuCategoryCreateRequest menuCategoryCreateRequest) {
         MenuCategoryDto menuCategoryDto = menuCategoryCreateRequest.toMenuCategoryDto(
                 restaurantUuid);
