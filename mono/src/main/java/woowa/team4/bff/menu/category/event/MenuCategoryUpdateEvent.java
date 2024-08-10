@@ -7,24 +7,18 @@ import woowa.team4.bff.menu.category.entity.MenuCategory;
 
 @Getter
 @Builder
-public class MenuCategoryCreateEvent {
+public class MenuCategoryUpdateEvent {
 
     private final Long id;
-    private final String uuid;
-    private final String restaurantUuid;
     private final String name;
     private final String description;
-    private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public static MenuCategoryCreateEvent from(final MenuCategory menuCategory) {
-        return MenuCategoryCreateEvent.builder()
+    public static MenuCategoryUpdateEvent from(final MenuCategory menuCategory) {
+        return MenuCategoryUpdateEvent.builder()
                 .id(menuCategory.getId())
-                .uuid(menuCategory.getUuid())
-                .restaurantUuid(menuCategory.getRestaurantUuid())
                 .name(menuCategory.getName())
                 .description(menuCategory.getDescription())
-                .createdAt(menuCategory.getCreatedAt())
                 .updatedAt(menuCategory.getUpdatedAt())
                 .build();
     }
