@@ -7,5 +7,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class MenuCategoryCreateResponse {
 
-    private final String MenuCategoryUuid;
+    private final String menuCategoryUuid;
 }
