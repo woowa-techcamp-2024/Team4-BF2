@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import woowa.team4.bff.menu.category.dto.MenuCategoryCreateRequest;
 import woowa.team4.bff.menu.category.dto.MenuCategoryCreateResponse;
 import woowa.team4.bff.menu.category.dto.MenuCategoryDto;
+import woowa.team4.bff.menu.category.dto.create.MenuCategoryCreateDto;
+import woowa.team4.bff.menu.category.dto.create.MenuCategoryCreateRequest;
+import woowa.team4.bff.menu.category.dto.create.MenuCategoryCreateResponse;
 import woowa.team4.bff.menu.category.service.MenuCategoryService;
 
 @RestController
@@ -28,9 +31,9 @@ public class MenuCategoryController {
     public ApiResult<MenuCategoryCreateResponse> createCategory(
             @PathVariable String restaurantUuid,
             @Valid @RequestBody MenuCategoryCreateRequest menuCategoryCreateRequest) {
-        MenuCategoryDto menuCategoryDto = menuCategoryCreateRequest.toMenuCategoryDto(
-                restaurantUuid);
-        String menuCategoryUuid = menuCategoryService.createMenuCategory(menuCategoryDto);
+        MenuCategoryCreateDto menuCategoryCreateDto = menuCategoryCreateRequest
+                .toDto(restaurantUuid);
+        String menuCategoryUuid = menuCategoryService.createMenuCategory(menuCategoryCreateDto);
         return success(new MenuCategoryCreateResponse(menuCategoryUuid));
     }
 }

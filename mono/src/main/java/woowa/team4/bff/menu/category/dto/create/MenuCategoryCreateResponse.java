@@ -1,10 +1,10 @@
-package woowa.team4.bff.menu.category.dto;
+package woowa.team4.bff.menu.category.dto.create;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MenuCategoryCreateResponse {
 
     private final String menuCategoryUuid;

@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import woowa.team4.bff.menu.category.dto.MenuCategoryCreateDto;
+import woowa.team4.bff.menu.category.dto.create.MenuCategoryCreateDto;
 import woowa.team4.bff.menu.category.entity.MenuCategory;
 import woowa.team4.bff.menu.category.event.MenuCategoryCreateEvent;
 import woowa.team4.bff.menu.category.repository.MenuCategoryRepository;
