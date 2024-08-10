@@ -5,6 +5,7 @@ import static woowa.team4.bff.common.utils.ApiUtils.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -47,5 +48,11 @@ public class MenuCategoryController {
         MenuCategoryUpdateDto updatedMenuCategoryDto = menuCategoryService
                 .updateMenuCategory(menuCategoryUpdateDto);
         return success(MenuCategoryUpdateResponse.from(updatedMenuCategoryDto));
+    }
+
+    @DeleteMapping("/{menuCategoryUuid}")
+    public ApiResult<Boolean> deleteCategory(
+            @PathVariable final String menuCategoryUuid) {
+        return success(menuCategoryService.deleteMenuCategory(menuCategoryUuid));
     }
 }

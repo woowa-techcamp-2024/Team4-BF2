@@ -8,6 +8,7 @@ import woowa.team4.bff.menu.category.dto.create.MenuCategoryCreateDto;
 import woowa.team4.bff.menu.category.dto.update.MenuCategoryUpdateDto;
 import woowa.team4.bff.menu.category.entity.MenuCategory;
 import woowa.team4.bff.menu.category.event.MenuCategoryCreateEvent;
+import woowa.team4.bff.menu.category.event.MenuCategoryDeleteEvent;
 import woowa.team4.bff.menu.category.event.MenuCategoryUpdateEvent;
 import woowa.team4.bff.menu.category.exception.MenuCategoryNotFoundException;
 import woowa.team4.bff.menu.category.repository.MenuCategoryRepository;
@@ -20,7 +21,7 @@ public class MenuCategoryService {
     private final MenuCategoryRepository menuCategoryRepository;
 
     @Transactional
-    public String createMenuCategory(MenuCategoryCreateDto dto) {
+    public String createMenuCategory(final MenuCategoryCreateDto dto) {
         MenuCategory menuCategory = new MenuCategory();
         menuCategory.setRestaurantUuid(dto.getRestaurantUuid());
         menuCategory.setName(dto.getName());
@@ -31,12 +32,21 @@ public class MenuCategoryService {
     }
 
     @Transactional
-    public MenuCategoryUpdateDto updateMenuCategory(MenuCategoryUpdateDto dto) {
+    public MenuCategoryUpdateDto updateMenuCategory(final MenuCategoryUpdateDto dto) {
         MenuCategory menuCategory = menuCategoryRepository.findByUuid(dto.getUuid())
                 .orElseThrow(() -> new MenuCategoryNotFoundException(dto.getUuid()));
         menuCategory.setName(dto.getName());
         menuCategory.setDescription(dto.getDescription());
         eventPublisher.publishEvent(MenuCategoryUpdateEvent.from(menuCategory));
         return MenuCategoryUpdateDto.from(menuCategory);
+    }
+
+    @Transactional
+    public Boolean deleteMenuCategory(final String uuid) {
+        MenuCategory menuCategory = menuCategoryRepository.findByUuid(uuid)
+                .orElseThrow(() -> new MenuCategoryNotFoundException(uuid));
+        menuCategoryRepository.delete(menuCategory);
+        eventPublisher.publishEvent(MenuCategoryDeleteEvent.from(menuCategory.getId()));
+        return Boolean.TRUE;
     }
 }
