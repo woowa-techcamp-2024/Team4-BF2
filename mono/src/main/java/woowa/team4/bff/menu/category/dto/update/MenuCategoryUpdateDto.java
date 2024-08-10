@@ -12,9 +12,9 @@ public class MenuCategoryUpdateDto {
     private final String name;
     private final String description;
 
-    public static MenuCategoryUpdateDto from(final MenuCategory MenuCategory) {
-        return new MenuCategoryUpdateDto(MenuCategory.getUuid(),
-                MenuCategory.getName(),
-                MenuCategory.getDescription());
+    public static MenuCategoryUpdateDto from(final MenuCategory menuCategory) {
+        return new MenuCategoryUpdateDto(menuCategory.getUuid(),
+                menuCategory.getName(),
+                menuCategory.getDescription());
     }
 }
