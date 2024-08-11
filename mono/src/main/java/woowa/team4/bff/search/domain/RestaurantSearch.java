@@ -10,18 +10,9 @@ import lombok.Getter;
 public class RestaurantSearch {
     private String id;
     private String restaurantName;
-    private String restaurantId;
+    private Long restaurantId;
 
     public void update(String restaurantName){
         this.restaurantName = restaurantName;
-    }
-
-    @Override
-    public String toString() {
-        return "Restaurant{" +
-                "id='" + id + '\'' +
-                ", restaurantName='" + restaurantName + '\'' +
-                ", restaurantId='" + restaurantId + '\'' +
-                '}';
     }
 }

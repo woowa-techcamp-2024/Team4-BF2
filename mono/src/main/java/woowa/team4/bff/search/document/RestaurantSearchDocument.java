@@ -17,15 +17,5 @@ public class RestaurantSearchDocument {
     @Field(type = FieldType.Text, name = "restaurantName")
     private String restaurantName;
 
-    @Field(type = FieldType.Keyword, name = "restaurantId")
-    private String restaurantId;
-
-    @Override
-    public String toString() {
-        return "RestaurantDocument{" +
-                "id='" + id + '\'' +
-                ", restaurantName='" + restaurantName + '\'' +
-                ", restaurantId='" + restaurantId + '\'' +
-                '}';
-    }
+    private Long restaurantId;
 }

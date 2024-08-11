@@ -13,19 +13,10 @@ public class MenuSearch {
 
     private String menuName;
 
-    private String menuId;
+    private Long menuId;
+    private Long restaurantId;
 
     public void update(String menuName){
         this.menuName = menuName;
-    }
-
-
-    @Override
-    public String toString() {
-        return "MenuSearch{" +
-                "id='" + id + '\'' +
-                ", menuName='" + menuName + '\'' +
-                ", menuId='" + menuId + '\'' +
-                '}';
     }
 }

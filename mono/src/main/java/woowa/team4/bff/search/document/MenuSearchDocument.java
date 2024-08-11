@@ -17,6 +17,6 @@ public class MenuSearchDocument {
     @Field(type = FieldType.Text, name = "menuName")
     private String menuName;
 
-    @Field(type = FieldType.Keyword, name = "menuId")
-    private String menuId;
+    private Long menuId;
+    private Long restaurantId;
 }
