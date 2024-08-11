@@ -9,18 +9,20 @@ import java.util.UUID;
 @Service
 public class RestaurantService {
 
+    private final RestaurantValidator restaurantValidator;
     private final RestaurantRegistrant restaurantRegistrant;
     private final RestaurantEventProvider restaurantEventProvider;
 
-    public RestaurantService(RestaurantRegistrant restaurantRegistrant, RestaurantEventProvider restaurantEventProvider) {
+    public RestaurantService(RestaurantValidator restaurantValidator, RestaurantRegistrant restaurantRegistrant, RestaurantEventProvider restaurantEventProvider) {
+        this.restaurantValidator = restaurantValidator;
         this.restaurantRegistrant = restaurantRegistrant;
         this.restaurantEventProvider = restaurantEventProvider;
     }
 
     public UUID registerRestaurant(Restaurant newRestaurant) {
-        // TODO 가게에 대한 유효성 검사
-        // TODO RDB에 가게 정보 저장
-        // TODO 가게 등록 이벤트 발행(Elasticsearch에 변경 사항 반영)
-        return null;
+        restaurantValidator.validateRestaurant(newRestaurant);
+        Restaurant registered = restaurantRegistrant.register(newRestaurant);
+        restaurantEventProvider.publishRegistrationEvent(registered);
+        return registered.uuid();
     }
 }
