@@ -14,8 +14,6 @@ import woowa.team4.bff.restaurant.controller.dto.response.RegisterRestaurantResp
 import woowa.team4.bff.restaurant.domain.Restaurant;
 import woowa.team4.bff.restaurant.service.RestaurantService;
 
-import java.util.UUID;
-
 @RequestMapping("/restaurants")
 @RestController
 public class RestaurantController {
@@ -30,7 +28,7 @@ public class RestaurantController {
     @PostMapping
     public ApiResult<RegisterRestaurantResponse> registerRestaurant(@Validated @RequestBody CreateRestaurantRequest request) {
         Restaurant newRestaurant = Restaurant.newRestaurant(request);
-        UUID restaurantId = restaurantService.registerRestaurant(newRestaurant);
+        String restaurantId = restaurantService.registerRestaurant(newRestaurant);
         return ApiUtils.success(new RegisterRestaurantResponse(restaurantId));
     }
 }

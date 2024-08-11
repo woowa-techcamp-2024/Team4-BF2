@@ -4,8 +4,6 @@ import org.springframework.stereotype.Service;
 import woowa.team4.bff.restaurant.domain.Restaurant;
 import woowa.team4.bff.restaurant.domain.RestaurantRegistrant;
 
-import java.util.UUID;
-
 @Service
 public class RestaurantService {
 
@@ -19,7 +17,7 @@ public class RestaurantService {
         this.restaurantEventProvider = restaurantEventProvider;
     }
 
-    public UUID registerRestaurant(Restaurant newRestaurant) {
+    public String registerRestaurant(Restaurant newRestaurant) {
         restaurantValidator.validateRestaurant(newRestaurant);
         Restaurant registered = restaurantRegistrant.register(newRestaurant);
         restaurantEventProvider.publishRegistrationEvent(registered);
