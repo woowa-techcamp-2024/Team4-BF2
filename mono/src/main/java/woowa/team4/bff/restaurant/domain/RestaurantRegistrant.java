@@ -1,6 +1,7 @@
 package woowa.team4.bff.restaurant.domain;
 
 import org.springframework.stereotype.Component;
+import woowa.team4.bff.restaurant.entity.RestaurantEntity;
 import woowa.team4.bff.restaurant.repository.RestaurantRepository;
 
 @Component
@@ -13,7 +14,19 @@ public class RestaurantRegistrant {
     }
 
     public Restaurant register(Restaurant restaurant) {
-        // TODO entity로 변환 후 RDB에 저장
-        return null;
+        RestaurantEntity entity = RestaurantEntity.builder()
+                .name(restaurant.name())
+                .address(restaurant.address())
+                .phone(restaurant.phone())
+                .introduction(restaurant.introduction())
+                .image(restaurant.image())
+                .location(restaurant.location())
+                .operatingTime(restaurant.operatingTime())
+                .closedDays(restaurant.closedDays())
+                .minimumOrderAmount(restaurant.minimumOrderAmount())
+                .businessId(restaurant.businessId())
+                .build();
+        RestaurantEntity savedEntity = restaurantRepository.save(entity);
+        return Restaurant.fromEntity(savedEntity);
     }
 }
