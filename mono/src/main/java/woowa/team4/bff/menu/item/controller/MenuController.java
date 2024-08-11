@@ -39,8 +39,8 @@ public class MenuController {
 
     @PutMapping("/{menuUuid}")
     public ApiResult<MenuUpdateResponse> updateMenu(@PathVariable final String menuUuid,
-            @Valid @RequestBody final MenuUpdateRequest MenuUpdateRequest) {
-        MenuUpdateDto menuUpdateDto = MenuUpdateRequest.toDto(menuUuid);
+            @Valid @RequestBody final MenuUpdateRequest menuUpdateRequest) {
+        MenuUpdateDto menuUpdateDto = menuUpdateRequest.toDto(menuUuid);
         MenuUpdateDto updatedMenu = menuService.updateMenu(menuUpdateDto);
         return success(MenuUpdateResponse.from(updatedMenu));
     }
