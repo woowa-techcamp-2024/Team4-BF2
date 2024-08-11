@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import woowa.team4.bff.search.domain.Restaurant;
+import woowa.team4.bff.restauarnt.domain.Restaurant;
 import woowa.team4.bff.search.service.SearchService;
-import woowa.team4.bff.search.service.command.CreateRestaurantCommand;
+import woowa.team4.bff.search.service.command.CreateRestaurantSearchCommand;
 import woowa.team4.bff.search.service.command.SearchRestaurantCommand;
 
 @RequestMapping("/api/v1/search")
@@ -20,14 +20,16 @@ public class SearchApiController {
     private final SearchService searchService;
 
     @GetMapping("")
-    public ResponseEntity<List<Restaurant>> searchRestaurants(@RequestParam("restaurantName") String restaurantName) {
-        List<Restaurant> response = searchService.search(SearchRestaurantCommand.of(restaurantName));
+    public ResponseEntity<List<Restaurant>> searchRestaurants(
+            @RequestParam("keyword") String keyword,
+            @RequestParam("deliveryLocation") String deliveryLocation) {
+        List<Restaurant> response = searchService.search(SearchRestaurantCommand.of(keyword, deliveryLocation));
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("")
     public String addRestaurant(@RequestParam("restaurantName") String restaurantName, @RequestParam("restaurantId") String restaurantId){
-        String response = searchService.addRestaurant(CreateRestaurantCommand.of(restaurantId, restaurantName));
+        String response = searchService.addRestaurant(CreateRestaurantSearchCommand.of(restaurantId, restaurantName));
         return response;
     }
 }
