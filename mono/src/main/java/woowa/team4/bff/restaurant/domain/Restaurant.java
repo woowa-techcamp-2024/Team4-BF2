@@ -2,6 +2,7 @@ package woowa.team4.bff.restaurant.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import woowa.team4.bff.restaurant.controller.dto.request.CreateRestaurantRequest;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -38,5 +39,19 @@ public class Restaurant {
         this.businessId = businessId;
         this.uuid = uuid;
         this.createdAt = createdAt;
+    }
+
+    public static Restaurant newRestaurant(CreateRestaurantRequest request) {
+        return Restaurant.builder()
+                .name(request.name())
+                .phone(request.phone())
+                .address(request.address())
+                .location(request.location())
+                .introduction(request.introduction())
+                .image(request.image())
+                .operatingTime(request.operatingTime())
+                .closedDays(request.closedDays())
+                .minimumOrderAmount(request.minimumOrderAmount())
+                .build();
     }
 }
