@@ -8,5 +8,5 @@ public interface RestaurantSearchRepository extends ElasticsearchRepository<Rest
     // {"query": {"match": {"restaurantName": "검색어"}}}
     List<RestaurantSearchDocument> findByRestaurantNameContaining(String restaurantName);
 
-    RestaurantSearchDocument findByRestaurantId(String restaurantId);
+    RestaurantSearchDocument findByRestaurantId(Long restaurantId);
 }

@@ -12,32 +12,13 @@ import woowa.team4.bff.search.domain.RestaurantSearch;
 import woowa.team4.bff.search.domain.RestaurantSearchResult;
 import woowa.team4.bff.search.repository.RestaurantEntityRepository;
 import woowa.team4.bff.search.repository.SearchRepository;
-import woowa.team4.bff.search.service.command.CreateRestaurantSearchCommand;
 import woowa.team4.bff.search.service.command.SearchRestaurantCommand;
-import woowa.team4.bff.search.service.command.UpdateRestaurantSearchCommand;
 
 @Service
 @RequiredArgsConstructor
 public class SearchService {
     private final SearchRepository searchRepository;
     private final RestaurantEntityRepository restaurantEntityRepository;
-
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public String addRestaurant(CreateRestaurantSearchCommand command) {
-        RestaurantSearch restaurantSearch = RestaurantSearch.builder()
-                .restaurantId(command.restaurantId())
-                .restaurantName(command.restaurantName())
-                .build();
-        return searchRepository.save(restaurantSearch);
-    }
-
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public String updateRestaurant(UpdateRestaurantSearchCommand command) {
-        RestaurantSearch restaurantSearch = searchRepository.findByRestaurantId(command.restaurantId());
-        restaurantSearch.update(command.restaurantName());
-        return searchRepository.save(restaurantSearch);
-    }
-
     @MethodLogging
     public List<RestaurantSearchResult> search(SearchRestaurantCommand command){
         return restaurantEntityRepository.findRestaurantSearchResults(getRestaurantIds(command.keyword()), command.deliveryLocation());

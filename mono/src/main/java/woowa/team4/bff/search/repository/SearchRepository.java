@@ -15,25 +15,6 @@ public class SearchRepository {
     private final RestaurantSearchMapper restaurantSearchMapper = RestaurantSearchMapper.INSTANCE;
     private final MenuSearchMapper menuSearchMapper = MenuSearchMapper.INSTANCE;
 
-    public String save(RestaurantSearch restaurantSearch) {
-        return restaurantSearchMapper.toDomain(restaurantSearchRepository.save(restaurantSearchMapper.toDocument(restaurantSearch)))
-                .getRestaurantId();
-    }
-
-    public String save(MenuSearch menuSearch) {
-        return menuSearchMapper.toDomain(menuSearchRepository.save(menuSearchMapper.toDocument(menuSearch)))
-                .getMenuId();
-    }
-
-    public RestaurantSearch findByRestaurantId(String restaurantId){
-        return restaurantSearchMapper.toDomain(restaurantSearchRepository.findByRestaurantId(restaurantId));
-    }
-
-
-    public MenuSearch findByMenuId(String menuId){
-        return menuSearchMapper.toDomain(menuSearchRepository.findByMenuId(menuId));
-    }
-
     public List<RestaurantSearch> findAllByRestaurantName(String restaurantName) {
         return restaurantSearchRepository.findByRestaurantNameContaining(restaurantName).stream()
                 .map(restaurantSearchMapper::toDomain)
