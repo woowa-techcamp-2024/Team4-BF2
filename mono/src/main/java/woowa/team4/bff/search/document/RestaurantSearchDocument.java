@@ -10,14 +10,14 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Getter
 @Document(indexName = "restaurants")
 @AllArgsConstructor
-public class RestaurantDocument {
+public class RestaurantSearchDocument {
     @Id
     private String id;
 
-    @Field(type = FieldType.Text, name = "restaurant_name")
+    @Field(type = FieldType.Text, name = "restaurantName")
     private String restaurantName;
 
-    @Field(type = FieldType.Keyword, name = "restaurant_id")
+    @Field(type = FieldType.Keyword, name = "restaurantId")
     private String restaurantId;
 
     @Override
