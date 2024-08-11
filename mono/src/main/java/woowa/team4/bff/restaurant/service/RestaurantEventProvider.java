@@ -3,6 +3,7 @@ package woowa.team4.bff.restaurant.service;
 import org.springframework.stereotype.Component;
 import woowa.team4.bff.restaurant.domain.Restaurant;
 import woowa.team4.bff.restaurant.event.EventPublisher;
+import woowa.team4.bff.restaurant.event.RestaurantRegistrationEvent;
 
 @Component
 public class RestaurantEventProvider {
@@ -14,6 +15,7 @@ public class RestaurantEventProvider {
     }
 
     public void publishRegistrationEvent(Restaurant restaurant) {
-        // TODO 가게 등록 이벤트 생성•발행
+        RestaurantRegistrationEvent event = new RestaurantRegistrationEvent(restaurant.uuid());
+        eventPublisher.publish(event);
     }
 }
