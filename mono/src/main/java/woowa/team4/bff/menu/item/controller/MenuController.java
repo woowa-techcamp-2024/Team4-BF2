@@ -2,6 +2,7 @@ package woowa.team4.bff.menu.item.controller;
 
 import static woowa.team4.bff.common.utils.ApiUtils.*;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +26,7 @@ public class MenuController {
     @PostMapping("/{menuCategoryUuid}")
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResult<MenuCreateResponse> createMenu(@PathVariable final String menuCategoryUuid,
-            @RequestBody final MenuCreateRequest menuCreateRequest) {
+            @Valid @RequestBody final MenuCreateRequest menuCreateRequest) {
         MenuCreateDto menuCreateDto = menuCreateRequest.toDto(menuCategoryUuid);
         String menuUuid = menuService.createMenu(menuCreateDto);
         return success(new MenuCreateResponse(menuUuid));
