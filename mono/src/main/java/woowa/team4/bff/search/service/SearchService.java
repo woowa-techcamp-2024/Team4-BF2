@@ -47,6 +47,7 @@ public class SearchService {
         List<MenuSearch> menuSearches =  searchRepository.findAllByMenuName(command.keyword());
 
         // restaurant id list, menu id list 가 주어질 때 join 으로 Restaurant & Menu 가져 오는 쿼리 짜야 할 듯
+        // review 쪽도 join 해야 할까?
         restaurantRepository.findAllByIds(restaurantSearches.stream().map(RestaurantSearch::getRestaurantId).collect(Collectors.toList()),
                 command.deliveryLocation());
         menuRepository.findAllByIds(menuSearches.stream().map(MenuSearch::getMenuId).collect(Collectors.toList()),
