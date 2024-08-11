@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class Restaurant {
+public class RestaurantSearch {
     private String id;
     private String restaurantName;
     private String restaurantId;
