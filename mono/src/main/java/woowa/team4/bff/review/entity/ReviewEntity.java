@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import woowa.team4.bff.review.command.ReviewCreateCommand;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "reviews")
@@ -18,7 +19,7 @@ public class ReviewEntity {
     private Long id;
 
     @Column(name = "uuid")
-    private String uuid;
+    private UUID uuid;
 
     @Column(name = "restaurant_uuid")
     private String restaurantUuid;
@@ -32,7 +33,7 @@ public class ReviewEntity {
 
     @PrePersist
     public void prePersist() {
-        this.uuid = "review_" + java.util.UUID.randomUUID();
+        this.uuid = java.util.UUID.randomUUID();
     }
 
     public ReviewEntity(final String restaurantUuid, final String content, final Double rating) {
