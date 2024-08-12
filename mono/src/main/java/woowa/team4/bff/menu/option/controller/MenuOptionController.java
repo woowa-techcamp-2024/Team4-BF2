@@ -41,4 +41,10 @@ public class MenuOptionController {
         menuOptionService.updateMenuOption(request.toDto(menuOptionUuid));
         return success(Boolean.TRUE);
     }
+
+    @DeleteMapping("/{menuOptionUuid}")
+    public ApiResult<Boolean> deleteMenuOption(@PathVariable String menuOptionUuid) {
+        menuOptionService.deleteMenuOption(menuOptionUuid);
+        return success(Boolean.TRUE);
+    }
 }
