@@ -1,6 +1,5 @@
 package woowa.team4.bff.search.domain;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,14 +7,13 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class MenuSearch {
-    private String id;
+public class RestaurantSearch {
 
-    private String menuName;
-    private Long menuId;
+    private String id;
+    private String restaurantName;
     private Long restaurantId;
 
-    public void update(String menuName) {
-        this.menuName = menuName;
+    public void update(String restaurantName) {
+        this.restaurantName = restaurantName;
     }
 }

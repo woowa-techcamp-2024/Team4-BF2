@@ -11,6 +11,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Document(indexName = "restaurants")
 @AllArgsConstructor
 public class RestaurantSearchDocument {
+
     @Id
     private String id;
 

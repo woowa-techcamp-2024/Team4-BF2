@@ -7,8 +7,8 @@ import woowa.team4.bff.search.domain.MenuSearch;
 
 @Mapper
 public interface MenuSearchMapper {
-    MenuSearchMapper INSTANCE = Mappers.getMapper(MenuSearchMapper.class);
 
+    MenuSearchMapper INSTANCE = Mappers.getMapper(MenuSearchMapper.class);
     MenuSearch toDomain(MenuSearchDocument document);
     MenuSearchDocument toDocument(MenuSearch domain);
 }

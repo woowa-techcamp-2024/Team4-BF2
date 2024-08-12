@@ -4,17 +4,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
+import woowa.team4.bff.search.domain.MenuSearch;
+import woowa.team4.bff.search.domain.RestaurantSearch;
 import woowa.team4.bff.event.menu.MenuCreateEvent;
 import woowa.team4.bff.event.menu.MenuUpdateEvent;
 import woowa.team4.bff.event.restaurant.RestaurantCreateEvent;
 import woowa.team4.bff.event.restaurant.RestaurantUpdateEvent;
-import woowa.team4.bff.search.domain.MenuSearch;
-import woowa.team4.bff.search.domain.RestaurantSearch;
 import woowa.team4.bff.search.repository.SearchIndexManageRepository;
 
 @Service
 @RequiredArgsConstructor
 public class SearchIndexManageService {
+
     private final SearchIndexManageRepository searchIndexManageRepository;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
