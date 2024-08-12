@@ -9,9 +9,9 @@ import woowa.team4.bff.menu.category.repository.MenuCategoryRepository;
 import woowa.team4.bff.menu.item.dto.create.MenuCreateDto;
 import woowa.team4.bff.menu.item.dto.update.MenuUpdateDto;
 import woowa.team4.bff.menu.item.entity.Menu;
-import woowa.team4.bff.menu.item.event.MenuCreateEvent;
-import woowa.team4.bff.menu.item.event.MenuDeleteEvent;
-import woowa.team4.bff.menu.item.event.MenuUpdateEvent;
+import woowa.team4.bff.event.menu.MenuCreateEvent;
+import woowa.team4.bff.event.menu.MenuDeleteEvent;
+import woowa.team4.bff.event.menu.MenuUpdateEvent;
 import woowa.team4.bff.menu.item.exception.MenuNotFoundException;
 import woowa.team4.bff.menu.item.repository.MenuRepository;
 

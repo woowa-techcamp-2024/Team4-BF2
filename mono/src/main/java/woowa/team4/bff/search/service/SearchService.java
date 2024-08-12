@@ -11,7 +11,7 @@ import woowa.team4.bff.search.domain.RestaurantSearch;
 import woowa.team4.bff.search.domain.RestaurantSearchResult;
 import woowa.team4.bff.search.repository.RestaurantEntityRepository;
 import woowa.team4.bff.search.repository.SearchRepository;
-import woowa.team4.bff.search.service.command.SearchRestaurantCommand;
+import woowa.team4.bff.search.command.SearchRestaurantCommand;
 
 @Service
 @RequiredArgsConstructor
