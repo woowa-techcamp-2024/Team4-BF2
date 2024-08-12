@@ -11,7 +11,8 @@ public class RestaurantService {
     private final RestaurantRegistrant restaurantRegistrant;
     private final RestaurantEventProvider restaurantEventProvider;
 
-    public RestaurantService(RestaurantValidator restaurantValidator, RestaurantRegistrant restaurantRegistrant, RestaurantEventProvider restaurantEventProvider) {
+    public RestaurantService(RestaurantValidator restaurantValidator, RestaurantRegistrant restaurantRegistrant,
+                             RestaurantEventProvider restaurantEventProvider) {
         this.restaurantValidator = restaurantValidator;
         this.restaurantRegistrant = restaurantRegistrant;
         this.restaurantEventProvider = restaurantEventProvider;
