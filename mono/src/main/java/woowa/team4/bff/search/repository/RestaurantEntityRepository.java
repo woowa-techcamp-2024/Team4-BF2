@@ -4,9 +4,10 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import woowa.team4.bff.restaurant.entity.RestaurantEntity;
 import woowa.team4.bff.search.domain.RestaurantSearchResult;
-import woowa.team4.bff.search.entity.RestaurantEntity;
 
+// ToDo: RestaurantEntity module 분리시 고려
 public interface RestaurantEntityRepository extends JpaRepository<RestaurantEntity, Long> {
     @Query("SELECT new woowa.team4.bff.search.domain.RestaurantSearchResult(r.restaurantUuid, r.restaurantName, r.minimumOrderPrice, " +
             "rs.rating, rs.reviewCount, m.menuName) " +
