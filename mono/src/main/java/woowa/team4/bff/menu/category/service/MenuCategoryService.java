@@ -4,8 +4,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import woowa.team4.bff.menu.category.dto.create.MenuCategoryCreateDto;
-import woowa.team4.bff.menu.category.dto.update.MenuCategoryUpdateDto;
+import woowa.team4.bff.menu.category.controller.create.MenuCategoryCreateDto;
+import woowa.team4.bff.menu.category.controller.update.MenuCategoryUpdateDto;
 import woowa.team4.bff.menu.category.entity.MenuCategory;
 import woowa.team4.bff.menu.category.event.MenuCategoryCreateEvent;
 import woowa.team4.bff.menu.category.event.MenuCategoryDeleteEvent;
@@ -22,8 +22,8 @@ public class MenuCategoryService {
 
     @Transactional
     public String createMenuCategory(final MenuCategoryCreateDto dto) {
-        MenuCategory menuCategory = MenuCategory.create(dto.getRestaurantUuid(),
-                dto.getName(), dto.getDescription());
+        MenuCategory menuCategory = MenuCategory.create(dto.restaurantUuid(),
+                dto.name(), dto.description());
         menuCategoryRepository.save(menuCategory);
         eventPublisher.publishEvent(MenuCategoryCreateEvent.from(menuCategory));
         return menuCategory.getUuid();
@@ -31,9 +31,9 @@ public class MenuCategoryService {
 
     @Transactional
     public MenuCategoryUpdateDto updateMenuCategory(final MenuCategoryUpdateDto dto) {
-        MenuCategory menuCategory = menuCategoryRepository.findByUuid(dto.getUuid())
-                .orElseThrow(() -> new MenuCategoryNotFoundException(dto.getUuid()));
-        menuCategory.update(dto.getName(), dto.getDescription());
+        MenuCategory menuCategory = menuCategoryRepository.findByUuid(dto.uuid())
+                .orElseThrow(() -> new MenuCategoryNotFoundException(dto.uuid()));
+        menuCategory.update(dto.name(), dto.description());
         eventPublisher.publishEvent(MenuCategoryUpdateEvent.from(menuCategory));
         return MenuCategoryUpdateDto.from(menuCategory);
     }

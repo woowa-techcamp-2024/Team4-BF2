@@ -1,12 +1,5 @@
 package woowa.team4.bff.menu.option.dto.create;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+public record MenuOptionCreateResponse(String menuOptionUuid) {
 
-@Getter
-@RequiredArgsConstructor
-public class MenuOptionCreateResponse {
-
-    private final String menuOptionUuid;
 }
-

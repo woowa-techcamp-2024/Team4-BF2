@@ -2,28 +2,17 @@ package woowa.team4.bff.menu.option.dto.update;
 
 import java.math.BigDecimal;
 import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 @Builder
-public class MenuOptionUpdateDto {
+public record MenuOptionUpdateDto(String uuid,
+                                  String name,
+                                  String description,
+                                  List<OptionDetailDto> optionDetails) {
 
-    private String uuid;
-    private String name;
-    private String description;
-    private List<OptionDetailDto> optionDetails;
+    public record OptionDetailDto(String uuid,
+                                  String name,
+                                  BigDecimal price) {
 
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    public static class OptionDetailDto {
-
-        private String uuid;
-        private String name;
-        private BigDecimal price;
     }
 }

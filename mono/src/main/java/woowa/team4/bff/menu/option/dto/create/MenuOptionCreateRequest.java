@@ -7,26 +7,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
-public class MenuOptionCreateRequest {
+public record MenuOptionCreateRequest(@NotBlank String name,
+                                      String description,
+                                      List<OptionDetailRequest> optionDetails) {
 
-    @NotBlank
-    private String name;
-    private String description;
-    private List<OptionDetailRequest> optionDetails;
+    public record OptionDetailRequest(String name,
+                                      @NotNull @DecimalMin(value = MENU_OPTION_MIN_PRICE) BigDecimal price) {
 
-    @Getter
-    @Setter
-    public static class OptionDetailRequest {
-
-        private String name;
-        @NotNull
-        @DecimalMin(value = MENU_OPTION_MIN_PRICE)
-        private BigDecimal price;
     }
 
     public MenuOptionCreateDto toDto(String menuUuid) {
@@ -36,8 +24,8 @@ public class MenuOptionCreateRequest {
                 .description(description)
                 .optionDetails(optionDetails.stream()
                         .map(detail -> new MenuOptionCreateDto.OptionDetailDto(
-                                detail.getName(),
-                                detail.getPrice()))
+                                detail.name(),
+                                detail.price()))
                         .toList())
                 .build();
     }

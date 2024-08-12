@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import woowa.team4.bff.menu.category.dto.create.MenuCategoryCreateDto;
-import woowa.team4.bff.menu.category.dto.create.MenuCategoryCreateRequest;
-import woowa.team4.bff.menu.category.dto.create.MenuCategoryCreateResponse;
-import woowa.team4.bff.menu.category.dto.update.MenuCategoryUpdateDto;
-import woowa.team4.bff.menu.category.dto.update.MenuCategoryUpdateRequest;
-import woowa.team4.bff.menu.category.dto.update.MenuCategoryUpdateResponse;
+import woowa.team4.bff.menu.category.controller.create.MenuCategoryCreateDto;
+import woowa.team4.bff.menu.category.controller.create.MenuCategoryCreateRequest;
+import woowa.team4.bff.menu.category.controller.create.MenuCategoryCreateResponse;
+import woowa.team4.bff.menu.category.controller.update.MenuCategoryUpdateDto;
+import woowa.team4.bff.menu.category.controller.update.MenuCategoryUpdateRequest;
+import woowa.team4.bff.menu.category.controller.update.MenuCategoryUpdateResponse;
 import woowa.team4.bff.menu.category.service.MenuCategoryService;
 
 @RestController

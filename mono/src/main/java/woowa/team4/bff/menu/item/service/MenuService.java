@@ -26,8 +26,8 @@ public class MenuService {
     @Transactional
     public String createMenu(final MenuCreateDto dto) {
         Long menuCategoryId = menuCategoryRepository
-                .findIdByUuid(dto.getMenuCategoryUuid())
-                .orElseThrow(() -> new MenuCategoryNotFoundException(dto.getMenuCategoryUuid()));
+                .findIdByUuid(dto.menuCategoryUuid())
+                .orElseThrow(() -> new MenuCategoryNotFoundException(dto.menuCategoryUuid()));
         Menu menu = Menu.create(menuCategoryId, dto);
         Menu savedMenu = menuRepository.save(menu);
         eventPublisher.publishEvent(MenuCreateEvent.from(savedMenu));
@@ -36,8 +36,8 @@ public class MenuService {
 
     @Transactional
     public MenuUpdateDto updateMenu(final MenuUpdateDto dto) {
-        Menu menu = menuRepository.findByUuid(dto.getUuid())
-                .orElseThrow(() -> new MenuNotFoundException(dto.getUuid()));
+        Menu menu = menuRepository.findByUuid(dto.uuid())
+                .orElseThrow(() -> new MenuNotFoundException(dto.uuid()));
         menu.update(dto);
         eventPublisher.publishEvent(MenuUpdateEvent.from(menu));
         return MenuUpdateDto.from(menu);

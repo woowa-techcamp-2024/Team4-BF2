@@ -59,12 +59,12 @@ public class MenuOption {
     public static MenuOption create(final Long menuId,
             final MenuOptionCreateDto menuOptionCreateDto) {
         return new MenuOption(menuId,
-                menuOptionCreateDto.getName(),
-                menuOptionCreateDto.getDescription());
+                menuOptionCreateDto.name(),
+                menuOptionCreateDto.description());
     }
 
     public void update(final MenuOptionUpdateDto menuOptionUpdateDto) {
-        this.name = menuOptionUpdateDto.getName();
-        this.description = menuOptionUpdateDto.getDescription();
+        this.name = menuOptionUpdateDto.name();
+        this.description = menuOptionUpdateDto.description();
     }
 }

@@ -63,13 +63,13 @@ public class Menu {
     }
 
     public static Menu create(final Long menuCategoryId, final MenuCreateDto menuCreateDto) {
-        return new Menu(menuCategoryId, menuCreateDto.getName(),
-                menuCreateDto.getDescription(), menuCreateDto.getPrice());
+        return new Menu(menuCategoryId, menuCreateDto.name(),
+                menuCreateDto.description(), menuCreateDto.price());
     }
 
     public void update(final MenuUpdateDto menuUpdateDto) {
-        this.name = menuUpdateDto.getName();
-        this.description = menuUpdateDto.getDescription();
-        this.price = menuUpdateDto.getPrice();
+        this.name = menuUpdateDto.name();
+        this.description = menuUpdateDto.description();
+        this.price = menuUpdateDto.price();
     }
 }

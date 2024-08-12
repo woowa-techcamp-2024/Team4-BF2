@@ -33,14 +33,14 @@ public class MenuOptionService {
 
     @Transactional
     public String createMenuOption(final MenuOptionCreateDto dto) {
-        Long menuId = menuRepository.findIdByUuid(dto.getMenuUuid())
-                .orElseThrow(() -> new MenuNotFoundException(dto.getMenuUuid()));
+        Long menuId = menuRepository.findIdByUuid(dto.menuUuid())
+                .orElseThrow(() -> new MenuNotFoundException(dto.menuUuid()));
         MenuOption menuOption = MenuOption.create(menuId, dto);
         MenuOption savedMenuOption = menuOptionRepository.save(menuOption);
 
-        List<MenuOptionDetail> details = dto.getOptionDetails().stream()
+        List<MenuOptionDetail> details = dto.optionDetails().stream()
                 .map(detailDto -> MenuOptionDetail.create(savedMenuOption.getId(),
-                        detailDto.getName(), detailDto.getPrice()))
+                        detailDto.name(), detailDto.price()))
                 .toList();
         List<MenuOptionDetail> savedDetails = menuOptionDetailRepository.saveAll(details);
 
@@ -50,8 +50,8 @@ public class MenuOptionService {
 
     @Transactional
     public void updateMenuOption(final MenuOptionUpdateDto dto) {
-        MenuOption menuOption = menuOptionRepository.findByUuid(dto.getUuid())
-                .orElseThrow(() -> new MenuOptionNotFoundException(dto.getUuid()));
+        MenuOption menuOption = menuOptionRepository.findByUuid(dto.uuid())
+                .orElseThrow(() -> new MenuOptionNotFoundException(dto.uuid()));
 
         menuOption.update(dto);
 
@@ -63,19 +63,19 @@ public class MenuOptionService {
         List<MenuOptionDetail> toSave = new ArrayList<>();
         List<String> processedUuids = new ArrayList<>();
 
-        for (MenuOptionUpdateDto.OptionDetailDto detailDto : dto.getOptionDetails()) {
-            if (detailDto.getUuid() != null && existingDetailsMap.containsKey(
-                    detailDto.getUuid())) {
+        for (MenuOptionUpdateDto.OptionDetailDto detailDto : dto.optionDetails()) {
+            if (detailDto.uuid() != null && existingDetailsMap.containsKey(
+                    detailDto.uuid())) {
                 // 존재하는 옵션들은 업데이트
-                MenuOptionDetail existingDetail = existingDetailsMap.get(detailDto.getUuid());
-                existingDetail.update(detailDto.getName(), detailDto.getPrice());
+                MenuOptionDetail existingDetail = existingDetailsMap.get(detailDto.uuid());
+                existingDetail.update(detailDto.name(), detailDto.price());
                 toSave.add(existingDetail);
             } else {
                 // 새로운 옵션들은 List에 저장
                 toSave.add(MenuOptionDetail.create(menuOption.getId(),
-                        detailDto.getName(), detailDto.getPrice()));
+                        detailDto.name(), detailDto.price()));
             }
-            processedUuids.add(detailDto.getUuid());
+            processedUuids.add(detailDto.uuid());
         }
 
         // 업데이트에 없는 옵션들은 삭제
