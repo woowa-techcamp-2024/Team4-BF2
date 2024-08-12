@@ -59,4 +59,9 @@ public class MenuOptionDetail {
             final String name, final BigDecimal price) {
         return new MenuOptionDetail(menuOptionId, name, price);
     }
+
+    public void update(final String name, final BigDecimal price) {
+        this.name = name;
+        this.price = price;
+    }
 }

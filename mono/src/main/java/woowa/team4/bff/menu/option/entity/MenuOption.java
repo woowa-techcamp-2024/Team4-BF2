@@ -15,6 +15,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import woowa.team4.bff.menu.option.dto.create.MenuOptionCreateDto;
+import woowa.team4.bff.menu.option.dto.update.MenuOptionUpdateDto;
 
 @Entity
 @Table(name = "menu_options")
@@ -60,5 +61,10 @@ public class MenuOption {
         return new MenuOption(menuId,
                 menuOptionCreateDto.getName(),
                 menuOptionCreateDto.getDescription());
+    }
+
+    public void update(final MenuOptionUpdateDto menuOptionUpdateDto) {
+        this.name = menuOptionUpdateDto.getName();
+        this.description = menuOptionUpdateDto.getDescription();
     }
 }
