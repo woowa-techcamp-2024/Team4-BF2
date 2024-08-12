@@ -11,8 +11,9 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import woowa.team4.bff.menu.item.exception.MenuNotFoundException;
 import woowa.team4.bff.menu.item.repository.MenuRepository;
-import woowa.team4.bff.menu.option.dto.create.MenuOptionCreateDto;
-import woowa.team4.bff.menu.option.dto.update.MenuOptionUpdateDto;
+import woowa.team4.bff.menu.option.command.MenuOptionCreateCommand;
+import woowa.team4.bff.menu.option.command.MenuOptionUpdateCommand;
+import woowa.team4.bff.menu.option.command.MenuOptionUpdateCommand.OptionDetailCommand;
 import woowa.team4.bff.menu.option.entity.MenuOption;
 import woowa.team4.bff.menu.option.entity.MenuOptionDetail;
 import woowa.team4.bff.menu.option.event.MenuOptionCreateEvent;
@@ -32,7 +33,7 @@ public class MenuOptionService {
     private final MenuOptionDetailRepository menuOptionDetailRepository;
 
     @Transactional
-    public String createMenuOption(final MenuOptionCreateDto dto) {
+    public String createMenuOption(final MenuOptionCreateCommand dto) {
         Long menuId = menuRepository.findIdByUuid(dto.menuUuid())
                 .orElseThrow(() -> new MenuNotFoundException(dto.menuUuid()));
         MenuOption menuOption = MenuOption.create(menuId, dto);
@@ -49,7 +50,7 @@ public class MenuOptionService {
     }
 
     @Transactional
-    public void updateMenuOption(final MenuOptionUpdateDto dto) {
+    public void updateMenuOption(final MenuOptionUpdateCommand dto) {
         MenuOption menuOption = menuOptionRepository.findByUuid(dto.uuid())
                 .orElseThrow(() -> new MenuOptionNotFoundException(dto.uuid()));
 
@@ -63,7 +64,7 @@ public class MenuOptionService {
         List<MenuOptionDetail> toSave = new ArrayList<>();
         List<String> processedUuids = new ArrayList<>();
 
-        for (MenuOptionUpdateDto.OptionDetailDto detailDto : dto.optionDetails()) {
+        for (OptionDetailCommand detailDto : dto.optionDetails()) {
             if (detailDto.uuid() != null && existingDetailsMap.containsKey(
                     detailDto.uuid())) {
                 // 존재하는 옵션들은 업데이트

@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import woowa.team4.bff.menu.option.dto.create.MenuOptionCreateRequest;
-import woowa.team4.bff.menu.option.dto.create.MenuOptionCreateResponse;
-import woowa.team4.bff.menu.option.dto.update.MenuOptionUpdateRequest;
+import woowa.team4.bff.menu.option.controller.create.MenuOptionCreateRequest;
+import woowa.team4.bff.menu.option.controller.create.MenuOptionCreateResponse;
+import woowa.team4.bff.menu.option.controller.update.MenuOptionUpdateRequest;
 import woowa.team4.bff.menu.option.service.MenuOptionService;
 
 @RestController
@@ -30,7 +30,7 @@ public class MenuOptionController {
     public ApiResult<MenuOptionCreateResponse> createMenuOption(
             @PathVariable final String menuUuid,
             @Valid @RequestBody final MenuOptionCreateRequest request) {
-        String menuOptionUuid = menuOptionService.createMenuOption(request.toDto(menuUuid));
+        String menuOptionUuid = menuOptionService.createMenuOption(request.toCommand(menuUuid));
         return success(new MenuOptionCreateResponse(menuOptionUuid));
     }
 
@@ -38,7 +38,7 @@ public class MenuOptionController {
     public ApiResult<Boolean> updateMenuOption(
             @PathVariable final String menuOptionUuid,
             @RequestBody final MenuOptionUpdateRequest request) {
-        menuOptionService.updateMenuOption(request.toDto(menuOptionUuid));
+        menuOptionService.updateMenuOption(request.toCommand(menuOptionUuid));
         return success(Boolean.TRUE);
     }
 

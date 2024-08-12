@@ -1,4 +1,4 @@
-package woowa.team4.bff.menu.option.dto.create;
+package woowa.team4.bff.menu.option.controller.create;
 
 import static woowa.team4.bff.menu.utils.constants.*;
 
@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
+import woowa.team4.bff.menu.option.command.MenuOptionCreateCommand;
+import woowa.team4.bff.menu.option.command.MenuOptionCreateCommand.OptionDetailCommand;
 
 public record MenuOptionCreateRequest(@NotBlank String name,
                                       String description,
@@ -17,13 +19,13 @@ public record MenuOptionCreateRequest(@NotBlank String name,
 
     }
 
-    public MenuOptionCreateDto toDto(String menuUuid) {
-        return MenuOptionCreateDto.builder()
+    public MenuOptionCreateCommand toCommand(final String menuUuid) {
+        return MenuOptionCreateCommand.builder()
                 .menuUuid(menuUuid)
                 .name(name)
                 .description(description)
                 .optionDetails(optionDetails.stream()
-                        .map(detail -> new MenuOptionCreateDto.OptionDetailDto(
+                        .map(detail -> new OptionDetailCommand(
                                 detail.name(),
                                 detail.price()))
                         .toList())

@@ -4,8 +4,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import woowa.team4.bff.menu.category.controller.create.MenuCategoryCreateDto;
-import woowa.team4.bff.menu.category.controller.update.MenuCategoryUpdateDto;
+import woowa.team4.bff.menu.category.command.MenuCategoryCreateCommand;
+import woowa.team4.bff.menu.category.command.MenuCategoryUpdateCommand;
 import woowa.team4.bff.menu.category.entity.MenuCategory;
 import woowa.team4.bff.menu.category.event.MenuCategoryCreateEvent;
 import woowa.team4.bff.menu.category.event.MenuCategoryDeleteEvent;
@@ -21,7 +21,7 @@ public class MenuCategoryService {
     private final MenuCategoryRepository menuCategoryRepository;
 
     @Transactional
-    public String createMenuCategory(final MenuCategoryCreateDto dto) {
+    public String createMenuCategory(final MenuCategoryCreateCommand dto) {
         MenuCategory menuCategory = MenuCategory.create(dto.restaurantUuid(),
                 dto.name(), dto.description());
         menuCategoryRepository.save(menuCategory);
@@ -30,12 +30,12 @@ public class MenuCategoryService {
     }
 
     @Transactional
-    public MenuCategoryUpdateDto updateMenuCategory(final MenuCategoryUpdateDto dto) {
+    public MenuCategoryUpdateCommand updateMenuCategory(final MenuCategoryUpdateCommand dto) {
         MenuCategory menuCategory = menuCategoryRepository.findByUuid(dto.uuid())
                 .orElseThrow(() -> new MenuCategoryNotFoundException(dto.uuid()));
         menuCategory.update(dto.name(), dto.description());
         eventPublisher.publishEvent(MenuCategoryUpdateEvent.from(menuCategory));
-        return MenuCategoryUpdateDto.from(menuCategory);
+        return MenuCategoryUpdateCommand.from(menuCategory);
     }
 
     @Transactional

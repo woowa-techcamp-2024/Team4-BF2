@@ -6,8 +6,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import woowa.team4.bff.menu.category.exception.MenuCategoryNotFoundException;
 import woowa.team4.bff.menu.category.repository.MenuCategoryRepository;
-import woowa.team4.bff.menu.item.dto.create.MenuCreateDto;
-import woowa.team4.bff.menu.item.dto.update.MenuUpdateDto;
+import woowa.team4.bff.menu.item.command.MenuCreateCommand;
+import woowa.team4.bff.menu.item.command.MenuUpdateCommand;
 import woowa.team4.bff.menu.item.entity.Menu;
 import woowa.team4.bff.menu.item.event.MenuCreateEvent;
 import woowa.team4.bff.menu.item.event.MenuDeleteEvent;
@@ -24,7 +24,7 @@ public class MenuService {
     private final MenuRepository menuRepository;
 
     @Transactional
-    public String createMenu(final MenuCreateDto dto) {
+    public String createMenu(final MenuCreateCommand dto) {
         Long menuCategoryId = menuCategoryRepository
                 .findIdByUuid(dto.menuCategoryUuid())
                 .orElseThrow(() -> new MenuCategoryNotFoundException(dto.menuCategoryUuid()));
@@ -35,12 +35,12 @@ public class MenuService {
     }
 
     @Transactional
-    public MenuUpdateDto updateMenu(final MenuUpdateDto dto) {
+    public MenuUpdateCommand updateMenu(final MenuUpdateCommand dto) {
         Menu menu = menuRepository.findByUuid(dto.uuid())
                 .orElseThrow(() -> new MenuNotFoundException(dto.uuid()));
         menu.update(dto);
         eventPublisher.publishEvent(MenuUpdateEvent.from(menu));
-        return MenuUpdateDto.from(menu);
+        return MenuUpdateCommand.from(menu);
     }
 
     @Transactional

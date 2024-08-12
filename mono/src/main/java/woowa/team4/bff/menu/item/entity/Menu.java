@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import woowa.team4.bff.menu.item.dto.create.MenuCreateDto;
-import woowa.team4.bff.menu.item.dto.update.MenuUpdateDto;
+import woowa.team4.bff.menu.item.command.MenuCreateCommand;
+import woowa.team4.bff.menu.item.command.MenuUpdateCommand;
 
 @Entity
 @Table(name = "menus")
@@ -62,14 +62,15 @@ public class Menu {
         this.price = price;
     }
 
-    public static Menu create(final Long menuCategoryId, final MenuCreateDto menuCreateDto) {
-        return new Menu(menuCategoryId, menuCreateDto.name(),
-                menuCreateDto.description(), menuCreateDto.price());
+    public static Menu create(final Long menuCategoryId,
+            final MenuCreateCommand menuCreateCommand) {
+        return new Menu(menuCategoryId, menuCreateCommand.name(),
+                menuCreateCommand.description(), menuCreateCommand.price());
     }
 
-    public void update(final MenuUpdateDto menuUpdateDto) {
-        this.name = menuUpdateDto.name();
-        this.description = menuUpdateDto.description();
-        this.price = menuUpdateDto.price();
+    public void update(final MenuUpdateCommand menuUpdateCommand) {
+        this.name = menuUpdateCommand.name();
+        this.description = menuUpdateCommand.description();
+        this.price = menuUpdateCommand.price();
     }
 }

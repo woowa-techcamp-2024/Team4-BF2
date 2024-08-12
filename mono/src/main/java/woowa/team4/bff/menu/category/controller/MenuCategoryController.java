@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import woowa.team4.bff.menu.category.controller.create.MenuCategoryCreateDto;
+import woowa.team4.bff.menu.category.command.MenuCategoryCreateCommand;
+import woowa.team4.bff.menu.category.command.MenuCategoryUpdateCommand;
 import woowa.team4.bff.menu.category.controller.create.MenuCategoryCreateRequest;
 import woowa.team4.bff.menu.category.controller.create.MenuCategoryCreateResponse;
-import woowa.team4.bff.menu.category.controller.update.MenuCategoryUpdateDto;
 import woowa.team4.bff.menu.category.controller.update.MenuCategoryUpdateRequest;
 import woowa.team4.bff.menu.category.controller.update.MenuCategoryUpdateResponse;
 import woowa.team4.bff.menu.category.service.MenuCategoryService;
@@ -33,9 +33,9 @@ public class MenuCategoryController {
     public ApiResult<MenuCategoryCreateResponse> createCategory(
             @PathVariable final String restaurantUuid,
             @Valid @RequestBody final MenuCategoryCreateRequest menuCategoryCreateRequest) {
-        MenuCategoryCreateDto menuCategoryCreateDto = menuCategoryCreateRequest
+        MenuCategoryCreateCommand menuCategoryCreateCommand = menuCategoryCreateRequest
                 .toDto(restaurantUuid);
-        String menuCategoryUuid = menuCategoryService.createMenuCategory(menuCategoryCreateDto);
+        String menuCategoryUuid = menuCategoryService.createMenuCategory(menuCategoryCreateCommand);
         return success(new MenuCategoryCreateResponse(menuCategoryUuid));
     }
 
@@ -43,10 +43,10 @@ public class MenuCategoryController {
     public ApiResult<MenuCategoryUpdateResponse> updateCategory(
             @PathVariable final String menuCategoryUuid,
             @Valid @RequestBody final MenuCategoryUpdateRequest menuCategoryUpdateRequest) {
-        MenuCategoryUpdateDto menuCategoryUpdateDto = menuCategoryUpdateRequest
+        MenuCategoryUpdateCommand menuCategoryUpdateCommand = menuCategoryUpdateRequest
                 .toDto(menuCategoryUuid);
-        MenuCategoryUpdateDto updatedMenuCategoryDto = menuCategoryService
-                .updateMenuCategory(menuCategoryUpdateDto);
+        MenuCategoryUpdateCommand updatedMenuCategoryDto = menuCategoryService
+                .updateMenuCategory(menuCategoryUpdateCommand);
         return success(MenuCategoryUpdateResponse.from(updatedMenuCategoryDto));
     }
 
