@@ -22,7 +22,7 @@ public class ReviewMenu {
     private String uuid;
 
     @ManyToOne
-    private Review review;
+    private ReviewEntity reviewEntity;
 
     @OneToOne
     @JoinColumn(name = "menu_id")

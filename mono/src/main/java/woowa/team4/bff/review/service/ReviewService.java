@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import woowa.team4.bff.review.command.ReviewCreateCommand;
-import woowa.team4.bff.review.entity.Review;
+import woowa.team4.bff.review.entity.ReviewEntity;
 import woowa.team4.bff.review.repository.ReviewRepository;
 
 @Service
@@ -15,8 +15,8 @@ public class ReviewService {
 
     @Transactional
     public String createReview(final ReviewCreateCommand reviewCreateCommand) {
-        Review review = Review.create(reviewCreateCommand.restaurantUuid(), reviewCreateCommand);
-        reviewRepository.save(review);
-        return review.getUuid();
+        ReviewEntity reviewEntity = ReviewEntity.create(reviewCreateCommand.restaurantUuid(), reviewCreateCommand);
+        reviewRepository.save(reviewEntity);
+        return reviewEntity.getUuid();
     }
 }

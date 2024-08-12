@@ -11,7 +11,7 @@ import java.util.List;
 @Table(name = "reviews")
 @Getter
 @NoArgsConstructor
-public class Review {
+public class ReviewEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,14 +35,14 @@ public class Review {
         this.uuid = "review_" + java.util.UUID.randomUUID();
     }
 
-    public Review(final String restaurantUuid, final String content, final Double rating) {
+    public ReviewEntity(final String restaurantUuid, final String content, final Double rating) {
         this.restaurantUuid = restaurantUuid;
         this.content = content;
         this.rating = rating;
     }
 
-    public static Review create(final String restaurantUuid, ReviewCreateCommand command) {
-        return new Review(restaurantUuid, command.content(), command.rating());
+    public static ReviewEntity create(final String restaurantUuid, ReviewCreateCommand command) {
+        return new ReviewEntity(restaurantUuid, command.content(), command.rating());
     }
 
 }
