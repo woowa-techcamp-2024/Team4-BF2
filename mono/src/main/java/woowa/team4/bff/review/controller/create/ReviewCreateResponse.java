@@ -1,4 +1,4 @@
-package woowa.team4.bff.review.dto.create;
+package woowa.team4.bff.review.controller.create;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
