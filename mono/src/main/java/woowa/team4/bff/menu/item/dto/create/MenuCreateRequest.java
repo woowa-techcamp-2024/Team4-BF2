@@ -1,5 +1,7 @@
 package woowa.team4.bff.menu.item.dto.create;
 
+import static woowa.team4.bff.menu.utils.constants.*;
+
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +18,7 @@ public class MenuCreateRequest {
     @NotBlank
     private String description;
     @NotNull
-    @DecimalMin(value = "0.0")
+    @DecimalMin(value = MENU_MIN_PRICE)
     private BigDecimal price;
 
     public MenuCreateDto toDto(final String menuCategoryUuid) {
