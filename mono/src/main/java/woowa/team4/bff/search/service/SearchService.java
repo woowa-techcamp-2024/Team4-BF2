@@ -18,9 +18,11 @@ import woowa.team4.bff.search.service.command.SearchRestaurantCommand;
 public class SearchService {
     private final SearchRepository searchRepository;
     private final RestaurantEntityRepository restaurantEntityRepository;
+
     @MethodLogging
     public List<RestaurantSearchResult> search(SearchRestaurantCommand command){
-        return restaurantEntityRepository.findRestaurantSearchResults(getRestaurantIds(command.keyword()), command.deliveryLocation());
+        return null;
+        // return restaurantEntityRepository.findRestaurantSearchResults(getRestaurantIds(command.keyword()), command.deliveryLocation());
     }
 
     private List<Long> getRestaurantIds(String keyword){
