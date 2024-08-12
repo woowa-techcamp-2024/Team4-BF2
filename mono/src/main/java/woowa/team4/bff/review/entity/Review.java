@@ -3,7 +3,7 @@ package woowa.team4.bff.review.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import woowa.team4.bff.review.command.ReviewCreateDto;
+import woowa.team4.bff.review.command.ReviewCreateCommand;
 
 import java.util.List;
 
@@ -41,8 +41,8 @@ public class Review {
         this.rating = rating;
     }
 
-    public static Review create(final String restaurantUuid, ReviewCreateDto reviewCreateDto) {
-        return new Review(restaurantUuid, reviewCreateDto.getContent(), reviewCreateDto.getRating());
+    public static Review create(final String restaurantUuid, ReviewCreateCommand reviewCreateCommand) {
+        return new Review(restaurantUuid, reviewCreateCommand.getContent(), reviewCreateCommand.getRating());
     }
 
 }

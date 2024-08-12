@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 
 import lombok.Builder;
 import lombok.Getter;
-import woowa.team4.bff.review.command.ReviewCreateDto;
+import woowa.team4.bff.review.command.ReviewCreateCommand;
 
 @Getter
 @Builder
@@ -20,8 +20,8 @@ public class ReviewCreateRequest {
     @DecimalMax(value = "5.0")
     private Double rating;
 
-    public ReviewCreateDto toDto(final String restaurantUuid) {
-        return ReviewCreateDto.builder()
+    public ReviewCreateCommand toDto(final String restaurantUuid) {
+        return ReviewCreateCommand.builder()
                 .restaurantUuid(restaurantUuid)
                 .content(content)
                 .rating(rating)

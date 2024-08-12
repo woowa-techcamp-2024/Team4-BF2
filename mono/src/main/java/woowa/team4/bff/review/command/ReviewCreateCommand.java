@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ReviewCreateDto {
+public class ReviewCreateCommand {
 
     private String restaurantUuid;
     private String content;
