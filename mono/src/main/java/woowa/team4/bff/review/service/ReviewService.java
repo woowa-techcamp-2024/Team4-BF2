@@ -14,8 +14,8 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
 
     @Transactional
-    public String createReview(final ReviewCreateCommand dto) {
-        Review review = Review.create(dto.getRestaurantUuid(), dto);
+    public String createReview(final ReviewCreateCommand reviewCreateCommand) {
+        Review review = Review.create(reviewCreateCommand.restaurantUuid(), reviewCreateCommand);
         reviewRepository.save(review);
         return review.getUuid();
     }

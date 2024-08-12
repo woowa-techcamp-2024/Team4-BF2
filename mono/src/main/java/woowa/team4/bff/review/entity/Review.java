@@ -41,8 +41,8 @@ public class Review {
         this.rating = rating;
     }
 
-    public static Review create(final String restaurantUuid, ReviewCreateCommand reviewCreateCommand) {
-        return new Review(restaurantUuid, reviewCreateCommand.getContent(), reviewCreateCommand.getRating());
+    public static Review create(final String restaurantUuid, ReviewCreateCommand command) {
+        return new Review(restaurantUuid, command.content(), command.rating());
     }
 
 }
