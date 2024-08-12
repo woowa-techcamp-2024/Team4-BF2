@@ -44,7 +44,12 @@ dependencies {
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
     // module
-    implementation project(":common")
+    implementation project(":core-web")
+    implementation project(":domain:menu-domain-rdb")
+    implementation project(":domain:restaurant-domain-rdb")
+    implementation project(":domain:review-domain-rdb")
+    implementation project(":domain:search-domain-rdb")
+    implementation project(":domain:search-domain-es")
 }
 
 tasks.named('test') {
