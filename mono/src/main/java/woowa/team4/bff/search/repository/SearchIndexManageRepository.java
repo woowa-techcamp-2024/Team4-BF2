@@ -14,7 +14,8 @@ public class SearchIndexManageRepository {
     private final MenuSearchMapper menuSearchMapper = MenuSearchMapper.INSTANCE;
 
     public Long save(RestaurantSearch restaurantSearch) {
-        return restaurantSearchMapper.toDomain(restaurantSearchRepository.save(restaurantSearchMapper.toDocument(restaurantSearch)))
+        return restaurantSearchMapper.toDomain(
+                        restaurantSearchRepository.save(restaurantSearchMapper.toDocument(restaurantSearch)))
                 .getRestaurantId();
     }
 
@@ -23,12 +24,12 @@ public class SearchIndexManageRepository {
                 .getMenuId();
     }
 
-    public RestaurantSearch findByRestaurantId(Long restaurantId){
+    public RestaurantSearch findByRestaurantId(Long restaurantId) {
         return restaurantSearchMapper.toDomain(restaurantSearchRepository.findByRestaurantId(restaurantId));
     }
 
 
-    public MenuSearch findByMenuId(Long menuId){
+    public MenuSearch findByMenuId(Long menuId) {
         return menuSearchMapper.toDomain(menuSearchRepository.findByMenuId(menuId));
     }
 }

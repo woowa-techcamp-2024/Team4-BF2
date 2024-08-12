@@ -12,11 +12,10 @@ public class MenuSearch {
     private String id;
 
     private String menuName;
-
     private Long menuId;
     private Long restaurantId;
 
-    public void update(String menuName){
+    public void update(String menuName) {
         this.menuName = menuName;
     }
 }

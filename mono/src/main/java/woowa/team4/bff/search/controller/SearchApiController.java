@@ -27,14 +27,17 @@ public class SearchApiController {
     public ApiResult<List<RestaurantSearchResult>> searchRestaurants(
             @RequestParam("keyword") String keyword,
             @RequestParam("deliveryLocation") String deliveryLocation) {
-        List<RestaurantSearchResult> response = searchService.search(SearchRestaurantCommand.of(keyword, deliveryLocation));
+        List<RestaurantSearchResult> response = searchService.search(
+                SearchRestaurantCommand.of(keyword, deliveryLocation));
         return success(response);
     }
 
     // test 용 으로 만든 api
     @PostMapping("")
-    public ApiResult<Long> addRestaurant(@RequestParam("restaurantName") String restaurantName, @RequestParam("restaurantId") Long restaurantId){
-        Long response = searchIndexManageService.addRestaurant(CreateRestaurantSearchCommand.of(restaurantId, restaurantName));
+    public ApiResult<Long> addRestaurant(@RequestParam("restaurantName") String restaurantName,
+                                         @RequestParam("restaurantId") Long restaurantId) {
+        Long response = searchIndexManageService.addRestaurant(
+                CreateRestaurantSearchCommand.of(restaurantId, restaurantName));
         return success(response);
     }
 }

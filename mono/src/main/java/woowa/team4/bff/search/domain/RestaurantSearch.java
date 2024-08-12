@@ -12,7 +12,7 @@ public class RestaurantSearch {
     private String restaurantName;
     private Long restaurantId;
 
-    public void update(String restaurantName){
+    public void update(String restaurantName) {
         this.restaurantName = restaurantName;
     }
 }

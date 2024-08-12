@@ -20,15 +20,15 @@ public class SearchService {
     private final RestaurantEntityRepository restaurantEntityRepository;
 
     @MethodLogging
-    public List<RestaurantSearchResult> search(SearchRestaurantCommand command){
+    public List<RestaurantSearchResult> search(SearchRestaurantCommand command) {
         return null;
         // return restaurantEntityRepository.findRestaurantSearchResults(getRestaurantIds(command.keyword()), command.deliveryLocation());
     }
 
-    private List<Long> getRestaurantIds(String keyword){
+    private List<Long> getRestaurantIds(String keyword) {
         // ToDo: 비동기로 쏴도 괜찮을 까?
-        List<RestaurantSearch> restaurantSearches =  searchRepository.findAllByRestaurantName(keyword);
-        List<MenuSearch> menuSearches =  searchRepository.findAllByMenuName(keyword);
+        List<RestaurantSearch> restaurantSearches = searchRepository.findAllByRestaurantName(keyword);
+        List<MenuSearch> menuSearches = searchRepository.findAllByMenuName(keyword);
         List<Long> ids = new ArrayList<>();
         ids.addAll(restaurantSearches.stream().map(RestaurantSearch::getRestaurantId).toList());
         ids.addAll(menuSearches.stream().map(MenuSearch::getRestaurantId).toList());
