@@ -28,22 +28,22 @@ public class MenuOptionController {
     @PostMapping("/{menuUuid}")
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResult<MenuOptionCreateResponse> createMenuOption(
-            @PathVariable String menuUuid,
-            @Valid @RequestBody MenuOptionCreateRequest request) {
+            @PathVariable final String menuUuid,
+            @Valid @RequestBody final MenuOptionCreateRequest request) {
         String menuOptionUuid = menuOptionService.createMenuOption(request.toDto(menuUuid));
         return success(new MenuOptionCreateResponse(menuOptionUuid));
     }
 
     @PutMapping("/{menuOptionUuid}")
     public ApiResult<Boolean> updateMenuOption(
-            @PathVariable String menuOptionUuid,
-            @RequestBody MenuOptionUpdateRequest request) {
+            @PathVariable final String menuOptionUuid,
+            @RequestBody final MenuOptionUpdateRequest request) {
         menuOptionService.updateMenuOption(request.toDto(menuOptionUuid));
         return success(Boolean.TRUE);
     }
 
     @DeleteMapping("/{menuOptionUuid}")
-    public ApiResult<Boolean> deleteMenuOption(@PathVariable String menuOptionUuid) {
+    public ApiResult<Boolean> deleteMenuOption(@PathVariable final String menuOptionUuid) {
         menuOptionService.deleteMenuOption(menuOptionUuid);
         return success(Boolean.TRUE);
     }
