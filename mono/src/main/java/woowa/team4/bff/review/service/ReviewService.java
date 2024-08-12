@@ -3,7 +3,7 @@ package woowa.team4.bff.review.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import woowa.team4.bff.review.dto.create.ReviewCreateDto;
+import woowa.team4.bff.review.command.ReviewCreateDto;
 import woowa.team4.bff.review.entity.Review;
 import woowa.team4.bff.review.repository.ReviewRepository;
 

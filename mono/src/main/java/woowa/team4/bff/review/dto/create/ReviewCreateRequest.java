@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 
 import lombok.Builder;
 import lombok.Getter;
+import woowa.team4.bff.review.command.ReviewCreateDto;
 
 @Getter
 @Builder

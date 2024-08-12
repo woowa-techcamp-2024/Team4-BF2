@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import woowa.team4.bff.common.utils.ApiUtils;
-import woowa.team4.bff.review.dto.create.ReviewCreateDto;
+import woowa.team4.bff.review.command.ReviewCreateDto;
 import woowa.team4.bff.review.dto.create.ReviewCreateRequest;
 import woowa.team4.bff.review.dto.create.ReviewCreateResponse;
 import woowa.team4.bff.review.service.ReviewService;

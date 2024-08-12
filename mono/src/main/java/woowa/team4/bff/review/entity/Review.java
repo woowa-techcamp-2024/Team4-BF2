@@ -3,7 +3,7 @@ package woowa.team4.bff.review.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import woowa.team4.bff.review.dto.create.ReviewCreateDto;
+import woowa.team4.bff.review.command.ReviewCreateDto;
 
 import java.util.List;
 
