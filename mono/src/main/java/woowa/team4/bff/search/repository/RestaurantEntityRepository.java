@@ -11,6 +11,6 @@ public interface RestaurantEntityRepository extends JpaRepository<RestaurantEnti
 //            "FROM Restaurant r " +
 //            "LEFT JOIN RestaurantReviewStatus rs ON r.id = rs.restaurantId " +
 //            "LEFT JOIN Menu m ON r.id = m.restaurantId " +
-//            "WHERE r.id IN :restaurantIds and r.location = :deliveryLocation")
+//            "WHERE r.id IN :restaurantIds and r.deliveryLocation = :deliveryLocation")
 //    List<RestaurantSearchResult> findRestaurantSearchResults(@Param("restaurantIds") List<Long> restaurantIds, @Param("deliveryLocation") String deliveryLocation);
 }
