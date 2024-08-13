@@ -26,8 +26,7 @@ public class ReviewMenuEntity {
 
     private String uuid;
 
-    @ManyToOne
-    private ReviewEntity review;
+    private Long reviewId;
 
     private Long menuId;
 
