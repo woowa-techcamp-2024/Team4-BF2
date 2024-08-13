@@ -15,7 +15,6 @@ public class ReviewService {
 
     @Transactional
     public String createReview(final ReviewCreateCommand reviewCreateCommand) {
-
         Review review = Review.builder()
                 .restaurantUuid(reviewCreateCommand.restaurantUuid())
                 .content(reviewCreateCommand.content())
