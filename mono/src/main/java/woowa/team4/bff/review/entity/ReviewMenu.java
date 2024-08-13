@@ -1,13 +1,20 @@
 package woowa.team4.bff.review.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import woowa.team4.bff.menu.item.entity.Menu;
-
-import java.time.LocalDateTime;
+import woowa.team4.bff.menu.item.entity.MenuEntity;
 
 @Entity
 @Table(name = "review_menus")
@@ -26,7 +33,7 @@ public class ReviewMenu {
 
     @OneToOne
     @JoinColumn(name = "menu_id")
-    private Menu menu;
+    private MenuEntity menuEntity;
 
     private Boolean isLiked;
 

@@ -9,7 +9,7 @@ public final class PrefixedUuidConverter {
 
     public static UUID extractUUID(String prefixedUUID) {
         if (prefixedUUID == null || prefixedUUID.isEmpty()) {
-            throw new IllegalArgumentException("입력된 UUID 문자열이 null이거나 비어 있습니다.");
+            return null;
         }
 
         String[] parts = prefixedUUID.split("_");

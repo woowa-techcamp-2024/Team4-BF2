@@ -1,14 +1,15 @@
 package woowa.team4.bff.menu.item.controller.update;
 
-import jakarta.validation.constraints.DecimalMin;
+import static woowa.team4.bff.menu.utils.Constants.*;
+
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import java.math.BigDecimal;
 import woowa.team4.bff.menu.item.command.MenuUpdateCommand;
 
 public record MenuUpdateRequest(@NotBlank String name,
                                 @NotBlank String description,
-                                @NotNull @DecimalMin(value = "0.0") BigDecimal price) {
+                                @NotNull @Min(MENU_MIN_PRICE) long price) {
 
     public MenuUpdateCommand toCommand(final String menuUuid) {
         return MenuUpdateCommand.builder()

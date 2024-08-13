@@ -17,12 +17,13 @@ import woowa.team4.bff.menu.item.command.MenuCreateCommand;
 import woowa.team4.bff.menu.item.command.MenuUpdateCommand;
 import woowa.team4.bff.menu.item.controller.create.MenuCreateRequest;
 import woowa.team4.bff.menu.item.controller.create.MenuCreateResponse;
+import woowa.team4.bff.menu.item.controller.delete.MenuDeleteResponse;
 import woowa.team4.bff.menu.item.controller.update.MenuUpdateRequest;
 import woowa.team4.bff.menu.item.controller.update.MenuUpdateResponse;
 import woowa.team4.bff.menu.item.service.MenuService;
 
 @RestController
-@RequestMapping("/menu")
+@RequestMapping("/api/v1/menus")
 @RequiredArgsConstructor
 public class MenuController {
 
@@ -41,12 +42,11 @@ public class MenuController {
     public ApiResult<MenuUpdateResponse> updateMenu(@PathVariable final String menuUuid,
             @Valid @RequestBody final MenuUpdateRequest menuUpdateRequest) {
         MenuUpdateCommand menuUpdateCommand = menuUpdateRequest.toCommand(menuUuid);
-        MenuUpdateCommand updatedMenu = menuService.updateMenu(menuUpdateCommand);
-        return success(MenuUpdateResponse.from(updatedMenu));
+        return success(new MenuUpdateResponse(menuService.updateMenu(menuUpdateCommand)));
     }
 
     @DeleteMapping("/{menuUuid}")
-    public ApiResult<Boolean> deleteMenu(@PathVariable final String menuUuid) {
-        return success(menuService.deleteMenu(menuUuid));
+    public ApiResult<MenuDeleteResponse> deleteMenu(@PathVariable final String menuUuid) {
+        return success(new MenuDeleteResponse(menuService.deleteMenu(menuUuid)));
     }
 }

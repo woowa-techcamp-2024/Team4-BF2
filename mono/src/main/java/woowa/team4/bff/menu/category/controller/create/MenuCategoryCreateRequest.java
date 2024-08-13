@@ -7,7 +7,7 @@ public record MenuCategoryCreateRequest(
         @NotBlank String name,
         @NotBlank String description) {
 
-    public MenuCategoryCreateCommand toDto(final String restaurantUuid) {
+    public MenuCategoryCreateCommand toCommand(final String restaurantUuid) {
         return new MenuCategoryCreateCommand(restaurantUuid, name, description);
     }
 }

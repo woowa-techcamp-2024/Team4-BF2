@@ -17,12 +17,13 @@ import woowa.team4.bff.menu.category.command.MenuCategoryCreateCommand;
 import woowa.team4.bff.menu.category.command.MenuCategoryUpdateCommand;
 import woowa.team4.bff.menu.category.controller.create.MenuCategoryCreateRequest;
 import woowa.team4.bff.menu.category.controller.create.MenuCategoryCreateResponse;
+import woowa.team4.bff.menu.category.controller.delete.MenuCategoryDeleteResponse;
 import woowa.team4.bff.menu.category.controller.update.MenuCategoryUpdateRequest;
 import woowa.team4.bff.menu.category.controller.update.MenuCategoryUpdateResponse;
 import woowa.team4.bff.menu.category.service.MenuCategoryService;
 
 @RestController
-@RequestMapping("/menu/category")
+@RequestMapping("/api/v1/menus/categories")
 @RequiredArgsConstructor
 public class MenuCategoryController {
 
@@ -34,7 +35,7 @@ public class MenuCategoryController {
             @PathVariable final String restaurantUuid,
             @Valid @RequestBody final MenuCategoryCreateRequest menuCategoryCreateRequest) {
         MenuCategoryCreateCommand menuCategoryCreateCommand = menuCategoryCreateRequest
-                .toDto(restaurantUuid);
+                .toCommand(restaurantUuid);
         String menuCategoryUuid = menuCategoryService.createMenuCategory(menuCategoryCreateCommand);
         return success(new MenuCategoryCreateResponse(menuCategoryUuid));
     }
@@ -43,16 +44,16 @@ public class MenuCategoryController {
     public ApiResult<MenuCategoryUpdateResponse> updateCategory(
             @PathVariable final String menuCategoryUuid,
             @Valid @RequestBody final MenuCategoryUpdateRequest menuCategoryUpdateRequest) {
-        MenuCategoryUpdateCommand menuCategoryUpdateCommand = menuCategoryUpdateRequest
-                .toDto(menuCategoryUuid);
-        MenuCategoryUpdateCommand updatedMenuCategoryDto = menuCategoryService
-                .updateMenuCategory(menuCategoryUpdateCommand);
-        return success(MenuCategoryUpdateResponse.from(updatedMenuCategoryDto));
+        MenuCategoryUpdateCommand updateCommand = menuCategoryUpdateRequest
+                .toCommand(menuCategoryUuid);
+        return success(new MenuCategoryUpdateResponse(
+                menuCategoryService.updateMenuCategory(updateCommand)));
     }
 
     @DeleteMapping("/{menuCategoryUuid}")
-    public ApiResult<Boolean> deleteCategory(
+    public ApiResult<MenuCategoryDeleteResponse> deleteCategory(
             @PathVariable final String menuCategoryUuid) {
-        return success(menuCategoryService.deleteMenuCategory(menuCategoryUuid));
+        return success(new MenuCategoryDeleteResponse(
+                menuCategoryService.deleteMenuCategory(menuCategoryUuid)));
     }
 }

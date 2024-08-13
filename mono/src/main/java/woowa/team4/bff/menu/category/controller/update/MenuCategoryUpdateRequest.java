@@ -7,7 +7,7 @@ public record MenuCategoryUpdateRequest(
         @NotBlank String name,
         @NotBlank String description) {
 
-    public MenuCategoryUpdateCommand toDto(final String menuCategoryUuid) {
+    public MenuCategoryUpdateCommand toCommand(final String menuCategoryUuid) {
         return new MenuCategoryUpdateCommand(menuCategoryUuid, this.name, this.description);
     }
 }
