@@ -1,4 +1,6 @@
 package woowa.team4.bff.event.restaurant;
 
-public record RestaurantUpdateEvent(Long restaurantId, String restaurantName) {
+import woowa.team4.bff.event.Event;
+
+public record RestaurantUpdateEvent(Long restaurantId, String restaurantName) implements Event {
 }
