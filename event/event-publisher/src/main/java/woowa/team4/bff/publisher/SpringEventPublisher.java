@@ -15,6 +15,6 @@ public class SpringEventPublisher implements EventPublisher {
 
     @Override
     public void publish(Event event) {
-        // TODO 이벤트 발행
+        eventPublisher.publishEvent(event);
     }
 }
