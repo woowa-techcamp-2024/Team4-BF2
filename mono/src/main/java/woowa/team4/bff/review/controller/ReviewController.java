@@ -23,7 +23,7 @@ public class ReviewController {
     @ResponseStatus(HttpStatus.CREATED)
     public ApiUtils.ApiResult<ReviewCreateResponse> createReview(@PathVariable final String restaurantUuid,
             @Valid @RequestBody final ReviewCreateRequest reviewCreateRequest) {
-        ReviewCreateCommand reviewCreateCommand = reviewCreateRequest.toCommand(restaurantUuid);
+        ReviewCreateCommand reviewCreateCommand = ReviewCreateCommand.of(restaurantUuid, reviewCreateRequest.content(), reviewCreateRequest.rating());
         String reviewUuid = reviewService.createReview(reviewCreateCommand);
         return success(new ReviewCreateResponse(reviewUuid));
     }
