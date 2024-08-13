@@ -22,14 +22,14 @@ public class ReviewEntity {
     private UUID uuid;
 
     @Column(name = "restaurant_uuid")
-    private String restaurantUuid;
+    private UUID restaurantUuid;
 
     private String content;
 
     private Double rating;
 
     @OneToMany(mappedBy = "review")
-    private List<ReviewMenu> reviewMenus;
+    private List<ReviewMenuEntity> reviewMenuEntities;
 
     @PrePersist
     public void prePersist() {
@@ -37,7 +37,7 @@ public class ReviewEntity {
     }
 
     @Builder
-    public ReviewEntity(final String restaurantUuid, final String content, final Double rating) {
+    public ReviewEntity(final UUID restaurantUuid, final String content, final Double rating) {
         this.restaurantUuid = restaurantUuid;
         this.content = content;
         this.rating = rating;
