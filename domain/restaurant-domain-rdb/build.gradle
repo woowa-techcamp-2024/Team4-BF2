@@ -42,6 +42,9 @@ dependencies {
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
     // module
     implementation project(":event:restaurant-event")
+    implementation project(":event:event-publisher")
+    implementation project(":event:common-event")
+    implementation project(":domain:common-domain")
 }
 
 tasks.named('test') {
