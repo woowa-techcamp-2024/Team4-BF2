@@ -23,6 +23,7 @@ public class Restaurant {
     private final String closedDays;
     private final Integer minimumOrderAmount;
     private final String uuid;
+    private final String deliveryLocation;
     private final LocalDateTime createdAt;
 
     public static Restaurant fromEntity(RestaurantEntity entity) {
@@ -37,6 +38,7 @@ public class Restaurant {
                 .closedDays(entity.getClosedDays())
                 .minimumOrderAmount(entity.getMinimumOrderAmount())
                 .uuid(PrefixedUuidConverter.addPrefix("restaurant", entity.getUuid()))
+                .deliveryLocation(entity.getDeliveryLocation())
                 .createdAt(entity.getCreatedAt())
                 .build();
     }
@@ -51,6 +53,7 @@ public class Restaurant {
                 .operatingTime(operatingTime)
                 .closedDays(closedDays)
                 .minimumOrderAmount(minimumOrderAmount)
+                .deliveryLocation(deliveryLocation)
                 .build();
     }
 }

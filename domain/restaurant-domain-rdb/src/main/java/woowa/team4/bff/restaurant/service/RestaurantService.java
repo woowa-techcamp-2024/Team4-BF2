@@ -24,6 +24,7 @@ public class RestaurantService {
                 .operatingTime(command.operatingTime())
                 .closedDays(command.closedDays())
                 .minimumOrderAmount(command.minimumOrderAmount())
+                .deliveryLocation(command.deliveryLocation())
                 .build();
         restaurantValidator.validateRestaurant(restaurant);
         Restaurant registered = restaurantRegistrant.register(restaurant);
