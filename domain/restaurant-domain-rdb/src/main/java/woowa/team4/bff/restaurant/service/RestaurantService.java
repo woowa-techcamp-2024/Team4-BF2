@@ -15,7 +15,16 @@ public class RestaurantService {
     private final RestaurantEventProvider restaurantEventProvider;
 
     public String registerRestaurant(RestaurantRegistrationCommand command) {
-        Restaurant restaurant = command.toDomain();
+        Restaurant restaurant = Restaurant.builder()
+                .name(command.name())
+                .phone(command.phone())
+                .address(command.address())
+                .introduction(command.introduction())
+                .image(command.image())
+                .operatingTime(command.operatingTime())
+                .closedDays(command.closedDays())
+                .minimumOrderAmount(command.minimumOrderAmount())
+                .build();
         restaurantValidator.validateRestaurant(restaurant);
         Restaurant registered = restaurantRegistrant.register(restaurant);
         restaurantEventProvider.publishRegistrationEvent(registered);
