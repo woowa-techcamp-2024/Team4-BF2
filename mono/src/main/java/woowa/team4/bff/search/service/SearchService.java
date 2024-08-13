@@ -10,19 +10,18 @@ import woowa.team4.bff.search.command.SearchRestaurantCommand;
 import woowa.team4.bff.search.domain.MenuSearch;
 import woowa.team4.bff.search.domain.RestaurantSearch;
 import woowa.team4.bff.search.domain.RestaurantSearchResult;
-import woowa.team4.bff.search.repository.RestaurantEntityRepository;
+import woowa.team4.bff.search.repository.RestaurantSearchResultRepository;
 import woowa.team4.bff.search.repository.SearchRepository;
 
 @Service
 @RequiredArgsConstructor
 public class SearchService {
     private final SearchRepository searchRepository;
-    // private final RestaurantEntityRepository restaurantEntityRepository;
+    private final RestaurantSearchResultRepository restaurantSearchResultRepository;
 
     @MethodLogging
     public List<RestaurantSearchResult> search(SearchRestaurantCommand command) {
-        return null;
-        // return restaurantEntityRepository.findRestaurantSearchResults(getRestaurantIds(command.keyword()), command.deliveryLocation());
+        return restaurantSearchResultRepository.findByRestaurantIdsAndDeliveryLocation(getRestaurantIds(command.keyword()), command.deliveryLocation());
     }
 
     private List<Long> getRestaurantIds(String keyword) {
