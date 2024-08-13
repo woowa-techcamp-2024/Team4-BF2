@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Getter
 @Entity
-@Table(name = "restaurant")
+@Table(name = "restaurants")
 @EntityListeners(AuditingEntityListener.class)
 public class RestaurantEntity {
 
