@@ -1,9 +1,9 @@
 package woowa.team4.bff.review.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import woowa.team4.bff.review.command.ReviewCreateCommand;
 
 import java.util.List;
 import java.util.UUID;
@@ -36,14 +36,11 @@ public class ReviewEntity {
         this.uuid = java.util.UUID.randomUUID();
     }
 
+    @Builder
     public ReviewEntity(final String restaurantUuid, final String content, final Double rating) {
         this.restaurantUuid = restaurantUuid;
         this.content = content;
         this.rating = rating;
-    }
-
-    public static ReviewEntity create(final String restaurantUuid, ReviewCreateCommand command) {
-        return new ReviewEntity(restaurantUuid, command.content(), command.rating());
     }
 
 }
