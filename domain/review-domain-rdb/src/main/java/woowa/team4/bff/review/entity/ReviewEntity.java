@@ -29,7 +29,7 @@ public class ReviewEntity {
     private Double rating;
 
     @OneToMany(mappedBy = "review")
-    private List<ReviewMenuEntity> reviewMenuEntities;
+    private List<ReviewMenuEntity> reviewMenus;
 
     @PrePersist
     public void prePersist() {
