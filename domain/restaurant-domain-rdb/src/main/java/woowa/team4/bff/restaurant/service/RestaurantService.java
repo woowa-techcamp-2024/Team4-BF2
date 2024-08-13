@@ -1,5 +1,6 @@
 package woowa.team4.bff.restaurant.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import woowa.team4.bff.restaurant.command.RestaurantRegistrationCommand;
@@ -14,6 +15,7 @@ public class RestaurantService {
     private final RestaurantRegistrant restaurantRegistrant;
     private final RestaurantEventProvider restaurantEventProvider;
 
+    @Transactional
     public String registerRestaurant(RestaurantRegistrationCommand command) {
         Restaurant restaurant = Restaurant.builder()
                 .name(command.name())
