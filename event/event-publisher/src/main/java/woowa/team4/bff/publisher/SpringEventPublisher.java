@@ -1,7 +1,8 @@
-package woowa.team4.bff.restaurant.event;
+package woowa.team4.bff.publisher;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
+import woowa.team4.bff.event.Event;
 
 @Component
 public class SpringEventPublisher implements EventPublisher {
@@ -14,6 +15,6 @@ public class SpringEventPublisher implements EventPublisher {
 
     @Override
     public void publish(Event event) {
-        // TODO 이벤트 발행
+        eventPublisher.publishEvent(event);
     }
 }

@@ -1,4 +1,6 @@
 package woowa.team4.bff.event.menu;
 
-public record MenuUpdateEvent(Long menuId, Long restaurantId, String menuName) {
+import woowa.team4.bff.event.Event;
+
+public record MenuUpdateEvent(Long menuId, Long restaurantId, String menuName) implements Event {
 }
