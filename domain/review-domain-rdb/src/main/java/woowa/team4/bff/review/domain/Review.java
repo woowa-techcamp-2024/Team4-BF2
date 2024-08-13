@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class Review {
 
-    private final String reviewId;
+    private final String reviewUuId;
     private final String restaurantUuid;
     private final String content;
     private final Double rating;
