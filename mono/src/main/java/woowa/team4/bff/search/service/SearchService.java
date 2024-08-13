@@ -6,18 +6,18 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import woowa.team4.bff.common.aop.MethodLogging;
+import woowa.team4.bff.search.command.SearchRestaurantCommand;
 import woowa.team4.bff.search.domain.MenuSearch;
 import woowa.team4.bff.search.domain.RestaurantSearch;
 import woowa.team4.bff.search.domain.RestaurantSearchResult;
 import woowa.team4.bff.search.repository.RestaurantEntityRepository;
 import woowa.team4.bff.search.repository.SearchRepository;
-import woowa.team4.bff.search.service.command.SearchRestaurantCommand;
 
 @Service
 @RequiredArgsConstructor
 public class SearchService {
     private final SearchRepository searchRepository;
-    private final RestaurantEntityRepository restaurantEntityRepository;
+    // private final RestaurantEntityRepository restaurantEntityRepository;
 
     @MethodLogging
     public List<RestaurantSearchResult> search(SearchRestaurantCommand command) {

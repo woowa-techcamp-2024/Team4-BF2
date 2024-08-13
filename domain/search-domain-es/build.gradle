@@ -29,10 +29,6 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     // db
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    runtimeOnly 'com.mysql:mysql-connector-j'
-    // spatial
-    implementation 'org.hibernate.orm:hibernate-spatial'
     implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch:2.7.18'
     // aop
     implementation("org.springframework.boot:spring-boot-starter-aop")
@@ -44,12 +40,8 @@ dependencies {
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
     // module
-    implementation project(":core-web")
-    implementation project(":domain:menu-domain-rdb")
-    implementation project(":domain:restaurant-domain-rdb")
-    implementation project(":domain:review-domain-rdb")
-    implementation project(":domain:search-domain-rdb")
-    implementation project(":domain:search-domain-es")
+    implementation project(":event:restaurant-event")
+    implementation project(":event:menu-event")
 }
 
 tasks.named('test') {
