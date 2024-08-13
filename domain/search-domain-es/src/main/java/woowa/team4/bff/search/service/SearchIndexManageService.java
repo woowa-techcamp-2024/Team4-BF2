@@ -37,6 +37,9 @@ public class SearchIndexManageService {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public Long addMenu(MenuCreateEvent event) {
         MenuSearch menuSearch = MenuSearch.builder()
+                .menuId(event.menuId())
+                .menuName(event.menuName())
+                .restaurantId(event.restaurantId())
                 .build();
         return searchIndexManageRepository.save(menuSearch);
     }
