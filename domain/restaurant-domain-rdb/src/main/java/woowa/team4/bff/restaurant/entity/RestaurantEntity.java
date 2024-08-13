@@ -43,6 +43,7 @@ public class RestaurantEntity {
     private Integer minimumOrderAmount;
 
     private UUID uuid;
+    private String deliveryLocation;
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -54,7 +55,7 @@ public class RestaurantEntity {
     }
 
     @Builder
-    public RestaurantEntity(String name, String phone, String address, String introduction, String image, String operatingTime, String closedDays, Integer minimumOrderAmount) {
+    public RestaurantEntity(String name, String phone, String address, String introduction, String image, String operatingTime, String closedDays, Integer minimumOrderAmount, String deliveryLocation) {
         this.name = name;
         this.phone = phone;
         this.address = address;
@@ -63,6 +64,7 @@ public class RestaurantEntity {
         this.operatingTime = operatingTime;
         this.closedDays = closedDays;
         this.minimumOrderAmount = minimumOrderAmount;
+        this.deliveryLocation = deliveryLocation;
     }
 
     @PrePersist
