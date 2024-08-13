@@ -5,13 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import woowa.team4.bff.review.command.ReviewCreateCommand;
 import woowa.team4.bff.review.entity.ReviewEntity;
-import woowa.team4.bff.review.repository.ReviewRepository;
+import woowa.team4.bff.review.repository.ReviewEntityRepository;
 
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
 
-    private final ReviewRepository reviewRepository;
+    private final ReviewEntityRepository reviewEntityRepository;
 
     @Transactional
     public String createReview(final ReviewCreateCommand reviewCreateCommand) {
