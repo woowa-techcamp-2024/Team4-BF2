@@ -1,4 +1,4 @@
-package woowa.team4.bff.common.utils;
+package woowa.team4.bff.domain.common.utils;
 
 import java.util.UUID;
 
