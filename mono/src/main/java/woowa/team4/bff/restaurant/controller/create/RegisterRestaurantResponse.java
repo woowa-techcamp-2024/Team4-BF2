@@ -1,4 +1,4 @@
-package woowa.team4.bff.restaurant.controller.dto.response;
+package woowa.team4.bff.restaurant.controller.create;
 
 public record RegisterRestaurantResponse(String restaurantId) {
 }

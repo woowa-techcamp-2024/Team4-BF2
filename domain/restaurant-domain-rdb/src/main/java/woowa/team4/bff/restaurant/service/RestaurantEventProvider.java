@@ -1,21 +1,19 @@
 package woowa.team4.bff.restaurant.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import woowa.team4.bff.event.restaurant.RestaurantCreateEvent;
+import woowa.team4.bff.publisher.EventPublisher;
 import woowa.team4.bff.restaurant.domain.Restaurant;
-import woowa.team4.bff.restaurant.event.EventPublisher;
-import woowa.team4.bff.restaurant.event.RestaurantRegistrationEvent;
 
 @Component
+@RequiredArgsConstructor
 public class RestaurantEventProvider {
 
     private final EventPublisher eventPublisher;
 
-    public RestaurantEventProvider(EventPublisher eventPublisher) {
-        this.eventPublisher = eventPublisher;
-    }
-
     public void publishRegistrationEvent(Restaurant restaurant) {
-        RestaurantRegistrationEvent event = new RestaurantRegistrationEvent(restaurant.uuid());
+        RestaurantCreateEvent event = new RestaurantCreateEvent(restaurant.getId(), restaurant.getName());
         eventPublisher.publish(event);
     }
 }
