@@ -1,0 +1,44 @@
+{
+  "analysis": {
+    "analyzer": {
+      "nori_synonym_analyzer": {
+        "tokenizer": "nori_tokenizer",
+        "filter": [
+          "nori_posfilter",
+          "nori_readingform",
+          "lowercase",
+          "synonym_filter"
+        ]
+      }
+    },
+    "filter": {
+      "synonym_filter": {
+        "type": "synonym",
+        "synonyms_path": "synonyms.txt"
+      },
+      "nori_posfilter": {
+        "type": "nori_part_of_speech",
+        "stoptags": [
+          "E",
+          "IC",
+          "J",
+          "MAG",
+          "MAJ",
+          "MM",
+          "SP",
+          "SSC",
+          "SSO",
+          "SC",
+          "SE",
+          "XPN",
+          "XSA",
+          "XSN",
+          "XSV",
+          "UNA",
+          "NA",
+          "VSV"
+        ]
+      }
+    }
+  }
+}
