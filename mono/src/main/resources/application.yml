@@ -29,6 +29,11 @@ spring:
     elasticsearch:
       repositories:
         enabled: true
+
+logging:
+  level:
+    tracer: TRACE
+
 ---
 spring:
   config:
