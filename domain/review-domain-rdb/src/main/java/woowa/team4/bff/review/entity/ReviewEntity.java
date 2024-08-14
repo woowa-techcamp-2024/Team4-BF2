@@ -28,9 +28,6 @@ public class ReviewEntity {
 
     private Double rating;
 
-    @OneToMany(mappedBy = "review")
-    private List<ReviewMenuEntity> reviewMenus;
-
     @PrePersist
     public void prePersist() {
         this.uuid = java.util.UUID.randomUUID();

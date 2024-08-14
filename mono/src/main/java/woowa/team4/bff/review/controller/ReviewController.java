@@ -13,7 +13,7 @@ import woowa.team4.bff.review.service.ReviewService;
 import static woowa.team4.bff.common.utils.ApiUtils.success;
 
 @RestController
-@RequestMapping("/review")
+@RequestMapping("/api/v1/reviews")
 @RequiredArgsConstructor
 public class ReviewController {
 
