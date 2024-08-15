@@ -1,9 +1,11 @@
 package woowa.team4.bff.review.command;
 
-public record ReviewCreateCommand (String restaurantUuid, String content, Double rating) {
+import java.util.List;
 
-    public static ReviewCreateCommand of(String restaurantUuid, String content, Double rating) {
-        return new ReviewCreateCommand(restaurantUuid, content, rating);
+public record ReviewCreateCommand (String restaurantUuid, String content, Double rating, List<ReviewMenuCreateCommand> menus) {
+
+    public static ReviewCreateCommand of(String restaurantUuid, String content, Double rating, List<ReviewMenuCreateCommand> menus) {
+        return new ReviewCreateCommand(restaurantUuid, content, rating, menus);
     }
 
 }
