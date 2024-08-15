@@ -42,6 +42,7 @@ dependencies {
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
     // module
     implementation project(":domain:restaurant-domain-rdb")
+    implementation project(":domain:menu-domain-rdb")
     implementation project(":domain:common-domain")
 }
 
