@@ -1,5 +1,6 @@
 dependencies {
     // module
     implementation project(":domain:restaurant-domain-rdb")
+    implementation project(":domain:menu-domain-rdb")
     implementation project(":domain:common-domain")
 }
