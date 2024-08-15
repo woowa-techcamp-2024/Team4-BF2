@@ -99,5 +99,4 @@ public class ReviewService {
         reviewStatistics.setAverageRating(totalRating / reviews);
         return reviewStatistics;
     }
-
 }
