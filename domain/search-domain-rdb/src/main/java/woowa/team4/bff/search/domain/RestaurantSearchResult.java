@@ -8,17 +8,17 @@ public class RestaurantSearchResult {
 
     private UUID restaurantUuid;
     private String restaurantName;
-    private Integer minimumOrderPrice;
+    private Integer minimumOrderAmount;
     // ToDo: ReviewStatus Domain 기능 완성 후 추가
 //    private Double rating;
 //    private Integer reviewCount;
-    private String menuName;
+    private String menuNames;
 
-    public RestaurantSearchResult(UUID restaurantUuid, String restaurantName, Integer minimumOrderPrice,
-                                  String menuName) {
+    public RestaurantSearchResult(UUID restaurantUuid, String restaurantName, Integer minimumOrderAmount,
+                                  String menuNames) {
         this.restaurantUuid = restaurantUuid;
         this.restaurantName = restaurantName;
-        this.minimumOrderPrice = minimumOrderPrice;
-        this.menuName = menuName;
+        this.minimumOrderAmount = minimumOrderAmount;
+        this.menuNames = menuNames;
     }
 }

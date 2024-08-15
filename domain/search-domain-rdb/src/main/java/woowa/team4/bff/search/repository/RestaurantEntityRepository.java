@@ -9,10 +9,13 @@ import woowa.team4.bff.search.domain.RestaurantSearchResult;
 
 public interface RestaurantEntityRepository extends JpaRepository<RestaurantEntity, Long> {
     // ToDo: Restauarnt, Menu, ReviewStatus 관련 module 완성시 사용
-    @Query("SELECT new woowa.team4.bff.search.domain.RestaurantSearchResult(r.uuid, r.name, r.minimumOrderAmount, m.name) " +
+    @Query("SELECT new woowa.team4.bff.search.domain.RestaurantSearchResult(r.uuid, r.name, r.minimumOrderAmount, " +
+            "CAST((SELECT COALESCE(GROUP_CONCAT(m.name), '') " +
+            "FROM MenuEntity m " +
+            "JOIN MenuCategoryEntity mc ON m.menuCategoryId = mc.id " +
+            "WHERE mc.restaurantId = r.id) AS string)) " +
             "FROM RestaurantEntity r " +
-            "LEFT JOIN MenuCategoryEntity mc ON r.id = mc.restaurantId " +
-            "LEFT JOIN MenuEntity m ON mc.id = m.menuCategoryId " +
-            "WHERE r.id IN :restaurantIds and r.deliveryLocation = :deliveryLocation")
+            "WHERE r.id IN :restaurantIds AND r.deliveryLocation = :deliveryLocation " +
+            "GROUP BY r.id")
     List<RestaurantSearchResult> findRestaurantSearchResults(@Param("restaurantIds") List<Long> restaurantIds, @Param("deliveryLocation") String deliveryLocation);
 }
