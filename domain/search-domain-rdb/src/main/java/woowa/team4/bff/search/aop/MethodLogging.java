@@ -1,4 +1,4 @@
-package woowa.team4.bff.common.aop;
+package woowa.team4.bff.search.aop;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

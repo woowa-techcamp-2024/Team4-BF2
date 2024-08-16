@@ -3,6 +3,7 @@ package woowa.team4.bff.search.repository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import woowa.team4.bff.search.aop.MethodLogging;
 import woowa.team4.bff.search.domain.RestaurantSearchResult;
 
 @Repository
@@ -10,6 +11,7 @@ import woowa.team4.bff.search.domain.RestaurantSearchResult;
 public class RestaurantSearchResultRepository {
     private final RestaurantEntityRepository restaurantEntityRepository;
 
+    @MethodLogging
     public List<RestaurantSearchResult> findByRestaurantIdsAndDeliveryLocation(List<Long> restaurantIds, String deliveryLocation){
         return restaurantEntityRepository.findRestaurantSearchResults(restaurantIds, deliveryLocation);
     }

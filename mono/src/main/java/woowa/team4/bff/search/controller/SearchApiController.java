@@ -19,11 +19,20 @@ import woowa.team4.bff.search.command.SearchRestaurantCommand;
 public class SearchApiController {
     private final SearchService searchService;
 
-    @GetMapping("")
+    @GetMapping("/es")
     public ApiResult<List<RestaurantSearchResult>> searchRestaurants(
             @RequestParam("keyword") String keyword,
             @RequestParam("deliveryLocation") String deliveryLocation) {
-        List<RestaurantSearchResult> response = searchService.search(
+        List<RestaurantSearchResult> response = searchService.searchEs(
+                SearchRestaurantCommand.of(keyword, deliveryLocation));
+        return success(response);
+    }
+
+    @GetMapping("/like")
+    public ApiResult<List<RestaurantSearchResult>> searchRestaurantsUsingLike(
+            @RequestParam("keyword") String keyword,
+            @RequestParam("deliveryLocation") String deliveryLocation) {
+        List<RestaurantSearchResult> response = searchService.searchLike(
                 SearchRestaurantCommand.of(keyword, deliveryLocation));
         return success(response);
     }

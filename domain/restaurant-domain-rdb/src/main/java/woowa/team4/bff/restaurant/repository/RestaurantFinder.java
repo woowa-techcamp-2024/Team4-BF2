@@ -1,8 +1,11 @@
 package woowa.team4.bff.restaurant.repository;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import woowa.team4.bff.domain.common.utils.PrefixedUuidConverter;
+import woowa.team4.bff.restaurant.domain.Restaurant;
 import woowa.team4.bff.restaurant.entity.RestaurantEntity;
 
 import java.util.UUID;
@@ -18,5 +21,12 @@ public class RestaurantFinder {
         RestaurantEntity restaurantEntity = restaurantRepository.findByUuid(extractedUuid)
                 .orElseThrow(() -> new IllegalArgumentException("해당 식당이 존재하지 않습니다: " + uuid));
         return restaurantEntity.getId();
+    }
+
+    public List<Long> findIdByKeyword(String restaurantName){
+        return restaurantRepository.findByNameContaining(restaurantName)
+                .stream()
+                .map(RestaurantEntity::getId)
+                .collect(Collectors.toList());
     }
 }
