@@ -34,9 +34,10 @@ public interface RestaurantSearchResultEntityRepository extends JpaRepository<Re
     @Query("SELECT DISTINCT r.id "
             + "FROM RestaurantEntity r "
             + "LEFT JOIN MenuEntity m ON m.restaurantId = r.id "
-            + "WHERE (LOWER(r.name) LIKE LOWER(CONCAT('%', :keyword, '%')) "
-            + "OR LOWER(m.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) "
-            + "AND r.deliveryLocation = :deliveryLocation "
+            + "WHERE "
+            + "r.deliveryLocation = :deliveryLocation AND "
+            + "(LOWER(r.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR "
+            + "LOWER(m.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) "
             + "GROUP BY r.id, r.uuid, r.name, r.minimumOrderAmount")
     List<Long> findIdsByKeywordAndDeliveryLocation(@Param("keyword") String keyword,
                                                    @Param("deliveryLocation") String deliveryLocation);
@@ -46,9 +47,10 @@ public interface RestaurantSearchResultEntityRepository extends JpaRepository<Re
                     + "FROM RestaurantEntity r "
                     + "LEFT JOIN MenuEntity m ON m.restaurantId = r.id "
                     + "LEFT JOIN ReviewStatisticsEntity rs ON rs.restaurantId = r.id "
-                    + "WHERE (LOWER(r.name) LIKE LOWER(CONCAT('%', :keyword, '%')) "
-                    + "OR LOWER(m.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) "
-                    + "AND r.deliveryLocation = :deliveryLocation "
+                    + "WHERE "
+                    + "r.deliveryLocation = :deliveryLocation AND "
+                    + "(LOWER(r.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR "
+                    + "LOWER(m.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) "
                     + "GROUP BY r.id, r.uuid, r.name, r.minimumOrderAmount, rs.averageRating, rs.reviewCount"
     )
     List<RestaurantSearchResult> findByKeywordAndDeliveryLocation(@Param("keyword") String keyword,
