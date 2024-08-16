@@ -1,0 +1,45 @@
+name: 개발 서버 배포
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: JDK 17 설정
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+
+      - name: gradlew 실행 권한 부여
+        run: chmod +x gradlew
+
+      - name: JAR 빌드
+        run: ./gradlew clean build
+
+      - name: JAR를 EC2로 전송
+        env:
+          PRIVATE_KEY: ${{ secrets.DEV_EC2_SSH_KEY }}
+          HOST: ${{ secrets.DEV_EC2_HOST }}
+          USER: ${{ secrets.DEV_EC2_USER }}
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          scp -o StrictHostKeyChecking=no -i private_key mono/build/libs/*.jar ${USER}@${HOST}:~/app.jar
+
+      - name: EC2에서 JAR 실행
+        env:
+          PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          HOST: ${{ secrets.EC2_HOST }}
+          USER: ${{ secrets.EC2_USER }}
+        run: |
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
+            pkill -f 'java -jar app.jar' || true
+            nohup java -jar app.jar > app.log 2>&1 &
+          EOF
