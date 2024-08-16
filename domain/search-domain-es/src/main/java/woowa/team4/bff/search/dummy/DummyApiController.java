@@ -10,31 +10,29 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import woowa.team4.bff.search.document.MenuSearchDocument;
-import woowa.team4.bff.search.document.RestaurantSearchDocument;
-import woowa.team4.bff.search.repository.MenuSearchRepository;
-import woowa.team4.bff.search.repository.RestaurantSearchRepository;
+import org.springframework.stereotype.Component;
+import woowa.team4.bff.search.domain.MenuSearch;
+import woowa.team4.bff.search.domain.RestaurantSearch;
+import woowa.team4.bff.search.service.DummyInsertService;
 
-@RequestMapping("/api/v1/dummy")
-@RestController
+
+//@RequestMapping("/api/v1/dummy")
+//@RestController
+@Component
 @RequiredArgsConstructor
 public class DummyApiController {
-    private final RestaurantSearchRepository restaurantSearchRepository;
-    private final MenuSearchRepository menuSearchRepository;
+    private final DummyInsertService dummyInsertService;
+
     private final Logger log = LoggerFactory.getLogger(DummyApiController.class);
 
-    @PostMapping("/restaurants/{idx}")
-    public void bulkInsertRestaurant(@PathVariable("idx") Integer idx){
+    //@PostMapping("/restaurants/{idx}")
+    public void bulkInsertRestaurant(Integer idx){
         String csvFile = "restaurant_es_" + idx + ".csv";
         readRestaurant(csvFile);
     }
 
-    private List<RestaurantSearchDocument> readRestaurant(String filename){
-        List<RestaurantSearchDocument> restaurantSearchDocuments = new ArrayList<>();
+    private void readRestaurant(String filename){
+        List<RestaurantSearch> restaurantSearchDocuments = new ArrayList<>();
         int batch_size = 10000;
         int i = 0;
         int count = 0;
@@ -49,7 +47,7 @@ public class DummyApiController {
                 count += 1;
                 if(i == batch_size){
                     i = 0;
-                    restaurantSearchRepository.saveAll(restaurantSearchDocuments);
+                    dummyInsertService.bulkInsertRestaurant(restaurantSearchDocuments);
                     restaurantSearchDocuments = new ArrayList<>();
                     System.out.println(count + "개 처리");
                 }
@@ -63,28 +61,27 @@ public class DummyApiController {
                     }
                 }
                 log.info(Arrays.toString(data));
-                RestaurantSearchDocument restaurantSearchDocument = RestaurantSearchDocument.builder()
+                RestaurantSearch restaurantSearchDocument = RestaurantSearch.builder()
                         .restaurantName(restaurantName)
                         .restaurantId(restaurantId)
                         .build();
                 restaurantSearchDocuments.add(restaurantSearchDocument);
             }
-            restaurantSearchRepository.saveAll(restaurantSearchDocuments);
+            dummyInsertService.bulkInsertRestaurant(restaurantSearchDocuments);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return restaurantSearchDocuments;
     }
 
 
-    @PostMapping("/menus/{idx}")
-    public void bulkInsertMenu(@PathVariable("idx") Integer idx){
+    //@PostMapping("/menus/{idx}")
+    public void bulkInsertMenu(Integer idx){
         String csvFile = "menu_es_" + idx + ".csv";
         readMenu(csvFile);
     }
 
-    private List<MenuSearchDocument> readMenu(String filename){
-        List<MenuSearchDocument> menuSearchDocuments = new ArrayList<>();
+    private void readMenu(String filename){
+        List<MenuSearch> menuSearchDocuments = new ArrayList<>();
         int batch_size = 10000;
         int i = 0;
         int count = 0;
@@ -99,7 +96,7 @@ public class DummyApiController {
                 count += 1;
                 if(i == batch_size){
                     i = 0;
-                    menuSearchRepository.saveAll(menuSearchDocuments);
+                    dummyInsertService.bulkInsertMenu(menuSearchDocuments);
                     menuSearchDocuments = new ArrayList<>();
                     log.info(count + "개 처리");
                 }
@@ -114,17 +111,16 @@ public class DummyApiController {
                     }
                 }
                 log.info(Arrays.toString(data));
-                MenuSearchDocument menuSearchDocument = MenuSearchDocument.builder()
+                MenuSearch menuSearchDocument = MenuSearch.builder()
                         .menuName(menuName)
                         .menuId(menuId)
                         .restaurantId(restaurantId)
                         .build();
                 menuSearchDocuments.add(menuSearchDocument);
             }
-            menuSearchRepository.saveAll(menuSearchDocuments);
+            dummyInsertService.bulkInsertMenu(menuSearchDocuments);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return menuSearchDocuments;
     }
 }

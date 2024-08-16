@@ -22,11 +22,4 @@ public class RestaurantFinder {
                 .orElseThrow(() -> new IllegalArgumentException("해당 식당이 존재하지 않습니다: " + uuid));
         return restaurantEntity.getId();
     }
-
-    public List<Long> findIdByKeyword(String restaurantName){
-        return restaurantRepository.findByNameContaining(restaurantName)
-                .stream()
-                .map(RestaurantEntity::getId)
-                .collect(Collectors.toList());
-    }
 }

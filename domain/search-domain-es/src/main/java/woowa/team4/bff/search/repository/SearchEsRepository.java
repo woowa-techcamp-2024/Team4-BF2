@@ -9,7 +9,7 @@ import woowa.team4.bff.search.domain.RestaurantSearch;
 
 @Repository
 @RequiredArgsConstructor
-public class SearchRepository {
+public class SearchEsRepository {
     private final RestaurantSearchRepository restaurantSearchRepository;
     private final MenuSearchRepository menuSearchRepository;
     private final RestaurantSearchMapper restaurantSearchMapper = RestaurantSearchMapper.INSTANCE;

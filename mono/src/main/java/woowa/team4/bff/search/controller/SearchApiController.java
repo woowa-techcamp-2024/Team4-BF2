@@ -19,20 +19,29 @@ import woowa.team4.bff.search.command.SearchRestaurantCommand;
 public class SearchApiController {
     private final SearchService searchService;
 
-    @GetMapping("/es")
-    public ApiResult<List<RestaurantSearchResult>> searchRestaurants(
+//    @GetMapping("/es")
+//    public ApiResult<List<RestaurantSearchResult>> searchRestaurants(
+//            @RequestParam("keyword") String keyword,
+//            @RequestParam("deliveryLocation") String deliveryLocation) {
+//        List<RestaurantSearchResult> response = searchService.searchEs(
+//                SearchRestaurantCommand.of(keyword, deliveryLocation));
+//        return success(response);
+//    }
+
+    @GetMapping("/like-and-join")
+    public ApiResult<List<RestaurantSearchResult>> searchRestaurantsUsingLikeAndJoin(
             @RequestParam("keyword") String keyword,
             @RequestParam("deliveryLocation") String deliveryLocation) {
-        List<RestaurantSearchResult> response = searchService.searchEs(
+        List<RestaurantSearchResult> response = searchService.searchLikeAndJoin(
                 SearchRestaurantCommand.of(keyword, deliveryLocation));
         return success(response);
     }
 
-    @GetMapping("/like")
-    public ApiResult<List<RestaurantSearchResult>> searchRestaurantsUsingLike(
+    @GetMapping("/like-after-join")
+    public ApiResult<List<RestaurantSearchResult>> searchRestaurantsUsingLikeAfterJoin(
             @RequestParam("keyword") String keyword,
             @RequestParam("deliveryLocation") String deliveryLocation) {
-        List<RestaurantSearchResult> response = searchService.searchLike(
+        List<RestaurantSearchResult> response = searchService.searchLikeAfterJoin(
                 SearchRestaurantCommand.of(keyword, deliveryLocation));
         return success(response);
     }
