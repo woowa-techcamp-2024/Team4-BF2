@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 public class ReviewMenu {
 
-    private final String reviewMenuUuId;
+    private final String reviewMenuUuid;
     private final Long reviewId;
     private final Long menuId;
     private final String content;
