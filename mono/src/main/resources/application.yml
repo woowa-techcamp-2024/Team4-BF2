@@ -19,7 +19,7 @@ spring:
       hibernate:
         format_sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
 
   elasticsearch:
     uris: http://localhost:9200
