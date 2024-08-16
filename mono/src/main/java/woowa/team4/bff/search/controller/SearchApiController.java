@@ -28,11 +28,20 @@ public class SearchApiController {
         return success(response);
     }
 
-    @GetMapping("/like")
-    public ApiResult<List<RestaurantSearchResult>> searchRestaurantsUsingLike(
+    @GetMapping("/like-and-join")
+    public ApiResult<List<RestaurantSearchResult>> searchRestaurantsUsingLikeAndJoin(
             @RequestParam("keyword") String keyword,
             @RequestParam("deliveryLocation") String deliveryLocation) {
-        List<RestaurantSearchResult> response = searchService.searchLike(
+        List<RestaurantSearchResult> response = searchService.searchLikeAndJoin(
+                SearchRestaurantCommand.of(keyword, deliveryLocation));
+        return success(response);
+    }
+
+    @GetMapping("/like-after-join")
+    public ApiResult<List<RestaurantSearchResult>> searchRestaurantsUsingLikeAfterJoin(
+            @RequestParam("keyword") String keyword,
+            @RequestParam("deliveryLocation") String deliveryLocation) {
+        List<RestaurantSearchResult> response = searchService.searchLikeAfterJoin(
                 SearchRestaurantCommand.of(keyword, deliveryLocation));
         return success(response);
     }
