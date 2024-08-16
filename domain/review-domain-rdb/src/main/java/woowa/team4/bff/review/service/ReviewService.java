@@ -88,8 +88,6 @@ public class ReviewService {
 
         ReviewStatistics reviewStatistics = optionalReviewStatistics.get();
         ReviewStatistics savedReviewStatistic = reviewStatisticsRepository.save(updateReviewStatistics(reviewStatistics, event));
-
-        log.info("[update ReviewStatistics] : {}", savedReviewStatistic);
     }
 
     public ReviewStatistics updateReviewStatistics(ReviewStatistics reviewStatistics, ReviewCreateEvent event) {
@@ -99,4 +97,5 @@ public class ReviewService {
         reviewStatistics.setAverageRating(totalRating / reviews);
         return reviewStatistics;
     }
+
 }
