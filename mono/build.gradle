@@ -40,7 +40,7 @@ dependencies {
     implementation project(":domain:restaurant-domain-rdb")
     implementation project(":domain:review-domain-rdb")
     implementation project(":domain:search-domain-rdb")
-    implementation project(":domain:search-domain-es")
+    // implementation project(":domain:search-domain-es")
 }
 
 tasks.named('test') {

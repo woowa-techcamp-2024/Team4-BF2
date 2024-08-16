@@ -10,27 +10,23 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import woowa.team4.bff.search.document.MenuSearchDocument;
-import woowa.team4.bff.search.document.RestaurantSearchDocument;
+import org.springframework.stereotype.Component;
 import woowa.team4.bff.search.domain.MenuSearch;
 import woowa.team4.bff.search.domain.RestaurantSearch;
 import woowa.team4.bff.search.service.DummyInsertService;
 
 
-@RequestMapping("/api/v1/dummy")
-@RestController
+//@RequestMapping("/api/v1/dummy")
+//@RestController
+@Component
 @RequiredArgsConstructor
 public class DummyApiController {
     private final DummyInsertService dummyInsertService;
 
     private final Logger log = LoggerFactory.getLogger(DummyApiController.class);
 
-    @PostMapping("/restaurants/{idx}")
-    public void bulkInsertRestaurant(@PathVariable("idx") Integer idx){
+    //@PostMapping("/restaurants/{idx}")
+    public void bulkInsertRestaurant(Integer idx){
         String csvFile = "restaurant_es_" + idx + ".csv";
         readRestaurant(csvFile);
     }
@@ -78,8 +74,8 @@ public class DummyApiController {
     }
 
 
-    @PostMapping("/menus/{idx}")
-    public void bulkInsertMenu(@PathVariable("idx") Integer idx){
+    //@PostMapping("/menus/{idx}")
+    public void bulkInsertMenu(Integer idx){
         String csvFile = "menu_es_" + idx + ".csv";
         readMenu(csvFile);
     }
