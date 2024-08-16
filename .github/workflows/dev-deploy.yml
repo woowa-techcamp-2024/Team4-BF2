@@ -35,9 +35,9 @@ jobs:
 
       - name: EC2에서 JAR 실행
         env:
-          PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-          HOST: ${{ secrets.EC2_HOST }}
-          USER: ${{ secrets.EC2_USER }}
+          PRIVATE_KEY: ${{ secrets.DEV_EC2_SSH_KEY }}
+          HOST: ${{ secrets.DEV_EC2_HOST }}
+          USER: ${{ secrets.DEV_EC2_USER }}
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
             pkill -f 'java -jar app.jar' || true
