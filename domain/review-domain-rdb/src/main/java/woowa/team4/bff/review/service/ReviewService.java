@@ -53,7 +53,7 @@ public class ReviewService {
         return ReviewCreateResult.builder()
                 .reviewUuid(savedReview.getReviewUuId())
                 .reviewMenuUuids(savedReviewMenus.stream()
-                        .map(ReviewMenu::getReviewMenuUuId).toList())
+                        .map(ReviewMenu::getReviewMenuUuid).toList())
                 .build();
     }
 }

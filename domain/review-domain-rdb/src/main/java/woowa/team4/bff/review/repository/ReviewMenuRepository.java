@@ -36,7 +36,7 @@ public class ReviewMenuRepository {
 
     private ReviewMenu toDomain(ReviewMenuEntity reviewMenuEntity) {
         return ReviewMenu.builder()
-                .reviewMenuUuId(PrefixedUuidConverter.addPrefix("review_menu", reviewMenuEntity.getUuid()))
+                .reviewMenuUuid(PrefixedUuidConverter.addPrefix("review_menu", reviewMenuEntity.getUuid()))
                 .reviewId(reviewMenuEntity.getReviewId())
                 .menuId(reviewMenuEntity.getMenuId())
                 .content(reviewMenuEntity.getContent())
