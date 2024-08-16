@@ -4,15 +4,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+
 @Builder
 @Getter
 @ToString
-public class Review {
+public class ReviewMenu {
 
-    private final Long id;
-    private final String reviewUuId;
-    private final Long restaurantId;
+    private final String reviewMenuUuid;
+    private final Long reviewId;
+    private final Long menuId;
     private final String content;
-    private final Double rating;
+    private final Boolean isLiked;
 
 }

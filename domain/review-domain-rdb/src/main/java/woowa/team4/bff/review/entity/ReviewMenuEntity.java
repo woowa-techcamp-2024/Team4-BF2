@@ -1,21 +1,19 @@
 package woowa.team4.bff.review.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "review_menus")
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @NoArgsConstructor
 public class ReviewMenuEntity {
@@ -24,7 +22,7 @@ public class ReviewMenuEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String uuid;
+    private UUID uuid;
 
     private Long reviewId;
 
@@ -42,7 +40,15 @@ public class ReviewMenuEntity {
 
     @PrePersist
     public void prePersist() {
-        this.uuid = "review_menu" + java.util.UUID.randomUUID();
+        this.uuid = java.util.UUID.randomUUID();
+    }
+
+    @Builder
+    public ReviewMenuEntity(final Long reviewId, final Long menuId, final String content, final Boolean isLiked) {
+        this.reviewId = reviewId;
+        this.menuId = menuId;
+        this.content = content;
+        this.isLiked = isLiked;
     }
 
 }
