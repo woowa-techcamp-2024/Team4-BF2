@@ -41,5 +41,5 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
             pkill -f 'java -jar app.jar' || true
-            nohup java -jar app.jar > app.log 2>&1 &
+            nohup java -jar app.jar --spring.profiles.active=dev > app.log 2>&1 &
           EOF
