@@ -28,6 +28,7 @@ public class MenuService {
                 .findByUuid(createCommand.menuCategoryUuid());
         Menu menu = Menu.builder()
                 .menuCategoryId(menuCategory.getId())
+                .restaurantId(menuCategory.getRestaurantId())
                 .name(createCommand.name())
                 .description(createCommand.description())
                 .price(createCommand.price())
@@ -36,7 +37,7 @@ public class MenuService {
         // 이벤트 발행
         eventPublisher.publish(
                 new MenuCreateEvent(savedMenu.getId(),
-                        menuCategory.getRestaurantId(),
+                        savedMenu.getRestaurantId(),
                         savedMenu.getName()));
         return savedMenu.getUuid();
     }

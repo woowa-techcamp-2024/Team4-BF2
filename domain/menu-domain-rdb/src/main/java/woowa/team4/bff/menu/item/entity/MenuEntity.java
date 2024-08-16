@@ -37,6 +37,9 @@ public class MenuEntity {
     @Column(name = "menu_category_id")
     private Long menuCategoryId;
 
+    @Column(name= "restaurant_id")
+    private Long restaurantId;
+
     private String name;
 
     private String description;
