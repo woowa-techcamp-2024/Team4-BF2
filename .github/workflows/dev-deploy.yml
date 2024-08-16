@@ -40,6 +40,6 @@ jobs:
           USER: ${{ secrets.DEV_EC2_USER }}
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
-            pkill -f 'java -jar app.jar' || true
+            pkill -f 'java -jar app.jar --spring.profiles.active=dev' || true
             nohup java -jar app.jar --spring.profiles.active=dev > app.log 2>&1 &
           EOF
