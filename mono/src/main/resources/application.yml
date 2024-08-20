@@ -21,14 +21,17 @@ spring:
     hibernate:
       ddl-auto: none
 
-#  elasticsearch:
-#    uris: http://localhost:9200
-#    username: elastic
-#    password: your_elastic_password
-#  data:
-#    elasticsearch:
-#      repositories:
-#        enabled: true
+  elasticsearch:
+    uris: http://localhost:9200
+    username: elastic
+    password: your_elastic_password
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+    redis:
+      host: localhost
+      port: 6379
 
 logging:
   level:
