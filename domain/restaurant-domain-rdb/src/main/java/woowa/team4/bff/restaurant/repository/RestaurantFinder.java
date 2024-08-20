@@ -1,11 +1,8 @@
 package woowa.team4.bff.restaurant.repository;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import woowa.team4.bff.domain.common.utils.PrefixedUuidConverter;
-import woowa.team4.bff.restaurant.domain.Restaurant;
 import woowa.team4.bff.restaurant.entity.RestaurantEntity;
 
 import java.util.UUID;

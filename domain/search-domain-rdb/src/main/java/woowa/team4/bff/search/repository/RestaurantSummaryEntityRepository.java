@@ -1,12 +1,13 @@
 package woowa.team4.bff.search.repository;
 
-import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import woowa.team4.bff.domain.RestaurantSummary;
 import woowa.team4.bff.restaurant.entity.RestaurantEntity;
+
+import java.util.List;
 
 public interface RestaurantSummaryEntityRepository extends JpaRepository<RestaurantEntity, Long> {
     // ToDo: Document 에 배달 가능 위치도 저장하는걸로 바꾸면 해당 메서드 제거
@@ -26,8 +27,8 @@ public interface RestaurantSummaryEntityRepository extends JpaRepository<Restaur
             + "LEFT JOIN MenuEntity m ON m.restaurantId = r.id "
             + "WHERE "
             + "r.deliveryLocation = :deliveryLocation AND "
-            + "(LOWER(r.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR "
-            + "LOWER(m.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) "
+            + "r.name LIKE %:keyword% OR "
+            + "m.name LIKE %:keyword% "
             + "GROUP BY r.id, r.uuid, r.name, r.minimumOrderAmount")
     List<Long> findIdsByKeywordAndDeliveryLocation(@Param("keyword") String keyword,
                                                    @Param("deliveryLocation") String deliveryLocation,
