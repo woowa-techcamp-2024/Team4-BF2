@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class RestaurantSummaryRepository {
+public class RestaurantReviewStatisticsRepository {
 
     private final RestaurantRepository restaurantRepository;
     private final ReviewStatisticsEntityRepository reviewStatisticsEntityRepository;
