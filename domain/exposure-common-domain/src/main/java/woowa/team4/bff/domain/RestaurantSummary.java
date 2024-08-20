@@ -1,29 +1,26 @@
 package woowa.team4.bff.domain;
 
 import java.util.UUID;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class RestaurantSummary {
     private UUID restaurantUuid;
     private String restaurantName;
     private String restaurantThumbnailUrl;
-    private Long reviewCount;
-    private Double rating;
+    private int minimumOrderAmount;
+    private long reviewCount;
+    private double rating;
     private String menus;
 
-    @Builder
-    public RestaurantSummary(UUID restaurantUuid, String restaurantName, String restaurantThumbnailUrl,
-                             Long reviewCount,
-                             Double rating, String menus) {
-        this.restaurantUuid = restaurantUuid;
-        this.restaurantName = restaurantName;
-        this.restaurantThumbnailUrl = restaurantThumbnailUrl;
-        this.reviewCount = reviewCount;
+    public void updateReviewStatistics(Double rating, Long reviewCount) {
         this.rating = rating;
-        this.menus = menus;
+        this.reviewCount = reviewCount;
     }
 }

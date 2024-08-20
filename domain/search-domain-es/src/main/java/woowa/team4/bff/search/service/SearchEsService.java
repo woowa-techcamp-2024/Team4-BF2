@@ -18,7 +18,7 @@ public class SearchEsService implements SearchService {
     private final SearchEsRepository searchEsRepository;
 
     @Override
-    public List<Long> findIdsByKeywordAndDeliveryLocation(String keyword, String deliveryLocation) {
+    public List<Long> findIdsByKeywordAndDeliveryLocation(String keyword, String deliveryLocation, Integer pageNumber) {
         List<RestaurantSearch> restaurantSearches = searchEsRepository.findAllByRestaurantName(keyword);
         List<MenuSearch> menuSearches = searchEsRepository.findAllByMenuName(keyword);
 
@@ -32,7 +32,8 @@ public class SearchEsService implements SearchService {
 
     @Override
     public List<RestaurantSummary> findRestaurantSummaryByKeywordAndDeliveryLocation(String keyword,
-                                                                                     String deliveryLocation) {
+                                                                                     String deliveryLocation,
+                                                                                     Integer pageNumber) {
         return List.of();
     }
 }

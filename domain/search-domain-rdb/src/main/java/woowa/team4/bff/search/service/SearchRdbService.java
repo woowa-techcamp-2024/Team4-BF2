@@ -15,13 +15,15 @@ public class SearchRdbService implements SearchService {
     private final RestaurantSummaryRepository restaurantSummaryRepository;
 
     @Override
-    public List<Long> findIdsByKeywordAndDeliveryLocation(String keyword, String deliveryLocation) {
-        return restaurantSummaryRepository.findIdsByKeywordAndDeliveryLocation(keyword, deliveryLocation);
+    public List<Long> findIdsByKeywordAndDeliveryLocation(String keyword, String deliveryLocation, Integer pageNumber) {
+        return restaurantSummaryRepository.findIdsByKeywordAndDeliveryLocation(keyword, deliveryLocation, pageNumber);
+
     }
 
     @Override
     public List<RestaurantSummary> findRestaurantSummaryByKeywordAndDeliveryLocation(String keyword,
-                                                                                     String deliveryLocation) {
-        return restaurantSummaryRepository.findByKeywordAndDeliveryLocation(keyword, deliveryLocation);
+                                                                                     String deliveryLocation,
+                                                                                     Integer pageNumber) {
+        return restaurantSummaryRepository.findByKeywordAndDeliveryLocation(keyword, deliveryLocation, pageNumber);
     }
 }

@@ -25,6 +25,6 @@ public class RestaurantExposureListService {
     // ToDo: 실험 후 제거
     public List<RestaurantSummary> searchNoCache(SearchCommand command){
         return searchService.findRestaurantSummaryByKeywordAndDeliveryLocation(command.keyword(),
-                command.deliveryLocation());
+                command.deliveryLocation(), command.pageNumber());
     }
 }
