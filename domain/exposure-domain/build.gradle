@@ -1,4 +1,5 @@
 dependencies {
     // module
     implementation project(":domain:exposure-common-domain")
+    implementation project(":domain:search-domain-rdb")
 }

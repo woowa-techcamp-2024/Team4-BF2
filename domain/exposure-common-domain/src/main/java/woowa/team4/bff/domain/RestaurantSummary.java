@@ -14,6 +14,6 @@ public class RestaurantSummary {
     private UUID restaurantUuid;
     private String restaurantName;
     private String restaurantThumbnailUrl;
-    private Integer reviewCount;
+    private Long reviewCount;
     private Double rating;
 }
