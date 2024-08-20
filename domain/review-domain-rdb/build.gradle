@@ -7,5 +7,4 @@ dependencies {
     implementation project(":event:event-publisher")
     implementation project(":event:common-event")
     implementation project(":event:review-event")
-    implementation project(":event:restaurant-event")
 }

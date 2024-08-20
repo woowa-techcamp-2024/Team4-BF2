@@ -14,13 +14,6 @@ public class RestaurantSummary {
     private UUID restaurantUuid;
     private String restaurantName;
     private String restaurantThumbnailUrl;
-    private int minimumOrderAmount;
-    private long reviewCount;
-    private double rating;
-    private String menus;
-
-    public void updateReviewStatistics(Double rating, Long reviewCount) {
-        this.rating = rating;
-        this.reviewCount = reviewCount;
-    }
+    private Integer reviewCount;
+    private Double rating;
 }

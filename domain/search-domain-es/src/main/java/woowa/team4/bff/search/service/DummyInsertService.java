@@ -13,7 +13,7 @@ import woowa.team4.bff.search.repository.RestaurantSearchRepository;
 
 @Service
 @RequiredArgsConstructor
-public class BulkInsertService {
+public class DummyInsertService {
     private final RestaurantSearchRepository restaurantSearchRepository;
     private final MenuSearchRepository menuSearchRepository;
 

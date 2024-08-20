@@ -1,5 +1,4 @@
 dependencies {
     // module
     implementation project(":domain:restaurant-domain-rdb")
-    implementation project(":domain:exposure-common-domain")
 }
