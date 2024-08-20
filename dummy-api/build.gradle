@@ -23,25 +23,17 @@ repositories {
     mavenCentral()
 }
 
-bootJar.enabled = true
+bootJar.enabled = false
 jar.enabled = false
 
 dependencies {
     // web
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    // aop
-    implementation 'org.springframework.boot:spring-boot-starter-aop'
-    // util
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
     // module
     implementation project(":core-web")
-    implementation project(":domain:menu-domain-rdb")
-    implementation project(":domain:restaurant-domain-rdb")
-    implementation project(":domain:review-domain-rdb")
-    //
-    implementation project(":domain:exposure-common-domain")
-    implementation project(":domain:exposure-domain")
+    implementation project(":domain:search-domain-rdb")
+    implementation project(":domain:search-domain-es")
 }
 
 tasks.named('test') {

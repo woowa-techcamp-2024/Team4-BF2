@@ -19,16 +19,16 @@ spring:
       hibernate:
         format_sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
 
-  elasticsearch:
-    uris: http://localhost:9200
-    username: elastic
-    password: your_elastic_password
-  data:
-    elasticsearch:
-      repositories:
-        enabled: true
+#  elasticsearch:
+#    uris: http://localhost:9200
+#    username: elastic
+#    password: your_elastic_password
+#  data:
+#    elasticsearch:
+#      repositories:
+#        enabled: true
 
 logging:
   level:
