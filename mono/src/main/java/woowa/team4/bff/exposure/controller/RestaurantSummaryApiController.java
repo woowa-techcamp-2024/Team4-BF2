@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import woowa.team4.bff.common.utils.ApiUtils.ApiResult;
 import woowa.team4.bff.domain.RestaurantSummary;
@@ -22,17 +23,20 @@ public class RestaurantSummaryApiController {
 
     @GetMapping("/cache")
     public ApiResult<List<RestaurantSummary>> getRestaurantSummaries(
-            @RequestBody GetRestaurantSummaryRequest request
+            @RequestParam("keyword")String keyword,
+            @RequestParam("deliveryLocation") String deliveryLocation,
+            @RequestParam("pageNumber") Integer pageNumber
     ){
-        List<RestaurantSummary> response = restaurantExposureListService.search(new SearchCommand(request.keyword(), request.deliveryLocation(), request.pageNumber()));
+        List<RestaurantSummary> response = restaurantExposureListService.search(new SearchCommand(keyword, deliveryLocation, pageNumber));
         return success(response);
     }
 
     @GetMapping("/no-cache")
     public ApiResult<List<RestaurantSummary>> getRestaurantSummariesNoCache(
-            @RequestBody GetRestaurantSummaryRequest request
-            ){
-        List<RestaurantSummary> response = restaurantExposureListService.searchNoCache(new SearchCommand(request.keyword(), request.deliveryLocation(), request.pageNumber()));
+            @RequestParam("keyword")String keyword,
+            @RequestParam("deliveryLocation") String deliveryLocation,
+            @RequestParam("pageNumber") Integer pageNumber            ){
+        List<RestaurantSummary> response = restaurantExposureListService.searchNoCache(new SearchCommand(keyword, deliveryLocation, pageNumber));
         return success(response);
     }
 }
