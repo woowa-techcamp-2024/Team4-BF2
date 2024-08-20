@@ -1,3 +1,4 @@
 dependencies {
     // module
+    implementation project(":domain:exposure-common-domain")
 }

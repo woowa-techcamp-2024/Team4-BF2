@@ -2,6 +2,7 @@ dependencies {
     // db
     implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch:2.7.18'
     // module
+    implementation project(":domain:exposure-common-domain")
     implementation project(":event:common-event")
     implementation project(":event:restaurant-event")
     implementation project(":event:menu-event")
