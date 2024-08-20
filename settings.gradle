@@ -29,4 +29,5 @@ include 'domain:exposure-domain'
 findProject(':domain:exposure-domain')?.name = 'exposure-domain'
 include 'domain:exposure-common-domain'
 findProject(':domain:exposure-common-domain')?.name = 'exposure-common-domain'
-
+include 'domain:cache-domain-redis'
+findProject(':domain:cache-domain-redis')?.name = 'cache-domain-redis'
