@@ -1,4 +1,9 @@
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.1'
     implementation project(":domain:exposure-common-domain")
+    implementation project(":domain:restaurant-domain-rdb")
+    implementation project(":domain:review-domain-rdb")
+    implementation project(":event:review-event")
+    implementation project(":event:common-event")
 }
