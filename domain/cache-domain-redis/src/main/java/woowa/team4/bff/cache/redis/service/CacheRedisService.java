@@ -2,18 +2,19 @@ package woowa.team4.bff.cache.redis.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 import woowa.team4.bff.cache.redis.exception.JsonConvertException;
 import woowa.team4.bff.cache.redis.repository.RestaurantReviewStatisticsRepository;
 import woowa.team4.bff.domain.RestaurantSummary;
 import woowa.team4.bff.event.reviewstatistics.ReviewStatisticsUpdateEvent;
 import woowa.team4.bff.interfaces.CacheService;
-
-import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +36,8 @@ public class CacheRedisService implements CacheService {
         String restaurantKey = getKey(id);
         String json = redisTemplate.opsForValue().get(restaurantKey);
         if (json == null) {
-            RestaurantSummary restaurantSummary = restaurantReviewStatisticsRepository.findByRestaurantId(id);
+            RestaurantSummary restaurantSummary =
+                    restaurantReviewStatisticsRepository.findByRestaurantId(id);
             redisTemplate.opsForValue()
                     .set(restaurantKey, convert(restaurantSummary));
             return restaurantSummary;
@@ -63,7 +65,8 @@ public class CacheRedisService implements CacheService {
         }
     }
 
-    @TransactionalEventListener
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleReviewStatisticsUpdated(ReviewStatisticsUpdateEvent event) {
         Long restaurantId = event.restaurantId();
         String restaurantKey = getKey(restaurantId);
