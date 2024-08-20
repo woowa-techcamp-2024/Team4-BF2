@@ -25,4 +25,8 @@ include 'domain:common-domain'
 findProject(':domain:common-domain')?.name = 'common-domain'
 include 'event:review-event'
 findProject(':event:review-event')?.name = 'review-event'
+include 'domain:exposure-domain'
+findProject(':domain:exposure-domain')?.name = 'exposure-domain'
+include 'domain:exposure-common-domain'
+findProject(':domain:exposure-common-domain')?.name = 'exposure-common-domain'
 
