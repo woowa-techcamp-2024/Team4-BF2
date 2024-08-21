@@ -1,0 +1,8 @@
+external-api:
+  host: http://localhost:8081
+  advertisement-service:
+    endpoints: /api/v1/advertisements
+  delivery-service:
+    endpoints: /api/v1/deliveries
+  coupon-service:
+    endpoints: /api/v1/coupons

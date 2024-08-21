@@ -1,4 +1,7 @@
 dependencies {
+    // web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
     // module
     implementation project(":domain:exposure-common-domain")
     implementation project(":domain:search-domain-rdb")
