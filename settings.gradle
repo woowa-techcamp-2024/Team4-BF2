@@ -32,3 +32,6 @@ findProject(':domain:exposure-common-domain')?.name = 'exposure-common-domain'
 include 'domain:cache-domain-redis'
 findProject(':domain:cache-domain-redis')?.name = 'cache-domain-redis'
 include 'dummy-api'
+include 'event:cache-event'
+findProject(':event:cache-event')?.name = 'cache-event'
+
