@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 배달비 계산 더미 API 소요시간: 50ms start 범위 : 5 ~ 35 end : start + 15
+ * 배달 시간 계산 더미 API 소요시간: 50ms min 범위 : 5 ~ 35 max : max + 15
  */
 @RestController
 @RequestMapping("/api/v1/deliveries")
-public class DeliveryController {
+public class DeliveryTimeController {
 
     private final Random random = new Random();
 
     @PostMapping
-    public List<DeliveryResponse> getDelivery(@RequestBody DeliveryRequest request) {
-        List<DeliveryResponse> responses = new ArrayList<>();
+    public List<DeliveryTimeResponse> getDelivery(@RequestBody DeliveryTimeRequest request) {
+        List<DeliveryTimeResponse> responses = new ArrayList<>();
 
         // 연산 작업 가정
         try {
@@ -31,30 +31,30 @@ public class DeliveryController {
         }
 
         for (Long id : request.getIds()) {
-            responses.add(new DeliveryResponse(id, random.nextInt(30) + 5));
+            responses.add(new DeliveryTimeResponse(id, random.nextInt(30) + 5));
         }
         return responses;
     }
 
     @Getter
     @Setter
-    static class DeliveryRequest {
+    static class DeliveryTimeRequest {
 
         private List<Long> ids;
     }
 
     @Getter
     @Setter
-    static class DeliveryResponse {
+    static class DeliveryTimeResponse {
 
         private long restaurantId;
-        private int start;
-        private int end;
+        private int min;
+        private int max;
 
-        public DeliveryResponse(long restaurantId, int start) {
+        public DeliveryTimeResponse(long restaurantId, int min) {
             this.restaurantId = restaurantId;
-            this.start = start;
-            this.end = start + 15;
+            this.min = min;
+            this.max = min + 15;
         }
     }
 }
