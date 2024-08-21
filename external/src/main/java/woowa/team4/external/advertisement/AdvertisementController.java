@@ -52,15 +52,15 @@ public class AdvertisementController {
     static class AdvertisementResponse {
 
         private long restaurantId;
-        private int rank;
+        private int adRank;
         private boolean hasAdvertisement;
 
-        public AdvertisementResponse(long restaurantId, int rank, boolean hasAdvertisement) {
+        public AdvertisementResponse(long restaurantId, int adRank, boolean hasAdvertisement) {
             this.restaurantId = restaurantId;
             this.hasAdvertisement = hasAdvertisement;
-            this.rank = Integer.MAX_VALUE;
+            this.adRank = Integer.MAX_VALUE;
             if (this.hasAdvertisement) {
-                this.rank = rank;
+                this.adRank = adRank;
             }
         }
     }
