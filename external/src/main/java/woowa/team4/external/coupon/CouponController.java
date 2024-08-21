@@ -20,7 +20,7 @@ public class CouponController {
     private final Random random = new Random();
 
     @PostMapping
-    public List<CouponResponse> getCoupons(@RequestBody List<Long> ids) {
+    public List<CouponResponse> getCoupons(@RequestBody CouponRequest request) {
         List<CouponResponse> responses = new ArrayList<>();
 
         // 연산 작업 가정
@@ -30,11 +30,18 @@ public class CouponController {
             throw new RuntimeException(e);
         }
 
-        for (Long id : ids) {
+        for (Long id : request.getIds()) {
             responses.add(new CouponResponse(id, random.nextBoolean()));
         }
 
         return responses;
+    }
+
+    @Getter
+    @Setter
+    static class CouponRequest {
+
+        private List<Long> ids;
     }
 
     @Getter

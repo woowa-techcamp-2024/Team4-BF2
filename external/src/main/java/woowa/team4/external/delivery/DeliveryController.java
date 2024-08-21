@@ -20,7 +20,7 @@ public class DeliveryController {
     private final Random random = new Random();
 
     @PostMapping
-    public List<DeliveryResponse> getDelivery(@RequestBody List<Long> ids) {
+    public List<DeliveryResponse> getDelivery(@RequestBody DeliveryRequest request) {
         List<DeliveryResponse> responses = new ArrayList<>();
 
         // 연산 작업 가정
@@ -30,10 +30,17 @@ public class DeliveryController {
             throw new RuntimeException(e);
         }
 
-        for (Long id : ids) {
+        for (Long id : request.getIds()) {
             responses.add(new DeliveryResponse(id, random.nextInt(30) + 5));
         }
         return responses;
+    }
+
+    @Getter
+    @Setter
+    static class DeliveryRequest {
+
+        private List<Long> ids;
     }
 
     @Getter
