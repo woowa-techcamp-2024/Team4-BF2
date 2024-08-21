@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import woowa.team4.bff.api.client.advertisement.response.AdvertisementResponse;
 import woowa.team4.bff.api.client.coupon.response.CouponResponse;
 import woowa.team4.bff.api.client.delivery.response.DeliveryTimeResponse;
 import woowa.team4.bff.domain.RestaurantSummary;
@@ -25,7 +26,7 @@ public class RestaurantExposureListService {
         List<Long> restaurantIds = searchService.findIdsByKeywordAndDeliveryLocation(
                 command.keyword(), command.deliveryLocation(), command.pageNumber());
         // 외부 API 호출
-        searchSynchronously(restaurantIds);
+        searchSynchronously(restaurantIds, command.keyword());
 
         return cacheService.findByRestaurantIds(restaurantIds);
     }
@@ -35,15 +36,16 @@ public class RestaurantExposureListService {
      *
      * @param restaurantIds
      */
-    public void searchSynchronously(List<Long> restaurantIds) {
+    public void searchSynchronously(List<Long> restaurantIds, String keyword) {
         // 배달 외부 API 요청
         List<DeliveryTimeResponse> deliveryTimeResponse = syncExternalApiCaller
                 .getDeliveryTime(restaurantIds);
-        // 가게 외부 API 요청
-
         // 쿠폰 외부 API 요청
         List<CouponResponse> couponResponse = syncExternalApiCaller
                 .getCoupon(restaurantIds);
+        // 광고 외부 API 요청
+        List<AdvertisementResponse> advertisementResponses = syncExternalApiCaller
+                .getAdvertisement(restaurantIds, keyword);
     }
 
     /**
