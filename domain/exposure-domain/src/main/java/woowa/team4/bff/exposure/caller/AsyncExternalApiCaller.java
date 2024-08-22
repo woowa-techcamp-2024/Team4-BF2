@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import woowa.team4.bff.api.client.advertisement.caller.AdvertisementApiCaller;
+import woowa.team4.bff.api.client.advertisement.request.AdvertisementRequest;
+import woowa.team4.bff.api.client.advertisement.response.AdvertisementResponse;
 import woowa.team4.bff.api.client.coupon.caller.CouponApiCaller;
 import woowa.team4.bff.api.client.coupon.request.CouponRequest;
 import woowa.team4.bff.api.client.coupon.response.CouponResponse;
@@ -37,5 +39,17 @@ public class AsyncExternalApiCaller {
 
     public Mono<List<CouponResponse>> getCouponWebFlux(List<Long> restaurantIds) {
         return couponApiCaller.sendAsyncMono(new CouponRequest(restaurantIds));
+    }
+
+    public CompletableFuture<List<AdvertisementResponse>> getAdvertisement(List<Long> restaurantIds,
+            String keyword) {
+        return advertisementApiCaller.sendAsyncCompletableFuture(
+                new AdvertisementRequest(restaurantIds, keyword));
+    }
+
+    public Mono<List<AdvertisementResponse>> getAdvertisementWebFlux(List<Long> restaurantIds,
+            String keyword) {
+        return advertisementApiCaller.sendAsyncMono(
+                new AdvertisementRequest(restaurantIds, keyword));
     }
 }

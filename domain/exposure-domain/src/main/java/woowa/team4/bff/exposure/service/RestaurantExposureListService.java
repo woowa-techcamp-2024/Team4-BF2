@@ -88,15 +88,22 @@ public class RestaurantExposureListService {
                     log.info("Mvc Coupon received");
                     return response;
                 });
-
         // 광고 외부 API 요청
+        CompletableFuture<List<AdvertisementResponse>> advertisementFuture = asyncExternalApiCaller
+                .getAdvertisement(restaurantIds, keyword)
+                .thenApply(response -> {
+                    // 배달 시간 응답 처리
+                    log.info("Mvc Advertisement received");
+                    return response;
+                });
 
         // 모든 결과가 완료된 후
-        return CompletableFuture.allOf(deliveryFuture, couponFuture)
+        return CompletableFuture.allOf(deliveryFuture, couponFuture, advertisementFuture)
                 .thenApply(v -> {
                     // 모든 응답이 도착한 후 실행될 로직
                     List<DeliveryTimeResponse> deliveryResponse = deliveryFuture.join();
                     List<CouponResponse> couponResponse = couponFuture.join();
+                    List<AdvertisementResponse> advertisementResponse = advertisementFuture.join();
                     return null;
                 });
     }
@@ -116,13 +123,18 @@ public class RestaurantExposureListService {
         Mono<List<CouponResponse>> couponMono = asyncExternalApiCaller
                 .getCouponWebFlux(restaurantIds)
                 .doOnNext(response -> log.info("WebFlux Coupon received"));
+
         // 광고 외부 API 요청
+        Mono<List<AdvertisementResponse>> advetisementMono = asyncExternalApiCaller
+                .getAdvertisementWebFlux(restaurantIds, keyword)
+                .doOnNext(response -> log.info("WebFlux Advertisement received"));
 
         // 모든 Mono를 결합
-        return Mono.zip(deliveryMono, couponMono)
+        return Mono.zip(deliveryMono, couponMono, advetisementMono)
                 .flatMap(tuple -> {
                     List<DeliveryTimeResponse> deliveryResponse = tuple.getT1();
                     List<CouponResponse> couponResponse = tuple.getT2();
+                    List<AdvertisementResponse> advertisementResponse = tuple.getT3();
 
                     // 여기서 모든 응답을 조합하거나 추가 처리를 수행
                     log.info("WebFlux All responses received and processed");
