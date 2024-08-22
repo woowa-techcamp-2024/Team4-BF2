@@ -1,4 +1,4 @@
-package woowa.team4.bff.exposure.caller;
+package woowa.team4.bff.exposure.external.caller;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
