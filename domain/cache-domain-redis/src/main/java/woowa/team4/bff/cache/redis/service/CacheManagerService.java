@@ -2,6 +2,7 @@ package woowa.team4.bff.cache.redis.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -41,7 +42,13 @@ public class CacheManagerService {
     @Async
     @EventListener
     public void handleDeliveryLocationAndKeywordCreate(DeliveryLocationAndKeywordCreateEvent event) {
-        redisTemplate.opsForHash().put(RedisKeyMaker.makeDeliveryLocation(event.deliveryLocation()), event.keyword(),
+        String key = RedisKeyMaker.makeDeliveryLocation(event.deliveryLocation());
+        redisTemplate.opsForHash().put(key, event.keyword(),
                 jsonConverter.convert(event.restaurantIds()));
+        redisTemplate.expire(
+                key,
+                1,
+                TimeUnit.HOURS
+        );
     }
 }
