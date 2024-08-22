@@ -9,9 +9,11 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.Mapping;
 import org.springframework.data.elasticsearch.annotations.Setting;
+import woowa.team4.bff.search.domain.RestaurantMenusSearch;
 import woowa.team4.bff.search.domain.RestaurantMenusSearch.Menu;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -35,8 +37,29 @@ public class RestaurantMenusDocument {
     @Field(type = FieldType.Nested, name = "menus")
     private List<MenuDocument> menus;
 
-    public void updateRestaurantName(String newName) {
-        this.restaurantName = newName;
+    public static RestaurantMenusDocument from(RestaurantMenusSearch restaurantMenusSearch) {
+        return RestaurantMenusDocument.builder()
+                .id(restaurantMenusSearch.getId())
+                .restaurantName(restaurantMenusSearch.getRestaurantName())
+                .deliveryLocation(restaurantMenusSearch.getDeliveryLocation())
+                .restaurantId(restaurantMenusSearch.getRestaurantId())
+                .menus(restaurantMenusSearch.getMenus()
+                        .stream()
+                        .map(MenuDocument::from)
+                        .toList())
+                .build();
+    }
+
+    public RestaurantMenusSearch toDomain() {
+        return RestaurantMenusSearch.builder()
+                .id(id)
+                .restaurantName(restaurantName)
+                .deliveryLocation(deliveryLocation)
+                .restaurantId(restaurantId)
+                .menus(menus.stream()
+                        .map(MenuDocument::toDomain)
+                        .collect(Collectors.toList()))
+                .build();
     }
 
     @Getter
@@ -61,10 +84,6 @@ public class RestaurantMenusDocument {
                     .menuName(menuName)
                     .menuId(menuId)
                     .build();
-        }
-
-        public void updateMenuName(String newName) {
-            this.menuName = newName;
         }
     }
 }
