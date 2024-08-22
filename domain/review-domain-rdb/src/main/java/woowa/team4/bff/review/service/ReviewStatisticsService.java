@@ -28,8 +28,9 @@ public class ReviewStatisticsService {
     @Transactional
     public void updateReviewStatistics(ReviewCreateEvent event) {
 
-        Optional<ReviewStatistics> optionalReviewStatistics = reviewStatisticsRepository.findByRestaurantId(
-                event.restaurantId());
+        Optional<ReviewStatistics> optionalReviewStatistics = reviewStatisticsRepository.findByRestaurantIdForUpdate(
+                event.restaurantId()
+        );
         // 해당 식당의 리뷰가 없을 경우 새로 생성
         if (optionalReviewStatistics.isEmpty()) {
             log.info("[no ReviewStatistics!]");
@@ -38,15 +39,15 @@ public class ReviewStatisticsService {
 
         // 해당 식당의 리뷰가 있을 경우 업데이트 진행
         ReviewStatistics reviewStatistics = optionalReviewStatistics.get();
-        ReviewStatistics savedReviewStatistic = reviewStatisticsRepository.save(
+        ReviewStatistics savedReviewStatistic = reviewStatisticsRepository.update(
                 updateReviewStatistics(reviewStatistics, event));
+        log.info("[new ReviewInfo] : {}", event);
         log.info("[update ReviewStatistics] : {}", savedReviewStatistic);
     }
 
     private ReviewStatistics updateReviewStatistics(ReviewStatistics reviewStatistics,
             ReviewCreateEvent event) {
-        double totalRating = reviewStatistics.getReviewCount() * reviewStatistics.getAverageRating()
-                + event.rating();
+        double totalRating = reviewStatistics.getReviewCount() * reviewStatistics.getAverageRating() + event.rating();
         long reviews = reviewStatistics.getReviewCount() + 1;
         reviewStatistics.setReviewCount(reviews);
         reviewStatistics.setAverageRating(totalRating / reviews);
