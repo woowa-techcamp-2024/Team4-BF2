@@ -68,16 +68,43 @@ public class RestaurantExposureListService {
         // 배달 외부 API 요청
         Mono<List<DeliveryTimeResponse>> deliveryMono = asyncExternalApiCaller
                 .getDeliveryTimeWebFlux(restaurantIds)
+                .switchIfEmpty(Mono.defer(() ->
+                        Mono.just(restaurantIds.stream()
+                                .map(id -> {
+                                    DeliveryTimeResponse deliveryTimeResponse = new DeliveryTimeResponse();
+                                    deliveryTimeResponse.setRestaurantId(id);
+                                    return deliveryTimeResponse;
+                                })
+                                .collect(Collectors.toList()))
+                ))
                 .doOnNext(response -> log.info("WebFlux Delivery time received"));
 
         // 쿠폰 외부 API 요청
         Mono<List<CouponResponse>> couponMono = asyncExternalApiCaller
                 .getCouponWebFlux(restaurantIds)
+                .switchIfEmpty(Mono.defer(() ->
+                        Mono.just(restaurantIds.stream()
+                                .map(id -> {
+                                    CouponResponse couponResponse = new CouponResponse();
+                                    couponResponse.setRestaurantId(id);
+                                    return couponResponse;
+                                })
+                                .collect(Collectors.toList()))
+                ))
                 .doOnNext(response -> log.info("WebFlux Coupon received"));
 
         // 광고 외부 API 요청
         Mono<List<AdvertisementResponse>> advertisementMono = asyncExternalApiCaller
                 .getAdvertisementWebFlux(restaurantIds, keyword)
+                .switchIfEmpty(Mono.defer(() ->
+                        Mono.just(restaurantIds.stream()
+                                .map(id -> {
+                                    AdvertisementResponse advertisementResponse = new AdvertisementResponse();
+                                    advertisementResponse.setRestaurantId(id);
+                                    return advertisementResponse;
+                                })
+                                .collect(Collectors.toList()))
+                ))
                 .doOnNext(response -> log.info("WebFlux Advertisement received"));
 
         // 모든 Mono를 결합
