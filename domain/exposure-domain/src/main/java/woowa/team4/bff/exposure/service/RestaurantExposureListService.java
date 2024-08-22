@@ -10,13 +10,12 @@ import woowa.team4.bff.api.client.advertisement.response.AdvertisementResponse;
 import woowa.team4.bff.api.client.coupon.response.CouponResponse;
 import woowa.team4.bff.api.client.delivery.response.DeliveryTimeResponse;
 import woowa.team4.bff.domain.RestaurantSummary;
+import woowa.team4.bff.event.cache.DeliveryLocationAndKeywordCreateEvent;
 import woowa.team4.bff.exposure.caller.AsyncExternalApiCaller;
 import woowa.team4.bff.exposure.caller.SyncExternalApiCaller;
 import woowa.team4.bff.exposure.command.SearchCommand;
 import woowa.team4.bff.interfaces.CacheService;
 import woowa.team4.bff.interfaces.SearchService;
-
-import java.util.List;
 import woowa.team4.bff.publisher.EventPublisher;
 
 @Slf4j
@@ -31,12 +30,14 @@ public class RestaurantExposureListService {
     private final AsyncExternalApiCaller asyncExternalApiCaller;
 
     public List<RestaurantSummary> search(SearchCommand command) {
-        List<Long> restaurantIds = cacheService.findIdsByKeywordAndDeliveryLocation(command.keyword(),
+        List<Long> restaurantIds = cacheService.findIdsByKeywordAndDeliveryLocation(
+                command.keyword(),
                 command.deliveryLocation());
         if (restaurantIds == null) {
             restaurantIds = searchService.findIdsByKeywordAndDeliveryLocation(command.keyword(),
                     command.deliveryLocation(), command.pageNumber());
-            eventPublisher.publish(new DeliveryLocationAndKeywordCreateEvent(command.keyword(), command.deliveryLocation(), restaurantIds));
+            eventPublisher.publish(new DeliveryLocationAndKeywordCreateEvent(command.keyword(),
+                    command.deliveryLocation(), restaurantIds));
         }
         List<RestaurantSummary> res = cacheService.findByRestaurantIds(restaurantIds);
         // ToDo: 외부 api 호출
