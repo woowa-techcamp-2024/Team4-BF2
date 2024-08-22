@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 @RequiredArgsConstructor
-public class ExternalApiCaller {
+public class SyncClientApiCaller {
 
     private final RestTemplate restTemplate;
 

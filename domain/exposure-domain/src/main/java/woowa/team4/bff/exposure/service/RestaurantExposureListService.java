@@ -1,13 +1,16 @@
 package woowa.team4.bff.exposure.service;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 import woowa.team4.bff.api.client.advertisement.response.AdvertisementResponse;
 import woowa.team4.bff.api.client.coupon.response.CouponResponse;
 import woowa.team4.bff.api.client.delivery.response.DeliveryTimeResponse;
 import woowa.team4.bff.domain.RestaurantSummary;
+import woowa.team4.bff.exposure.caller.AsyncExternalApiCaller;
 import woowa.team4.bff.exposure.caller.SyncExternalApiCaller;
 import woowa.team4.bff.exposure.command.SearchCommand;
 import woowa.team4.bff.interfaces.CacheService;
@@ -21,12 +24,27 @@ public class RestaurantExposureListService {
     private final SearchService searchService;
     private final CacheService cacheService;
     private final SyncExternalApiCaller syncExternalApiCaller;
+    private final AsyncExternalApiCaller asyncExternalApiCaller;
 
     public List<RestaurantSummary> search(SearchCommand command) {
         List<Long> restaurantIds = searchService.findIdsByKeywordAndDeliveryLocation(
                 command.keyword(), command.deliveryLocation(), command.pageNumber());
-        // 외부 API 호출
+        // 동기식 외부 API 호출
         searchSynchronously(restaurantIds, command.keyword());
+
+        // 비동기식 외부 API 호출
+        searchAsynchronously(restaurantIds, command.keyword())
+                .thenRun(() -> System.out.println("All operations completed"))
+                .exceptionally(ex -> {
+                    System.err.println("An error occurred: " + ex.getMessage());
+                    return null;
+                });
+
+        // 비동기식 외부 API 호출 (WebFlux)
+        searchAsynchronouslyWebFlux(restaurantIds, command.keyword())
+                .doOnSuccess(v -> System.out.println("All operations completed"))
+                .doOnError(ex -> System.err.println("An error occurred: " + ex.getMessage()))
+                .subscribe();
 
         return cacheService.findByRestaurantIds(restaurantIds);
     }
@@ -53,8 +71,55 @@ public class RestaurantExposureListService {
      *
      * @param restaurantIds
      */
-    public void searchAsynchronously(List<Long> restaurantIds) {
+    public CompletableFuture<Void> searchAsynchronously(List<Long> restaurantIds, String keyword) {
+        // 배달 외부 API 요청
+        CompletableFuture<List<DeliveryTimeResponse>> deliveryFuture = asyncExternalApiCaller
+                .getDeliveryTime(restaurantIds)
+                .thenApply(response -> {
+                    // 배달 시간 응답 처리
+                    System.out.println("Delivery time received");
+                    return response;
+                });
+        // 쿠폰 외부 API 요청
 
+        // 광고 외부 API 요청
+
+        // 모든 결과가 완료된 후
+        return CompletableFuture.allOf(deliveryFuture)
+                .thenApply(v -> {
+                    // 모든 응답이 도착한 후 실행될 로직
+                    List<DeliveryTimeResponse> deliveryResponse = deliveryFuture.join();
+                    return null;
+                });
+    }
+
+    /**
+     * 비동기 방식으로 외부 API 호출 (WebFlux)
+     *
+     * @param restaurantIds
+     */
+    public Mono<Void> searchAsynchronouslyWebFlux(List<Long> restaurantIds, String keyword) {
+        // 배달 외부 API 요청
+        Mono<List<DeliveryTimeResponse>> deliveryMono = asyncExternalApiCaller
+                .getDeliveryTimeWebFlux(restaurantIds)
+                .doOnNext(response -> System.out.println("Delivery time received"));
+
+        // 쿠폰 외부 API 요청
+
+        // 광고 외부 API 요청
+
+        // 모든 Mono를 결합
+        return Mono.zip(deliveryMono, deliveryMono)
+                .flatMap(tuple -> {
+                    List<DeliveryTimeResponse> deliveryResponse = tuple.getT1();
+
+                    // 여기서 모든 응답을 조합하거나 추가 처리를 수행
+                    System.out.println("All responses received and processed");
+
+                    // 필요한 처리를 수행한 후 Mono<Void>를 반환
+                    return Mono.empty();
+                })
+                .then(); // Mono<Void>로 변환
     }
 
     // ToDo: 실험 후 제거

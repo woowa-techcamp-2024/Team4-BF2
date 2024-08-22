@@ -22,7 +22,7 @@ public class SyncExternalApiCaller {
     private final AdvertisementApiCaller advertisementApiCaller;
 
     public List<DeliveryTimeResponse> getDeliveryTime(List<Long> restaurantIds) {
-        return deliveryTimeApiCaller.send(new DeliveryTimeRequest(restaurantIds));
+        return deliveryTimeApiCaller.sendSync(new DeliveryTimeRequest(restaurantIds));
     }
 
     public List<CouponResponse> getCoupon(List<Long> restaurantIds) {

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import woowa.team4.bff.api.client.coupon.config.CouponClientConfiguration;
 import woowa.team4.bff.api.client.coupon.request.CouponRequest;
 import woowa.team4.bff.api.client.coupon.response.CouponResponse;
-import woowa.tema4.bff.api.client.caller.ExternalApiCaller;
+import woowa.tema4.bff.api.client.caller.SyncClientApiCaller;
 
 @Slf4j
 @Component
@@ -16,10 +16,10 @@ import woowa.tema4.bff.api.client.caller.ExternalApiCaller;
 public class CouponApiCaller {
 
     private final CouponClientConfiguration couponClientConfiguration;
-    private final ExternalApiCaller externalApiCaller;
+    private final SyncClientApiCaller syncClientApiCaller;
 
     public List<CouponResponse> send(CouponRequest couponRequest) {
-        return externalApiCaller.post(couponClientConfiguration.getUrl(),
+        return syncClientApiCaller.post(couponClientConfiguration.getUrl(),
                 couponRequest,
                 new ParameterizedTypeReference<>() {
                 });
