@@ -18,6 +18,11 @@ public class ReviewStatisticsRepository {
         return reviewStatisticsEntity.map(this::toDomain);
     }
 
+    public Optional<ReviewStatistics> findByRestaurantIdForUpdate(Long restaurantId) {
+        Optional<ReviewStatisticsEntity> reviewStatisticsEntity = reviewStatisticsEntityRepository.findByRestaurantIdUsingPessimisticLock(restaurantId);
+        return reviewStatisticsEntity.map(this::toDomain);
+    }
+
     public ReviewStatistics save(ReviewStatistics reviewStatistics) {
         ReviewStatisticsEntity save = reviewStatisticsEntityRepository.save(toEntity(reviewStatistics));
         return toDomain(save);
