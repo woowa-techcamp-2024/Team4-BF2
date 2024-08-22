@@ -28,6 +28,11 @@ public class ReviewStatisticsRepository {
         return toDomain(save);
     }
 
+    public ReviewStatistics update(ReviewStatistics reviewStatistics) {
+        ReviewStatisticsEntity update = reviewStatisticsEntityRepository.saveAndFlush(toEntity(reviewStatistics));
+        return toDomain(update);
+    }
+
     public ReviewStatistics toDomain(ReviewStatisticsEntity reviewStatisticsEntity) {
         return ReviewStatistics.builder()
                 .id(reviewStatisticsEntity.getId())
