@@ -1,9 +1,0 @@
-{
-  "properties": {
-    "menuName": {
-      "type": "text",
-      "analyzer": "nori_synonym_analyzer",
-      "search_analyzer": "nori_synonym_analyzer"
-    }
-  }
-}
