@@ -89,12 +89,12 @@ public class RestaurantExposureListService {
 
                     // 응답들을 restaurantId를 키로 하는 Map으로 변환
                     Map<Long, DeliveryTimeResponse> deliveryMap = deliveryResponses.stream()
-                            .collect(Collectors.toMap(DeliveryTimeResponse::getRestaurantId,
+                            .collect(toMap(DeliveryTimeResponse::getRestaurantId,
                                     r -> r));
                     Map<Long, CouponResponse> couponMap = couponResponses.stream()
-                            .collect(Collectors.toMap(CouponResponse::getRestaurantId, r -> r));
+                            .collect(toMap(CouponResponse::getRestaurantId, r -> r));
                     Map<Long, AdvertisementResponse> adMap = advertisementResponses.stream()
-                            .collect(Collectors.toMap(AdvertisementResponse::getRestaurantId,
+                            .collect(toMap(AdvertisementResponse::getRestaurantId,
                                     r -> r));
 
                     // ExternalApiResult 리스트 생성
