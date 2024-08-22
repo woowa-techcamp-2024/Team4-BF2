@@ -1,18 +1,15 @@
 package woowa.team4.bff.domain;
 
 import java.util.UUID;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
-@NoArgsConstructor
+@Setter
 @Builder
-@AllArgsConstructor
-public class RestaurantSummary {
+public class ExposureRestaurantSummary {
 
-    private Long id;
     private UUID restaurantUuid;
     private String restaurantName;
     private String restaurantThumbnailUrl;
@@ -20,9 +17,10 @@ public class RestaurantSummary {
     private long reviewCount;
     private double rating;
     private String menus;
-
-    public void updateReviewStatistics(Double rating, Long reviewCount) {
-        this.rating = rating;
-        this.reviewCount = reviewCount;
-    }
+    private int adRank;
+    private boolean hasAdvertisement;
+    private boolean hasCoupon;
+    private String couponName;
+    private int min;
+    private int max;
 }

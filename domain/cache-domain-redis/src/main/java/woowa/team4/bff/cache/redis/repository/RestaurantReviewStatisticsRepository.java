@@ -1,5 +1,6 @@
 package woowa.team4.bff.cache.redis.repository;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,8 +9,6 @@ import woowa.team4.bff.restaurant.entity.RestaurantEntity;
 import woowa.team4.bff.restaurant.repository.RestaurantRepository;
 import woowa.team4.bff.review.entity.ReviewStatisticsEntity;
 import woowa.team4.bff.review.repository.ReviewStatisticsEntityRepository;
-
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,13 +23,15 @@ public class RestaurantReviewStatisticsRepository {
         if (restaurantEntity.isEmpty()) {
             return null;
         }
-        ReviewStatisticsEntity reviewStatisticsEntity = reviewStatisticsEntityRepository.findByRestaurantId(id)
+        ReviewStatisticsEntity reviewStatisticsEntity = reviewStatisticsEntityRepository.findByRestaurantId(
+                        id)
                 .orElseGet(() -> ReviewStatisticsEntity.builder()
                         .reviewCount(0L)
                         .averageRating(0.0)
                         .build());
         RestaurantEntity restaurant = restaurantEntity.get();
         return RestaurantSummary.builder()
+                .id(restaurant.getId())
                 .restaurantUuid(restaurant.getUuid())
                 .restaurantName(restaurant.getName())
                 .restaurantThumbnailUrl("https://image.com")
