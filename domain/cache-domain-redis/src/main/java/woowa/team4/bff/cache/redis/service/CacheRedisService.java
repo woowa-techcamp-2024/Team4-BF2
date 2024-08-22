@@ -28,6 +28,9 @@ public class CacheRedisService implements CacheService {
     public List<Long> findIdsByKeywordAndDeliveryLocation(String keyword, String deliveryLocation) {
         String deliveryLocationKey = RedisKeyMaker.makeDeliveryLocation(deliveryLocation);
         String json = (String) redisTemplate.opsForHash().get(deliveryLocationKey, keyword);
+        if(json == null){
+            return null;
+        }
         return jsonConverter.convert(json, new TypeReference <List<Long>>() {});
     }
 
