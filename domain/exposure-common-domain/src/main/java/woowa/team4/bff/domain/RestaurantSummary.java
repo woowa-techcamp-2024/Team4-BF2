@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 public class RestaurantSummary {
+
+    private Long id;
     private UUID restaurantUuid;
     private String restaurantName;
     private String restaurantThumbnailUrl;
