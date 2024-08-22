@@ -3,7 +3,6 @@ package woowa.team4.bff.api.client.delivery.caller;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -14,7 +13,6 @@ import woowa.tema4.bff.api.client.caller.AsyncClientApiCaller;
 import woowa.tema4.bff.api.client.caller.SyncClientApiCaller;
 import woowa.tema4.bff.api.client.caller.WebClientCaller;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class DeliveryTimeApiCaller {

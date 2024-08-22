@@ -34,16 +34,16 @@ public class RestaurantExposureListService {
 
         // 비동기식 외부 API 호출
         searchAsynchronously(restaurantIds, command.keyword())
-                .thenRun(() -> System.out.println("All operations completed"))
+                .thenRun(() -> log.info("MVC Asynchronous call completed"))
                 .exceptionally(ex -> {
-                    System.err.println("An error occurred: " + ex.getMessage());
+                    log.error("An error occurred: {}", ex.getMessage());
                     return null;
                 });
 
         // 비동기식 외부 API 호출 (WebFlux)
         searchAsynchronouslyWebFlux(restaurantIds, command.keyword())
-                .doOnSuccess(v -> System.out.println("All operations completed"))
-                .doOnError(ex -> System.err.println("An error occurred: " + ex.getMessage()))
+                .doOnSuccess(v -> log.info("WebFlux Asynchronous call completed"))
+                .doOnError(ex -> log.error("An error occurred: {}", ex.getMessage()))
                 .subscribe();
 
         return cacheService.findByRestaurantIds(restaurantIds);
@@ -77,18 +77,26 @@ public class RestaurantExposureListService {
                 .getDeliveryTime(restaurantIds)
                 .thenApply(response -> {
                     // 배달 시간 응답 처리
-                    System.out.println("Delivery time received");
+                    log.info("Mvc Delivery time received");
                     return response;
                 });
         // 쿠폰 외부 API 요청
+        CompletableFuture<List<CouponResponse>> couponFuture = asyncExternalApiCaller
+                .getCoupon(restaurantIds)
+                .thenApply(response -> {
+                    // 배달 시간 응답 처리
+                    log.info("Mvc Coupon received");
+                    return response;
+                });
 
         // 광고 외부 API 요청
 
         // 모든 결과가 완료된 후
-        return CompletableFuture.allOf(deliveryFuture)
+        return CompletableFuture.allOf(deliveryFuture, couponFuture)
                 .thenApply(v -> {
                     // 모든 응답이 도착한 후 실행될 로직
                     List<DeliveryTimeResponse> deliveryResponse = deliveryFuture.join();
+                    List<CouponResponse> couponResponse = couponFuture.join();
                     return null;
                 });
     }
@@ -102,19 +110,22 @@ public class RestaurantExposureListService {
         // 배달 외부 API 요청
         Mono<List<DeliveryTimeResponse>> deliveryMono = asyncExternalApiCaller
                 .getDeliveryTimeWebFlux(restaurantIds)
-                .doOnNext(response -> System.out.println("Delivery time received"));
+                .doOnNext(response -> log.info("WebFlux Delivery time received"));
 
         // 쿠폰 외부 API 요청
-
+        Mono<List<CouponResponse>> couponMono = asyncExternalApiCaller
+                .getCouponWebFlux(restaurantIds)
+                .doOnNext(response -> log.info("WebFlux Coupon received"));
         // 광고 외부 API 요청
 
         // 모든 Mono를 결합
-        return Mono.zip(deliveryMono, deliveryMono)
+        return Mono.zip(deliveryMono, couponMono)
                 .flatMap(tuple -> {
                     List<DeliveryTimeResponse> deliveryResponse = tuple.getT1();
+                    List<CouponResponse> couponResponse = tuple.getT2();
 
                     // 여기서 모든 응답을 조합하거나 추가 처리를 수행
-                    System.out.println("All responses received and processed");
+                    log.info("WebFlux All responses received and processed");
 
                     // 필요한 처리를 수행한 후 Mono<Void>를 반환
                     return Mono.empty();
