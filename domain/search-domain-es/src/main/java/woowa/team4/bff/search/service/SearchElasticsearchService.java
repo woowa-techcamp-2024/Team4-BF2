@@ -1,5 +1,6 @@
 package woowa.team4.bff.search.service;
 
+import co.elastic.clients.elasticsearch._types.SortOrder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
@@ -32,6 +33,7 @@ public class SearchElasticsearchService implements SearchService {
                         .should(menuQuery -> menuQuery.nested(nested -> nested.path("menus")
                                 .query(nestedQuery -> nestedQuery.match(match -> match.field("menus.menuName").query(keyword))))
                         )))
+                .withSort(sort -> sort.score(score -> score.order(SortOrder.Desc)))
                 .withPageable(PageRequest.of(pageNumber, DEFAULT_PAGE_SIZE))
                 .build();
         SearchHits<RestaurantMenusDocument> searchHits = elasticsearchOperations.search(searchQuery, RestaurantMenusDocument.class);
