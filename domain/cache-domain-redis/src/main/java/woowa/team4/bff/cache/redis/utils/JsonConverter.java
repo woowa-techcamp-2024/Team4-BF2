@@ -1,6 +1,7 @@
 package woowa.team4.bff.cache.redis.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -23,6 +24,14 @@ public class JsonConverter {
     public <T> T convert(String json, Class<T> clazz) {
         try {
             return objectMapper.readValue(json, clazz);
+        } catch (JsonProcessingException e) {
+            throw new JsonConvertException(e);
+        }
+    }
+
+    public <T> T convert(String json, TypeReference<T> typeReference) {
+        try {
+            return objectMapper.readValue(json, typeReference);
         } catch (JsonProcessingException e) {
             throw new JsonConvertException(e);
         }

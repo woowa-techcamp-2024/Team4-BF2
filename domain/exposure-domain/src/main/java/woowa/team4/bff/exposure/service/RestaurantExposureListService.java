@@ -16,6 +16,9 @@ import woowa.team4.bff.exposure.command.SearchCommand;
 import woowa.team4.bff.interfaces.CacheService;
 import woowa.team4.bff.interfaces.SearchService;
 
+import java.util.List;
+import woowa.team4.bff.publisher.EventPublisher;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -23,12 +26,21 @@ public class RestaurantExposureListService {
 
     private final SearchService searchService;
     private final CacheService cacheService;
+    private final EventPublisher eventPublisher;
     private final SyncExternalApiCaller syncExternalApiCaller;
     private final AsyncExternalApiCaller asyncExternalApiCaller;
 
     public List<RestaurantSummary> search(SearchCommand command) {
-        List<Long> restaurantIds = searchService.findIdsByKeywordAndDeliveryLocation(
-                command.keyword(), command.deliveryLocation(), command.pageNumber());
+        List<Long> restaurantIds = cacheService.findIdsByKeywordAndDeliveryLocation(command.keyword(),
+                command.deliveryLocation());
+        if (restaurantIds == null) {
+            restaurantIds = searchService.findIdsByKeywordAndDeliveryLocation(command.keyword(),
+                    command.deliveryLocation(), command.pageNumber());
+            eventPublisher.publish(new DeliveryLocationAndKeywordCreateEvent(command.keyword(), command.deliveryLocation(), restaurantIds));
+        }
+        List<RestaurantSummary> res = cacheService.findByRestaurantIds(restaurantIds);
+        // ToDo: 외부 api 호출
+
         // 동기식 외부 API 호출
         searchSynchronously(restaurantIds, command.keyword());
 
@@ -45,8 +57,7 @@ public class RestaurantExposureListService {
                 .doOnSuccess(v -> log.info("WebFlux Asynchronous call completed"))
                 .doOnError(ex -> log.error("An error occurred: {}", ex.getMessage()))
                 .subscribe();
-
-        return cacheService.findByRestaurantIds(restaurantIds);
+        return res;
     }
 
     /**
