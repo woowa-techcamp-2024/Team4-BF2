@@ -1,6 +1,7 @@
-package woowa.team4.bff.exposure.controller;
+package woowa.team4.bff.restauarntexposureservice.exposure.controller;
 
-import static woowa.team4.bff.common.utils.ApiUtils.*;
+
+import static woowa.team4.bff.common.utils.ApiUtils.success;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import woowa.team4.bff.common.utils.ApiUtils.*;
+import woowa.team4.bff.common.utils.ApiUtils.ApiResult;
 import woowa.team4.bff.domain.ExposureRestaurantSummary;
 import woowa.team4.bff.exposure.command.SearchCommand;
 import woowa.team4.bff.exposure.service.RestaurantExposureListService;
