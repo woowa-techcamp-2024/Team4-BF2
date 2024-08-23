@@ -49,7 +49,7 @@ public class MenuService {
         Menu updatedMenu = menuRepository.save(menu);
         // 이벤트 발행
         eventPublisher.publish(
-                new MenuUpdateEvent(updatedMenu.getId(), updatedMenu.getName()));
+                new MenuUpdateEvent(updatedMenu.getId(), updatedMenu.getName(), menu.getRestaurantId()));
         return updatedMenu.getUuid();
     }
 

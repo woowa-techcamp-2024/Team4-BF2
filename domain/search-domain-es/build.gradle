@@ -6,4 +6,6 @@ dependencies {
     implementation project(":event:common-event")
     implementation project(":event:restaurant-event")
     implementation project(":event:menu-event")
+
+    implementation 'com.opencsv:opencsv:5.9'
 }

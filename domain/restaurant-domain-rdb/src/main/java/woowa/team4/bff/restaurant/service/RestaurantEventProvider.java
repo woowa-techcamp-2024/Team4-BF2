@@ -13,7 +13,7 @@ public class RestaurantEventProvider {
     private final EventPublisher eventPublisher;
 
     public void publishRegistrationEvent(Restaurant restaurant) {
-        RestaurantCreateEvent event = new RestaurantCreateEvent(restaurant.getId(), restaurant.getName());
+        RestaurantCreateEvent event = new RestaurantCreateEvent(restaurant.getId(), restaurant.getName(), restaurant.getDeliveryLocation());
         eventPublisher.publish(event);
     }
 }

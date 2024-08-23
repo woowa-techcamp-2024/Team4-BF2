@@ -1,0 +1,28 @@
+{
+  "properties": {
+    "id": {
+      "type": "keyword"
+    },
+    "restaurantName": {
+      "type": "text",
+      "analyzer": "nori_synonym_analyzer",
+      "search_analyzer": "nori_synonym_analyzer"
+    },
+    "deliveryLocation": {
+      "type": "keyword"
+    },
+    "menus": {
+      "type": "nested",
+      "properties": {
+        "menuName": {
+          "type": "text",
+          "analyzer": "nori_synonym_analyzer",
+          "search_analyzer": "nori_synonym_analyzer"
+        },
+        "menuId": {
+          "type": "long"
+        }
+      }
+    }
+  }
+}
