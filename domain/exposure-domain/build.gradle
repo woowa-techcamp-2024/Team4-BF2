@@ -9,7 +9,6 @@ dependencies {
     implementation project(":api-client:coupon-client")
     implementation project(":api-client:advertisement-client")
     implementation project(":domain:exposure-common-domain")
-//    implementation project(":domain:search-domain-rdb")
     implementation project(":domain:search-domain-es")
     implementation project(":domain:cache-domain-redis")
     implementation project(":event:event-publisher")

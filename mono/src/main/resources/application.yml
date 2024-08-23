@@ -3,6 +3,7 @@ spring:
     active: local
 
 ---
+
 spring:
   config:
     activate:
@@ -46,6 +47,7 @@ external-api:
     endpoints: http://localhost:8081/api/v1/deliveries
 
 ---
+
 spring:
   config:
     activate:
@@ -57,13 +59,9 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-    hibernate:
-      ddl-auto: none
+
 ---
+
 spring:
   config:
     activate:
@@ -75,9 +73,3 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-    hibernate:
-      ddl-auto: none
