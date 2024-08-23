@@ -19,11 +19,4 @@ public class SearchRdbService implements SearchService {
         return restaurantSummaryRepository.findIdsByKeywordAndDeliveryLocation(keyword, deliveryLocation, pageNumber);
 
     }
-
-    @Override
-    public List<RestaurantSummary> findRestaurantSummaryByKeywordAndDeliveryLocation(String keyword,
-                                                                                     String deliveryLocation,
-                                                                                     Integer pageNumber) {
-        return restaurantSummaryRepository.findByKeywordAndDeliveryLocation(keyword, deliveryLocation, pageNumber);
-    }
 }
