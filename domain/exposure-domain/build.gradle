@@ -5,6 +5,7 @@ dependencies {
 
     // module
     implementation project(":core-web")
+    implementation project(":api-client:cache-client")
     implementation project(":api-client:delivery-client")
     implementation project(":api-client:coupon-client")
     implementation project(":api-client:advertisement-client")

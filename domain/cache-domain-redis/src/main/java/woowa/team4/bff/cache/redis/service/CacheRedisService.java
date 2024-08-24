@@ -34,7 +34,6 @@ public class CacheRedisService implements CacheService {
         return jsonConverter.convert(json, new TypeReference <List<Long>>() {});
     }
 
-    // ToDo: Async
     @Override
     public List<RestaurantSummary> findByRestaurantIds(List<Long> ids) {
         return ids.stream()
