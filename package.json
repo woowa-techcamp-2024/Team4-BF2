@@ -1,0 +1,10 @@
+{
+  "name": "bff-front",
+  "version": "1.0.0",
+  "description": "BFF view",
+  "scripts": {
+    "install-frontend": "cd view && npm install",
+    "start-frontend": "cd view && npm run dev",
+    "dev": "npm run install-frontend && npm run start-frontend"
+  }
+}
