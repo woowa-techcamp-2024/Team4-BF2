@@ -2,7 +2,7 @@ package woowa.team4.bff.search.service;
 
 import co.elastic.clients.elasticsearch._types.SortOrder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -16,17 +16,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SearchElasticsearchService implements SearchService {
 
-    private static final int DEFAULT_PAGE_SIZE = 25;
+    private static final int DEFAULT_MAX_SIZE = 250;
 
     private final ElasticsearchOperations elasticsearchOperations;
 
     @Override
     public List<Long> findIdsByKeywordAndDeliveryLocation(String keyword, String deliveryLocation, Integer pageNumber) {
-        return searchRestaurants(deliveryLocation, keyword, pageNumber);
+        NativeQuery searchQuery = buildNativeQuery(keyword, deliveryLocation);
+        SearchHits<RestaurantMenusDocument> searchHits = elasticsearchOperations.search(searchQuery, RestaurantMenusDocument.class);
+        return searchHits.getSearchHits()
+                .stream()
+                .map(hit -> hit.getContent().getRestaurantId())
+                .toList();
     }
 
-    public List<Long> searchRestaurants(String deliveryLocation, String keyword, int pageNumber) {
-        NativeQuery searchQuery = NativeQuery.builder()
+    private NativeQuery buildNativeQuery(String keyword, String deliveryLocation) {
+        return NativeQuery.builder()
                 .withFilter(filter -> filter.term(term -> term.field("deliveryLocation").value(deliveryLocation)))
                 .withQuery(query -> query.bool(bool -> bool
                         .should(restaurantQuery -> restaurantQuery.match(match -> match.field("restaurantName").query(keyword)))
@@ -34,13 +39,7 @@ public class SearchElasticsearchService implements SearchService {
                                 .query(nestedQuery -> nestedQuery.match(match -> match.field("menus.menuName").query(keyword))))
                         )))
                 .withSort(sort -> sort.score(score -> score.order(SortOrder.Desc)))
-                .withPageable(PageRequest.of(pageNumber, DEFAULT_PAGE_SIZE))
+                .withPageable(Pageable.ofSize(DEFAULT_MAX_SIZE))
                 .build();
-        SearchHits<RestaurantMenusDocument> searchHits = elasticsearchOperations.search(searchQuery, RestaurantMenusDocument.class);
-
-        return searchHits.getSearchHits()
-                .stream()
-                .map(hit -> hit.getContent().getRestaurantId())
-                .toList();
     }
 }
