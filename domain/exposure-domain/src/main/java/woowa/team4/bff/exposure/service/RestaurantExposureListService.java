@@ -1,10 +1,5 @@
 package woowa.team4.bff.exposure.service;
 
-import static java.util.stream.Collectors.*;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,10 +17,19 @@ import woowa.team4.bff.interfaces.CacheService;
 import woowa.team4.bff.interfaces.SearchService;
 import woowa.team4.bff.publisher.EventPublisher;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class RestaurantExposureListService {
+
+    private static final long DEFAULT_PAGE_SIZE = 25L;
 
     private final SearchService searchService;
     private final CacheService cacheService;
@@ -50,7 +54,11 @@ public class RestaurantExposureListService {
         List<ExternalApiResult> externalApiResults = getExternalResult(restaurantIds,
                 command.keyword());
 
-        return mergeSummariesWithExternalResults(cachedSummaries, externalApiResults);
+        return mergeSummariesWithExternalResults(cachedSummaries, externalApiResults)
+                .stream()
+                .skip(DEFAULT_PAGE_SIZE * command.pageNumber())
+                .limit(DEFAULT_PAGE_SIZE)
+                .toList();
     }
 
     public List<ExternalApiResult> getExternalResult(
