@@ -29,7 +29,6 @@ import woowa.team4.bff.api.client.response.SearchResponse;
 public class RestaurantExposureListService {
 
     private final SearchApiCaller searchApiCaller;
-    private final CacheApiCaller cacheApiCaller;
     private final AsyncExternalApiCaller asyncExternalApiCaller;
 
     public List<ExposureRestaurantSummary> search(SearchCommand command) {
