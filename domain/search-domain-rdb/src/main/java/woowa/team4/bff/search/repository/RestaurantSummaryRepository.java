@@ -1,6 +1,5 @@
 package woowa.team4.bff.search.repository;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;

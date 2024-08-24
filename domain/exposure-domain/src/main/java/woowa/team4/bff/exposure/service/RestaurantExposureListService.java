@@ -10,47 +10,37 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import woowa.team4.bff.api.client.advertisement.response.AdvertisementResponse;
+import woowa.team4.bff.api.client.cache.caller.CacheApiCaller;
+import woowa.team4.bff.api.client.cache.request.CacheRequest;
+import woowa.team4.bff.api.client.cache.response.CacheResponse;
 import woowa.team4.bff.api.client.coupon.response.CouponResponse;
 import woowa.team4.bff.api.client.delivery.response.DeliveryTimeResponse;
 import woowa.team4.bff.domain.ExposureRestaurantSummary;
-import woowa.team4.bff.domain.RestaurantSummary;
-import woowa.team4.bff.event.cache.DeliveryLocationAndKeywordCreateEvent;
 import woowa.team4.bff.exposure.command.SearchCommand;
 import woowa.team4.bff.exposure.external.caller.AsyncExternalApiCaller;
 import woowa.team4.bff.exposure.external.result.ExternalApiResult;
-import woowa.team4.bff.interfaces.CacheService;
-import woowa.team4.bff.interfaces.SearchService;
-import woowa.team4.bff.publisher.EventPublisher;
+import woowa.team4.bff.api.client.caller.SearchApiCaller;
+import woowa.team4.bff.api.client.request.SearchRequest;
+import woowa.team4.bff.api.client.response.SearchResponse;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class RestaurantExposureListService {
 
-    private final SearchService searchService;
-    private final CacheService cacheService;
-    private final EventPublisher eventPublisher;
+    private final SearchApiCaller searchApiCaller;
     private final AsyncExternalApiCaller asyncExternalApiCaller;
 
     public List<ExposureRestaurantSummary> search(SearchCommand command) {
-        List<Long> restaurantIds = cacheService.findIdsByKeywordAndDeliveryLocation(
-                command.keyword(),
-                command.deliveryLocation());
-        if (restaurantIds == null) {
-            restaurantIds = searchService.findIdsByKeywordAndDeliveryLocation(command.keyword(),
-                    command.deliveryLocation(), command.pageNumber());
-            eventPublisher.publish(new DeliveryLocationAndKeywordCreateEvent(command.keyword(),
-                    command.deliveryLocation(), restaurantIds));
-        }
-
-        //1. 동기식 캐시 서비스 호출
-        List<RestaurantSummary> cachedSummaries = cacheService.findByRestaurantIds(restaurantIds);
-
-        //2. 비동기식 외부 API 호출
+        SearchResponse searchResponse = searchApiCaller.send(new SearchRequest(command.keyword(),
+                command.deliveryLocation(), command.pageNumber()));
+        List<Long> restaurantIds = searchResponse.getIds();
+        log.info("[search] restaurantIds: {}", restaurantIds);
+        // 비동기 호출
         List<ExternalApiResult> externalApiResults = getExternalResult(restaurantIds,
                 command.keyword());
 
-        return mergeSummariesWithExternalResults(cachedSummaries, externalApiResults);
+        return mergeSummariesWithExternalResults(externalApiResults);
     }
 
     public List<ExternalApiResult> getExternalResult(
@@ -64,7 +54,21 @@ public class RestaurantExposureListService {
      * @param restaurantIds
      */
     public Mono<List<ExternalApiResult>> searchAsynchronouslyWebFlux(List<Long> restaurantIds,
-            String keyword) {
+                                                                     String keyword) {
+        // 캐시 외부 API 요청
+        Mono<List<CacheResponse>> restaurantSummaryMono = asyncExternalApiCaller
+                .getCacheWebFlux(restaurantIds)
+                .switchIfEmpty(Mono.defer(() ->
+                        Mono.just(restaurantIds.stream()
+                                .map(id -> {
+                                    CacheResponse cacheResponse = new CacheResponse();
+                                    cacheResponse.setRestaurantId(id);
+                                    return cacheResponse;
+                                })
+                                .collect(Collectors.toList()))
+                ))
+                .doOnNext(response -> log.info("WebFlux Cache received"));
+
         // 배달 외부 API 요청
         Mono<List<DeliveryTimeResponse>> deliveryMono = asyncExternalApiCaller
                 .getDeliveryTimeWebFlux(restaurantIds)
@@ -108,13 +112,17 @@ public class RestaurantExposureListService {
                 .doOnNext(response -> log.info("WebFlux Advertisement received"));
 
         // 모든 Mono를 결합
-        return Mono.zip(deliveryMono, couponMono, advertisementMono)
+        return Mono.zip(restaurantSummaryMono, deliveryMono, couponMono, advertisementMono)
                 .map(tuple -> {
-                    List<DeliveryTimeResponse> deliveryResponses = tuple.getT1();
-                    List<CouponResponse> couponResponses = tuple.getT2();
-                    List<AdvertisementResponse> advertisementResponses = tuple.getT3();
+                    List<CacheResponse> restaurantSummaryResponses = tuple.getT1();
+                    List<DeliveryTimeResponse> deliveryResponses = tuple.getT2();
+                    List<CouponResponse> couponResponses = tuple.getT3();
+                    List<AdvertisementResponse> advertisementResponses = tuple.getT4();
 
                     // 응답들을 restaurantId를 키로 하는 Map으로 변환
+                    Map<Long, CacheResponse> restaurantSummaryMap = restaurantSummaryResponses.stream()
+                            .collect(toMap(CacheResponse::getRestaurantId,
+                                    r -> r));
                     Map<Long, DeliveryTimeResponse> deliveryMap = deliveryResponses.stream()
                             .collect(toMap(DeliveryTimeResponse::getRestaurantId,
                                     r -> r));
@@ -128,6 +136,13 @@ public class RestaurantExposureListService {
                     return restaurantIds.stream()
                             .map(id -> ExternalApiResult.builder()
                                     .restaurantId(id)
+                                    .restaurantUuid(restaurantSummaryMap.get(id).getRestaurantUuid())
+                                    .restaurantName(restaurantSummaryMap.get(id).getRestaurantName())
+                                    .restaurantThumbnailUrl(restaurantSummaryMap.get(id).getRestaurantThumbnailUrl())
+                                    .minimumOrderAmount(restaurantSummaryMap.get(id).getMinimumOrderAmount())
+                                    .reviewCount(restaurantSummaryMap.get(id).getReviewCount())
+                                    .rating(restaurantSummaryMap.get(id).getRating())
+                                    .menus(restaurantSummaryMap.get(id).getMenus())
                                     .adRank(adMap.get(id).getAdRank())
                                     .hasAdvertisement(adMap.get(id).isHasAdvertisement())
                                     .hasCoupon(couponMap.get(id).isHasCoupon())
@@ -142,28 +157,23 @@ public class RestaurantExposureListService {
     }
 
     private List<ExposureRestaurantSummary> mergeSummariesWithExternalResults(
-            List<RestaurantSummary> summaries, List<ExternalApiResult> externalResults) {
-        Map<Long, ExternalApiResult> resultMap = externalResults.stream()
-                .collect(Collectors.toMap(ExternalApiResult::getRestaurantId, r -> r));
-
-        return summaries.stream()
-                .map(summary -> {
-                    ExternalApiResult result = resultMap.get(summary.getId());
-                    return updateSummaryWithExternalResult(summary, result);
-                })
+            List<ExternalApiResult> externalResults) {
+        return externalResults.stream()
+                .map(this::updateSummaryWithExternalResult
+                )
                 .collect(toList());
     }
 
-    private ExposureRestaurantSummary updateSummaryWithExternalResult(RestaurantSummary summary,
+    private ExposureRestaurantSummary updateSummaryWithExternalResult(
             ExternalApiResult result) {
         return ExposureRestaurantSummary.builder()
-                .restaurantUuid(summary.getRestaurantUuid())
-                .restaurantName(summary.getRestaurantName())
-                .restaurantThumbnailUrl(summary.getRestaurantThumbnailUrl())
-                .minimumOrderAmount(summary.getMinimumOrderAmount())
-                .reviewCount(summary.getReviewCount())
-                .rating(summary.getRating())
-                .menus(summary.getMenus())
+                .restaurantUuid(result.getRestaurantUuid())
+                .restaurantName(result.getRestaurantName())
+                .restaurantThumbnailUrl(result.getRestaurantThumbnailUrl())
+                .minimumOrderAmount(result.getMinimumOrderAmount())
+                .reviewCount(result.getReviewCount())
+                .rating(result.getRating())
+                .menus(result.getMenus())
                 .adRank(result.getAdRank())
                 .hasAdvertisement(result.isHasAdvertisement())
                 .hasCoupon(result.isHasCoupon())
