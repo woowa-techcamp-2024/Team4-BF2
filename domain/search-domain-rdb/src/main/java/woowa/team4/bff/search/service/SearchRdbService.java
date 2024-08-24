@@ -12,11 +12,13 @@ import woowa.team4.bff.search.repository.RestaurantSummaryRepository;
 @Service
 @RequiredArgsConstructor
 public class SearchRdbService implements SearchService {
+
     private final RestaurantSummaryRepository restaurantSummaryRepository;
 
     @Override
     public List<Long> findIdsByKeywordAndDeliveryLocation(String keyword, String deliveryLocation, Integer pageNumber) {
-        return restaurantSummaryRepository.findIdsByKeywordAndDeliveryLocation(keyword, deliveryLocation, pageNumber);
-
+        List<Long> res =  restaurantSummaryRepository.findIdsByKeywordAndDeliveryLocation(keyword, deliveryLocation, pageNumber);
+        log.info("[findIdsByKeywordAndDeliveryLocation] " + res);
+        return res;
     }
 }

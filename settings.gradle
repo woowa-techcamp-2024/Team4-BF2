@@ -1,5 +1,5 @@
 rootProject.name = 'bff'
-include 'mono'
+//include 'mono'
 include 'event'
 include 'event:menu-event'
 findProject(':event:menu-event')?.name = 'menu-event'

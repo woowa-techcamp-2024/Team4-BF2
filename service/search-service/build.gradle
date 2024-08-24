@@ -28,10 +28,17 @@ jar.enabled = false
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // util
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    // module
+    implementation project(":core-web")
+    implementation project(":api-client:search-client")
+    implementation project(":domain:exposure-common-domain")
+    implementation project(":domain:search-domain-rdb")
+    // implementation project(":domain:search-domain-es")
 }
 
 tasks.named('test') {

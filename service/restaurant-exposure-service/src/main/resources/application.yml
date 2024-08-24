@@ -1,5 +1,5 @@
 server:
-  port: 0
+  port: 8080
 
 spring:
   profiles:
@@ -43,16 +43,16 @@ logging:
 external-api:
   advertisement-service:
     endpoints: http://localhost:8081/api/v1/advertisements
-  cache-service:
-    endpoints: http://localhost:8082/api/v1/cache
   coupon-service:
-    endpoints: http://localhost:8082/api/v1/coupons
+    endpoints: http://localhost:8083/api/v1/coupons
   delivery-service:
-    endpoints: http://localhost:8083/api/v1/deliveries
+    endpoints: http://localhost:8084/api/v1/deliveries
+  cache-service:
+    endpoints: http://localhost:7001/api/v1/cache
   restaurant-service:
-    endpoints: http://localhost:8082/api/v1/restaurant
+    endpoints: http://localhost:7002/api/v1/restaurant
   search-service:
-    endpoints: http://localhost:8082/api/v1/search
+    endpoints: http://localhost:7003/api/v1/search
 
 ---
 spring:

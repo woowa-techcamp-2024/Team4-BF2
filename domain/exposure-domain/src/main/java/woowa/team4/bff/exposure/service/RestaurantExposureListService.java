@@ -10,31 +10,33 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import woowa.team4.bff.api.client.advertisement.response.AdvertisementResponse;
+import woowa.team4.bff.api.client.cache.caller.CacheApiCaller;
+import woowa.team4.bff.api.client.cache.request.CacheRequest;
 import woowa.team4.bff.api.client.cache.response.CacheResponse;
 import woowa.team4.bff.api.client.coupon.response.CouponResponse;
 import woowa.team4.bff.api.client.delivery.response.DeliveryTimeResponse;
 import woowa.team4.bff.domain.ExposureRestaurantSummary;
-import woowa.team4.bff.domain.RestaurantSummary;
-import woowa.team4.bff.event.cache.DeliveryLocationAndKeywordCreateEvent;
 import woowa.team4.bff.exposure.command.SearchCommand;
 import woowa.team4.bff.exposure.external.caller.AsyncExternalApiCaller;
 import woowa.team4.bff.exposure.external.result.ExternalApiResult;
-import woowa.team4.bff.interfaces.CacheService;
-import woowa.team4.bff.interfaces.SearchService;
-import woowa.team4.bff.publisher.EventPublisher;
+import woowa.team4.bff.api.client.caller.SearchApiCaller;
+import woowa.team4.bff.api.client.request.SearchRequest;
+import woowa.team4.bff.api.client.response.SearchResponse;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class RestaurantExposureListService {
 
-    private final SearchService searchService;
+    private final SearchApiCaller searchApiCaller;
+    private final CacheApiCaller cacheApiCaller;
     private final AsyncExternalApiCaller asyncExternalApiCaller;
 
     public List<ExposureRestaurantSummary> search(SearchCommand command) {
-        List<Long> restaurantIds = searchService.findIdsByKeywordAndDeliveryLocation(command.keyword(),
-                command.deliveryLocation(), command.pageNumber());
-
+        SearchResponse searchResponse = searchApiCaller.send(new SearchRequest(command.keyword(),
+                command.deliveryLocation(), command.pageNumber()));
+        List<Long> restaurantIds = searchResponse.getIds();
+        log.info("[search] restaurantIds: {}", restaurantIds);
         // 비동기 호출
         List<ExternalApiResult> externalApiResults = getExternalResult(restaurantIds,
                 command.keyword());
@@ -66,7 +68,7 @@ public class RestaurantExposureListService {
                                 })
                                 .collect(Collectors.toList()))
                 ))
-                .doOnNext(response -> log.info("WebFlux Coupon received"));
+                .doOnNext(response -> log.info("WebFlux Cache received"));
 
         // 배달 외부 API 요청
         Mono<List<DeliveryTimeResponse>> deliveryMono = asyncExternalApiCaller

@@ -32,4 +32,5 @@ public class SyncExternalApiCaller {
     public List<AdvertisementResponse> getAdvertisement(List<Long> restaurantIds, String keyword) {
         return advertisementApiCaller.send(new AdvertisementRequest(restaurantIds, keyword));
     }
+
 }

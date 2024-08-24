@@ -1,11 +1,9 @@
 server:
-  port: 0
+  port: 7002
 
 spring:
   profiles:
     active: local
-  application:
-    name: "restaurant-service"
 
 ---
 spring:
@@ -41,14 +39,6 @@ spring:
 logging:
   level:
     tracer: TRACE
-
-external-api:
-  advertisement-service:
-    endpoints: http://localhost:8083/api/v1/advertisements
-  coupon-service:
-    endpoints: http://localhost:8082/api/v1/coupons
-  delivery-service:
-    endpoints: http://localhost:8081/api/v1/deliveries
 
 ---
 spring:

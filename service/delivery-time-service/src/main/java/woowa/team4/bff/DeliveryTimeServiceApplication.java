@@ -1,4 +1,4 @@
-package woowa.team4.bff.deliverytimeservice;
+package woowa.team4.bff;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
