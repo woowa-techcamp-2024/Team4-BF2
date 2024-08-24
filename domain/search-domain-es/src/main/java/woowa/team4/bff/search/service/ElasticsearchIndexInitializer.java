@@ -9,8 +9,10 @@ import com.opencsv.exceptions.CsvValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.IndexOperations;
+import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import org.springframework.stereotype.Component;
@@ -24,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@Component // 빈으로 등록하면 스프링 시작 시 실행됩니다. Elasticsearch 인덱스를 초기화하는 용도입니다!
+@Component
 @RequiredArgsConstructor
 public class ElasticsearchIndexInitializer implements CommandLineRunner {
 
@@ -38,14 +40,25 @@ public class ElasticsearchIndexInitializer implements CommandLineRunner {
         IndexOperations indexOps = elasticsearchOperations.indexOps(RestaurantMenusDocument.class);
 
         if (indexOps.exists()) {
-            log.info("Elasticsearch 인덱스 '{}' 이미 존재합니다. 초기화를 건너뜁니다.", INDEX_NAME);
-            return;
+            NativeQuery countQuery = NativeQuery.builder()
+                    .withQuery(query -> query.matchAll(matchAll -> matchAll))
+                    .build();
+            SearchHits<RestaurantMenusDocument> searchHits = elasticsearchOperations.search(countQuery, RestaurantMenusDocument.class);
+            long documentCount = searchHits.getTotalHits();
+
+            if (documentCount > 0) {
+                log.info("Elasticsearch 인덱스 '{}' 에 {} 개의 문서가 존재합니다. 초기화를 건너뜁니다.", INDEX_NAME, documentCount);
+                return;
+            }
+            log.info("Elasticsearch 인덱스 '{}' 가 존재하지만 비어 있습니다. 초기화를 진행합니다.", INDEX_NAME);
+        } else {
+            log.info("Elasticsearch 인덱스 '{}' 가 존재하지 않습니다. 새로 생성합니다.", INDEX_NAME);
+            indexOps.create();
         }
 
         log.info("Elasticsearch nested 도큐먼트 인덱스 초기화 시작");
         Map<String, RestaurantMenusDocument> restaurantMap = readRestaurants("updated_restaurants_es.csv");
         readMenus("updated_menu_es.csv", restaurantMap);
-//        saveToElasticsearch(restaurantMap.values());
         bulkSaveToElasticsearch(restaurantMap.values());
         log.info("Elasticsearch nested 도큐먼트 인덱스 초기화 완료");
     }
