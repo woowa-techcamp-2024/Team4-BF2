@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -32,7 +31,7 @@ public class WebClientCaller {
     }
 
     private Mono fallback(Throwable t) {
-        log.error("error fallback");
+        log.error("error fallback {}", t.getMessage());
         return Mono.empty();
     }
 

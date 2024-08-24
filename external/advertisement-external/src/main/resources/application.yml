@@ -1,7 +1,0 @@
-server:
-  port: 8083
-
-spring:
-  threads:
-    virtual:
-      enabled: true

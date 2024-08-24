@@ -1,7 +1,5 @@
 package woowa.team4.bff.cache.redis.service;
 
-import static com.fasterxml.jackson.databind.type.LogicalType.Map;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -34,7 +32,6 @@ public class CacheRedisService implements CacheService {
         return jsonConverter.convert(json, new TypeReference <List<Long>>() {});
     }
 
-    // ToDo: Async
     @Override
     public List<RestaurantSummary> findByRestaurantIds(List<Long> ids) {
         return ids.stream()
@@ -49,6 +46,7 @@ public class CacheRedisService implements CacheService {
         String json = valueOperations.get(restaurantKey);
         if (json == null) {
             RestaurantSummary restaurantSummary = restaurantReviewStatisticsRepository.findByRestaurantId(id);
+            // ToDo: Event Publisher
             valueOperations.set(restaurantKey, jsonConverter.convert(restaurantSummary));
             return restaurantSummary;
         }
