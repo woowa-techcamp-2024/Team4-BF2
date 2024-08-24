@@ -10,8 +10,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.IndexOperations;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
+import org.springframework.stereotype.Component;
 import woowa.team4.bff.search.document.RestaurantMenusDocument;
 
 import java.io.IOException;
@@ -22,16 +24,24 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-//@Component // 빈으로 등록하면 스프링 시작 시 실행됩니다. Elasticsearch 인덱스를 초기화하는 용도입니다!
+@Component // 빈으로 등록하면 스프링 시작 시 실행됩니다. Elasticsearch 인덱스를 초기화하는 용도입니다!
 @RequiredArgsConstructor
 public class ElasticsearchIndexInitializer implements CommandLineRunner {
 
     private static final int BATCH_SIZE = 10_000;
+    private static final String INDEX_NAME = "restaurant_menus";
 
     private final ElasticsearchOperations elasticsearchOperations;
 
     @Override
     public void run(String... args) throws Exception {
+        IndexOperations indexOps = elasticsearchOperations.indexOps(RestaurantMenusDocument.class);
+
+        if (indexOps.exists()) {
+            log.info("Elasticsearch 인덱스 '{}' 이미 존재합니다. 초기화를 건너뜁니다.", INDEX_NAME);
+            return;
+        }
+
         log.info("Elasticsearch nested 도큐먼트 인덱스 초기화 시작");
         Map<String, RestaurantMenusDocument> restaurantMap = readRestaurants("updated_restaurants_es.csv");
         readMenus("updated_menu_es.csv", restaurantMap);

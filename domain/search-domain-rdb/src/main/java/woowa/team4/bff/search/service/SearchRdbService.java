@@ -17,8 +17,6 @@ public class SearchRdbService implements SearchService {
 
     @Override
     public List<Long> findIdsByKeywordAndDeliveryLocation(String keyword, String deliveryLocation, Integer pageNumber) {
-        List<Long> res =  restaurantSummaryRepository.findIdsByKeywordAndDeliveryLocation(keyword, deliveryLocation, pageNumber);
-        log.info("[findIdsByKeywordAndDeliveryLocation] " + res);
-        return res;
+        return restaurantSummaryRepository.findIdsByKeywordAndDeliveryLocation(keyword, deliveryLocation, pageNumber);
     }
 }
