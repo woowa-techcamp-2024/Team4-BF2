@@ -157,21 +157,27 @@ const RestaurantList = () => {
               >
                 <div className="flex justify-between items-start">
                   <div className="flex-grow">
-                    <h3 className="font-bold mb-1">{restaurant.restaurantName}</h3>
+                    <div className="flex items-center mb-1">
+                      <h3 className="font-semibold text-base">{restaurant.restaurantName}</h3>
+                      {restaurant.hasAdvertisement && (
+                          <span
+                              className="ml-2 text-xs font-medium text-gray-500 border border-gray-500 rounded px-1">광고</span>
+                      )}
+                    </div>
                     <div className="flex items-center mb-1">
                       <Star className="h-4 w-4 text-yellow-400 mr-1"/>
                       <span className="text-sm font-medium">
-                    {restaurant.rating.toFixed(1)}
-                  </span>
-                      <span className="text-sm text-gray-500 ml-1">
-                    ({restaurant.reviewCount})
-                  </span>
+              {restaurant.rating.toFixed(1)}
+            </span>
+                      <span className="text-xs text-gray-500 ml-1">
+              리뷰 {restaurant.reviewCount}
+            </span>
                     </div>
-                    <p className="text-sm text-gray-500 mb-1">
+                    <p className="text-xs text-gray-500 mb-1">
                       {restaurant.min > 0
                           ? `${restaurant.min}-${restaurant.max}분` : ''}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-xs text-gray-500">
                       최소주문 {restaurant.minimumOrderAmount.toLocaleString()}원
                     </p>
                   </div>
@@ -180,7 +186,7 @@ const RestaurantList = () => {
                 </div>
                 {restaurant.hasCoupon && (
                     <div
-                        className="mt-2 inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded">
+                        className="mt-2 inline-block bg-blue-50 text-blue-700 text-xs font-medium px-2 py-1 rounded">
                       {restaurant.couponName}
                     </div>
                 )}
