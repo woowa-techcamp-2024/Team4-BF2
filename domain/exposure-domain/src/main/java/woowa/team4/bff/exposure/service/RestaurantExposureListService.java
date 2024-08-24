@@ -1,32 +1,34 @@
 package woowa.team4.bff.exposure.service;
 
-import static java.util.stream.Collectors.*;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import woowa.team4.bff.api.client.advertisement.response.AdvertisementResponse;
-import woowa.team4.bff.api.client.cache.caller.CacheApiCaller;
-import woowa.team4.bff.api.client.cache.request.CacheRequest;
 import woowa.team4.bff.api.client.cache.response.CacheResponse;
+import woowa.team4.bff.api.client.caller.SearchApiCaller;
 import woowa.team4.bff.api.client.coupon.response.CouponResponse;
 import woowa.team4.bff.api.client.delivery.response.DeliveryTimeResponse;
+import woowa.team4.bff.api.client.request.SearchRequest;
+import woowa.team4.bff.api.client.response.SearchResponse;
 import woowa.team4.bff.domain.ExposureRestaurantSummary;
 import woowa.team4.bff.exposure.command.SearchCommand;
 import woowa.team4.bff.exposure.external.caller.AsyncExternalApiCaller;
 import woowa.team4.bff.exposure.external.result.ExternalApiResult;
-import woowa.team4.bff.api.client.caller.SearchApiCaller;
-import woowa.team4.bff.api.client.request.SearchRequest;
-import woowa.team4.bff.api.client.response.SearchResponse;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class RestaurantExposureListService {
+
+    private static final long DEFAULT_PAGE_SIZE = 25L;
 
     private final SearchApiCaller searchApiCaller;
     private final AsyncExternalApiCaller asyncExternalApiCaller;
@@ -38,7 +40,11 @@ public class RestaurantExposureListService {
         log.info("[search] restaurantIds: {}", restaurantIds);
         // 비동기 호출
         List<ExternalApiResult> externalApiResults = getExternalResult(restaurantIds,
-                command.keyword());
+                command.keyword())
+                .stream()
+                .skip(DEFAULT_PAGE_SIZE * command.pageNumber())
+                .limit(DEFAULT_PAGE_SIZE)
+                .toList();
 
         return mergeSummariesWithExternalResults(externalApiResults);
     }
