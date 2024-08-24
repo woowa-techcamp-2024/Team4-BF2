@@ -40,13 +40,13 @@ public class RestaurantExposureListService {
         log.info("[search] restaurantIds: {}", restaurantIds);
         // 비동기 호출
         List<ExternalApiResult> externalApiResults = getExternalResult(restaurantIds,
-                command.keyword());
-
-        return mergeSummariesWithExternalResults(externalApiResults)
+                command.keyword())
                 .stream()
                 .skip(DEFAULT_PAGE_SIZE * command.pageNumber())
                 .limit(DEFAULT_PAGE_SIZE)
                 .toList();
+
+        return mergeSummariesWithExternalResults(externalApiResults);
     }
 
     public List<ExternalApiResult> getExternalResult(
