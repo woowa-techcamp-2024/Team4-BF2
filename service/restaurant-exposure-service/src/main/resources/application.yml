@@ -44,9 +44,9 @@ external-api:
   advertisement-service:
     endpoints: http://localhost:8081/api/v1/advertisements
   coupon-service:
-    endpoints: http://localhost:8083/api/v1/coupons
+    endpoints: http://localhost:8082/api/v1/coupons
   delivery-service:
-    endpoints: http://localhost:8084/api/v1/deliveries
+    endpoints: http://localhost:8083/api/v1/deliveries
   cache-service:
     endpoints: http://localhost:7001/api/v1/cache
   restaurant-service:
