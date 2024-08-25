@@ -1,5 +1,5 @@
-service/cache-service/src/main/resources/updated_menu_es.csv
-service/cache-service/src/main/resources/updated_restauarnts_es.csv
+service/search-service/src/main/resources/updated_menu_es.csv
+service/search-service/src/main/resources/updated_restaurants_es.csv
 local
 HELP.md
 .gradle
