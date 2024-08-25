@@ -118,7 +118,7 @@ jobs:
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           services=("cache" "advertisement" "coupon" "delivery-time" "restaurant")
           for service in "${services[@]}"; do
-            if [[ "${{ needs.changes.outputs.$service }}" == 'true' ]]; then
+            if [[ "${{ needs.changes.outputs[format('{0}', service)] }}" == 'true' ]]; then
               scp -o StrictHostKeyChecking=no -i private_key service/${service}-service/build/libs/*.jar ${USER}@${HOST}:~/${service}-service.jar
               ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
                 pkill -f 'java -jar ${service}-service.jar' || true
