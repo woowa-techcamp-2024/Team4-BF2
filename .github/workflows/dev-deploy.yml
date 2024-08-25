@@ -66,6 +66,14 @@ jobs:
           USER: ${{ secrets.DEV_EC2_USER }}
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          
+          echo "Current directory:"
+          pwd
+          echo "Contents of current directory:"
+          ls -R
+          echo "Contents of build directory:"
+          ls -R service/search-service/build/libs/
+          
           scp -o StrictHostKeyChecking=no -i private_key service/restaurant-exposure-service/build/libs/*.jar ${USER}@${HOST}:~/restaurant-exposure-service.jar
       - name: 가게노출 서비스 실행
         env:
@@ -91,6 +99,14 @@ jobs:
           USER: ${{ secrets.DEV_EC2_USER }}
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          
+          echo "Current directory:"
+          pwd
+          echo "Contents of current directory:"
+          ls -R
+          echo "Contents of build directory:"
+          ls -R service/search-service/build/libs/
+          
           scp -o StrictHostKeyChecking=no -i private_key service/search-service/build/libs/*.jar ${USER}@${HOST}:~/search-service.jar
       - name: 검색 서비스 실행
         env:
