@@ -52,6 +52,10 @@ jobs:
         run: chmod +x gradlew
       - name: JAR 빌드
         run: ./gradlew clean build
+      - name: 빌드된 JAR 파일 확인
+        run: |
+          echo "빌드된 JAR 파일 목록:"
+          find service/*/build/libs -name "*.jar"
       - name: 아티팩트 업로드
         uses: actions/upload-artifact@v3
         with:
@@ -60,7 +64,7 @@ jobs:
 
   deploy-restaurant-exposure:
     needs: [ changes, build ]
-    if: ${{ needs.changes.outputs.restaurant-exposure == 'false' }}
+    if: ${{ needs.changes.outputs.restaurant-exposure == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -69,6 +73,10 @@ jobs:
         with:
           name: jar-files
           path: jars
+      - name: 다운로드된 JAR 파일 확인
+        run: |
+          echo "다운로드된 JAR 파일 목록:"
+          find jars -name "*.jar"
       - name: 가게노출 서비스 서버로 JAR 전송
         env:
           PRIVATE_KEY: ${{ secrets.DEV_EC2_SSH_KEY }}
@@ -76,7 +84,12 @@ jobs:
           USER: ${{ secrets.DEV_EC2_USER }}
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          scp -o StrictHostKeyChecking=no -i private_key jars/restaurant-exposure-service-*.jar ${USER}@${HOST}:~/restaurant-exposure-service.jar
+          jar_file=$(find jars -name "restaurant-exposure-service*.jar")
+          if [ -z "$jar_file" ]; then
+            echo "Error: restaurant-exposure-service JAR file not found"
+            exit 1
+          fi
+          scp -o StrictHostKeyChecking=no -i private_key "$jar_file" ${USER}@${HOST}:~/restaurant-exposure-service.jar
       - name: 가게노출 서비스 실행
         env:
           PRIVATE_KEY: ${{ secrets.DEV_EC2_SSH_KEY }}
