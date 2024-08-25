@@ -1,6 +1,5 @@
 package woowa.tema4.bff.api.client.config;
 
-import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig.SlidingWindowType;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
@@ -59,12 +58,7 @@ public class ApiClientConfiguration {
     }
 
     @Bean
-    public CircuitBreaker circuitBreaker(CircuitBreakerRegistry circuitBreakerRegistry) {
-        return circuitBreakerRegistry.circuitBreaker("bff");
-    }
-
-    @Bean
-    public WebClientCaller webClientCaller(WebClient webClient, CircuitBreaker circuitBreaker) {
-        return new WebClientCaller(webClient, circuitBreaker);
+    public WebClientCaller webClientCaller(WebClient webClient, CircuitBreakerRegistry circuitBreakerRegistry) {
+        return new WebClientCaller(webClient, circuitBreakerRegistry);
     }
 }
