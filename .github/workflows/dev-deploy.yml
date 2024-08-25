@@ -66,7 +66,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
             pkill -f 'java -jar restaurant-exposure-service.jar' || true
             rm -rf estaurant-exposure-service.log
-            source ~/.bashrc
+            source ~/.bash_profile
             nohup java -jar restaurant-exposure-service.jar --spring.profiles.active=dev > restaurant-exposure-service.log 2>&1 &
           EOF
 
@@ -80,7 +80,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
             pkill -f 'java -jar search-service.jar' || true
             rm -rf search-service.log
-            source ~/.bashrc
+            source ~/.bash_profile
             nohup java -jar search-service.jar --spring.profiles.active=dev > search-service.log 2>&1 &
           EOF
 
@@ -100,7 +100,7 @@ jobs:
             ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
               pkill -f 'java -jar cache-service.jar' || true
               rm -rf cache-service.log
-              source ~/.bashrc
+              source ~/.bash_profile
               nohup java -jar cache-service.jar --spring.profiles.active=dev > cache-service.log 2>&1 &
           EOF
           fi
@@ -109,7 +109,7 @@ jobs:
             ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
               pkill -f 'java -jar advertisement-service.jar' || true
               rm -rf advertisement-service.log
-              source ~/.bashrc
+              source ~/.bash_profile
               nohup java -jar advertisement-service.jar --spring.profiles.active=dev > advertisement-service.log 2>&1 &
           EOF
           fi
@@ -118,7 +118,7 @@ jobs:
             ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
               pkill -f 'java -jar coupon-service.jar' || true
               rm -rf coupon-service.log
-              source ~/.bashrc
+              source ~/.bash_profile
               nohup java -jar coupon-service.jar --spring.profiles.active=dev > coupon-service.log 2>&1 &
           EOF
           fi
@@ -127,7 +127,7 @@ jobs:
             ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
               pkill -f 'java -jar delivery-time-service.jar' || true
               rm -rf delivery-time-service.log
-              source ~/.bashrc
+              source ~/.bash_profile
               nohup java -jar delivery-time-service.jar --spring.profiles.active=dev > delivery-time-service.log 2>&1 &
           EOF
           fi
@@ -136,7 +136,7 @@ jobs:
             ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
               pkill -f 'java -jar restaurant-service.jar' || true
               rm -rf restaurant-service.log
-              source ~/.bashrc
+              source ~/.bash_profile
               nohup java -jar restaurant-service.jar --spring.profiles.active=dev > restaurant-service.log 2>&1 &
           EOF
           fi
