@@ -125,5 +125,4 @@ jobs:
               pkill -f 'java -jar restaurant-service.jar' || true
               nohup java -jar restaurant-service.jar --spring.profiles.active=dev > restaurant-service.log 2>&1 &
             EOF
-          fi
-          EOF
+            fi
