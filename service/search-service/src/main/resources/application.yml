@@ -24,18 +24,10 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: none
-
   elasticsearch:
     uris: http://localhost:9200
     username: elastic
     password: your_elastic_password
-  data:
-    elasticsearch:
-      repositories:
-        enabled: true
-    redis:
-      host: localhost
-      port: 6379
 
 logging:
   level:
@@ -62,17 +54,10 @@ spring:
     uris: ${ELASTICSEARCH_URL}
     username: ${ELASTICSEARCH_USERNAME}
     password: ${ELASTICSEARCH_PASSWORD}
-  data:
-    redis:
-      password: ${REDIS_PASSWORD}
 
 external-api:
-  advertisement-service:
-    endpoints: http://localhost:8083/api/v1/advertisements
-  coupon-service:
-    endpoints: http://localhost:8082/api/v1/coupons
-  delivery-service:
-    endpoints: http://localhost:8081/api/v1/deliveries
+  search-service:
+    endpoints: ${SEARCH_SERVICE_ENDPOINT}
 
 ---
 
