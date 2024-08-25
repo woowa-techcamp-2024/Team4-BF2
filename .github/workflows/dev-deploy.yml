@@ -55,7 +55,7 @@ jobs:
 
   deploy-restaurant-exposure:
     needs: [ changes, build ]
-    if: ${{ needs.changes.outputs.restaurant-exposure == 'true' }}
+    if: ${{ needs.changes.outputs.restaurant-exposure == 'false' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -80,7 +80,7 @@ jobs:
 
   deploy-search:
     needs: [ changes, build ]
-    if: ${{ needs.changes.outputs.search == 'true' }}
+    if: ${{ needs.changes.outputs.search == 'false' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -116,19 +116,19 @@ jobs:
           USER: ${{ secrets.DEV_EC2_USER }}
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          if [[ "${{ needs.changes.outputs.cache }}" == 'true' ]]; then
+          if [[ "${{ needs.changes.outputs.cache }}" == 'false' ]]; then
             scp -o StrictHostKeyChecking=no -i private_key service/cache-service/build/libs/*.jar ${USER}@${HOST}:~/cache-service.jar
           fi
-          if [[ "${{ needs.changes.outputs.advertisement }}" == 'true' ]]; then
+          if [[ "${{ needs.changes.outputs.advertisement }}" == 'false' ]]; then
             scp -o StrictHostKeyChecking=no -i private_key service/advertisement-service/build/libs/*.jar ${USER}@${HOST}:~/advertisement-service.jar
           fi
-          if [[ "${{ needs.changes.outputs.coupon }}" == 'true' ]]; then
+          if [[ "${{ needs.changes.outputs.coupon }}" == 'false' ]]; then
             scp -o StrictHostKeyChecking=no -i private_key service/coupon-service/build/libs/*.jar ${USER}@${HOST}:~/coupon-service.jar
           fi
-          if [[ "${{ needs.changes.outputs.delivery-time }}" == 'true' ]]; then
+          if [[ "${{ needs.changes.outputs.delivery-time }}" == 'false' ]]; then
             scp -o StrictHostKeyChecking=no -i private_key service/delivery-time-service/build/libs/*.jar ${USER}@${HOST}:~/delivery-time-service.jar
           fi
-          if [[ "${{ needs.changes.outputs.restaurant }}" == 'true' ]]; then
+          if [[ "${{ needs.changes.outputs.restaurant }}" == 'false' ]]; then
             scp -o StrictHostKeyChecking=no -i private_key service/restaurant-service/build/libs/*.jar ${USER}@${HOST}:~/restaurant-service.jar
           fi
       - name: 기타 서비스들 실행
@@ -138,23 +138,23 @@ jobs:
           USER: ${{ secrets.DEV_EC2_USER }}
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
-            if [[ "${{ needs.changes.outputs.cache }}" == 'true' ]]; then
+            if [[ "${{ needs.changes.outputs.cache }}" == 'false' ]]; then
               pkill -f 'java -jar cache-service.jar' || true
               nohup java -jar cache-service.jar --spring.profiles.active=dev > cache-service.log 2>&1 &
             fi
-            if [[ "${{ needs.changes.outputs.advertisement }}" == 'true' ]]; then
+            if [[ "${{ needs.changes.outputs.advertisement }}" == 'false' ]]; then
               pkill -f 'java -jar advertisement-service.jar' || true
               nohup java -jar advertisement-service.jar --spring.profiles.active=dev > advertisement-service.log 2>&1 &
             fi
-            if [[ "${{ needs.changes.outputs.coupon }}" == 'true' ]]; then
+            if [[ "${{ needs.changes.outputs.coupon }}" == 'false' ]]; then
               pkill -f 'java -jar coupon-service.jar' || true
               nohup java -jar coupon-service.jar --spring.profiles.active=dev > coupon-service.log 2>&1 &
             fi
-            if [[ "${{ needs.changes.outputs.delivery-time }}" == 'true' ]]; then
+            if [[ "${{ needs.changes.outputs.delivery-time }}" == 'false' ]]; then
               pkill -f 'java -jar delivery-time-service.jar' || true
               nohup java -jar delivery-time-service.jar --spring.profiles.active=dev > delivery-time-service.log 2>&1 &
             fi
-            if [[ "${{ needs.changes.outputs.restaurant }}" == 'true' ]]; then
+            if [[ "${{ needs.changes.outputs.restaurant }}" == 'false' ]]; then
               pkill -f 'java -jar restaurant-service.jar' || true
               nohup java -jar restaurant-service.jar --spring.profiles.active=dev > restaurant-service.log 2>&1 &
             fi
