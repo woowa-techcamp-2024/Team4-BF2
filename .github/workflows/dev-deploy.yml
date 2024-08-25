@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - dev
-      - config/122-deploy-script
 
 jobs:
   build-and-deploy:
