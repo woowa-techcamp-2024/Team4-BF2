@@ -57,7 +57,7 @@ jobs:
           chmod 600 private_key
 
       - name: 가게노출 서비스 배포
-        if: steps.check_changes.outputs.restaurant-exposure == 'false'
+        if: steps.check_changes.outputs.restaurant-exposure == 'true'
         env:
           HOST: ${{ secrets.DEV_EC2_HOST1 }}
           USER: ${{ secrets.DEV_EC2_USER }}
@@ -69,7 +69,7 @@ jobs:
           EOF
 
       - name: 검색 서비스 배포
-        if: steps.check_changes.outputs.search == 'false'
+        if: steps.check_changes.outputs.search == 'true'
         env:
           HOST: ${{ secrets.DEV_EC2_HOST2 }}
           USER: ${{ secrets.DEV_EC2_USER }}
@@ -82,11 +82,11 @@ jobs:
 
       - name: 기타 서비스 배포
         if: |
-          steps.check_changes.outputs.cache == 'false' ||
-          steps.check_changes.outputs.advertisement == 'false' ||
-          steps.check_changes.outputs.coupon == 'false' ||
-          steps.check_changes.outputs.delivery-time == 'false' ||
-          steps.check_changes.outputs.restaurant == 'false'
+          steps.check_changes.outputs.cache == 'true' ||
+          steps.check_changes.outputs.advertisement == 'true' ||
+          steps.check_changes.outputs.coupon == 'true' ||
+          steps.check_changes.outputs.delivery-time == 'true' ||
+          steps.check_changes.outputs.restaurant == 'true'
         env:
           HOST: ${{ secrets.DEV_EC2_HOST3 }}
           USER: ${{ secrets.DEV_EC2_USER }}
