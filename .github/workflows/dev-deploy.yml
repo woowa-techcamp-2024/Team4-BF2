@@ -91,38 +91,38 @@ jobs:
           HOST: ${{ secrets.DEV_EC2_HOST3 }}
           USER: ${{ secrets.DEV_EC2_USER }}
         run: |
-          if [[ "${{ steps.check_changes.outputs.cache }}" == 'false' ]]; then
+          if [[ "${{ steps.check_changes.outputs.cache }}" == 'true' ]]; then
             scp -o StrictHostKeyChecking=no -i private_key service/cache-service/build/libs/*.jar ${USER}@${HOST}:~/cache-service.jar
             ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
               pkill -f 'java -jar cache-service.jar' || true
               nohup java -jar cache-service.jar --spring.profiles.active=dev > cache-service.log 2>&1 &
-            EOF
+          EOF
           fi
-          if [[ "${{ steps.check_changes.outputs.advertisement }}" == 'false' ]]; then
+          if [[ "${{ steps.check_changes.outputs.advertisement }}" == 'true' ]]; then
             scp -o StrictHostKeyChecking=no -i private_key service/advertisement-service/build/libs/*.jar ${USER}@${HOST}:~/advertisement-service.jar
             ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
               pkill -f 'java -jar advertisement-service.jar' || true
               nohup java -jar advertisement-service.jar --spring.profiles.active=dev > advertisement-service.log 2>&1 &
-            EOF
+          EOF
           fi
-          if [[ "${{ steps.check_changes.outputs.coupon }}" == 'false' ]]; then
+          if [[ "${{ steps.check_changes.outputs.coupon }}" == 'true' ]]; then
             scp -o StrictHostKeyChecking=no -i private_key service/coupon-service/build/libs/*.jar ${USER}@${HOST}:~/coupon-service.jar
             ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
               pkill -f 'java -jar coupon-service.jar' || true
               nohup java -jar coupon-service.jar --spring.profiles.active=dev > coupon-service.log 2>&1 &
-            EOF
+          EOF
           fi
-          if [[ "${{ steps.check_changes.outputs.delivery-time }}" == 'false' ]]; then
+          if [[ "${{ steps.check_changes.outputs.delivery-time }}" == 'true' ]]; then
             scp -o StrictHostKeyChecking=no -i private_key service/delivery-time-service/build/libs/*.jar ${USER}@${HOST}:~/delivery-time-service.jar
             ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
               pkill -f 'java -jar delivery-time-service.jar' || true
               nohup java -jar delivery-time-service.jar --spring.profiles.active=dev > delivery-time-service.log 2>&1 &
-            EOF
+          EOF
           fi
-          if [[ "${{ steps.check_changes.outputs.restaurant }}" == 'false' ]]; then
+          if [[ "${{ steps.check_changes.outputs.restaurant }}" == 'true' ]]; then
             scp -o StrictHostKeyChecking=no -i private_key service/restaurant-service/build/libs/*.jar ${USER}@${HOST}:~/restaurant-service.jar
             ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
               pkill -f 'java -jar restaurant-service.jar' || true
               nohup java -jar restaurant-service.jar --spring.profiles.active=dev > restaurant-service.log 2>&1 &
-            EOF
-            fi
+          EOF
+          fi
