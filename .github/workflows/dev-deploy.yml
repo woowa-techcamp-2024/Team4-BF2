@@ -52,6 +52,11 @@ jobs:
         run: chmod +x gradlew
       - name: JAR 빌드
         run: ./gradlew clean build
+      - name: 아티팩트 업로드
+        uses: actions/upload-artifact@v3
+        with:
+          name: jar-files
+          path: service/*/build/libs/*.jar
 
   deploy-restaurant-exposure:
     needs: [ changes, build ]
@@ -59,6 +64,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: JAR 파일 다운로드
+        uses: actions/download-artifact@v3
+        with:
+          name: jar-files
+          path: jars
       - name: 가게노출 서비스 서버로 JAR 전송
         env:
           PRIVATE_KEY: ${{ secrets.DEV_EC2_SSH_KEY }}
@@ -66,15 +76,7 @@ jobs:
           USER: ${{ secrets.DEV_EC2_USER }}
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          
-          echo "Current directory:"
-          pwd
-          echo "Contents of current directory:"
-          ls -R
-          echo "Contents of build directory:"
-          ls -R service/search-service/build/libs/
-          
-          scp -o StrictHostKeyChecking=no -i private_key service/restaurant-exposure-service/build/libs/*.jar ${USER}@${HOST}:~/restaurant-exposure-service.jar
+          scp -o StrictHostKeyChecking=no -i private_key jars/restaurant-exposure-service-*.jar ${USER}@${HOST}:~/restaurant-exposure-service.jar
       - name: 가게노출 서비스 실행
         env:
           PRIVATE_KEY: ${{ secrets.DEV_EC2_SSH_KEY }}
@@ -92,6 +94,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: JAR 파일 다운로드
+        uses: actions/download-artifact@v3
+        with:
+          name: jar-files
+          path: jars
       - name: 검색 서비스 서버로 JAR 전송
         env:
           PRIVATE_KEY: ${{ secrets.DEV_EC2_SSH_KEY }}
@@ -99,15 +106,7 @@ jobs:
           USER: ${{ secrets.DEV_EC2_USER }}
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          
-          echo "Current directory:"
-          pwd
-          echo "Contents of current directory:"
-          ls -R
-          echo "Contents of build directory:"
-          ls -R service/search-service/build/libs/
-          
-          scp -o StrictHostKeyChecking=no -i private_key service/search-service/build/libs/*.jar ${USER}@${HOST}:~/search-service.jar
+          scp -o StrictHostKeyChecking=no -i private_key jars/search-service-*.jar ${USER}@${HOST}:~/search-service.jar
       - name: 검색 서비스 실행
         env:
           PRIVATE_KEY: ${{ secrets.DEV_EC2_SSH_KEY }}
@@ -121,10 +120,15 @@ jobs:
 
   deploy-other-services:
     needs: [ changes, build ]
-    if: ${{ needs.changes.outputs.cache == 'true' || needs.changes.outputs.advertisement == 'true' || needs.changes.outputs.coupon == 'true' || needs.changes.outputs.delivery-time == 'true' || needs.changes.outputs.restaurant == 'true' }}
+    if: ${{ needs.changes.outputs.cache == 'false' || needs.changes.outputs.advertisement == 'true' || needs.changes.outputs.coupon == 'true' || needs.changes.outputs.delivery-time == 'true' || needs.changes.outputs.restaurant == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: JAR 파일 다운로드
+        uses: actions/download-artifact@v3
+        with:
+          name: jar-files
+          path: jars
       - name: 기타 서비스 서버로 JAR 전송
         env:
           PRIVATE_KEY: ${{ secrets.DEV_EC2_SSH_KEY }}
@@ -133,19 +137,19 @@ jobs:
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           if [[ "${{ needs.changes.outputs.cache }}" == 'false' ]]; then
-            scp -o StrictHostKeyChecking=no -i private_key service/cache-service/build/libs/*.jar ${USER}@${HOST}:~/cache-service.jar
+            scp -o StrictHostKeyChecking=no -i private_key jars/cache-service-*.jar ${USER}@${HOST}:~/cache-service.jar
           fi
           if [[ "${{ needs.changes.outputs.advertisement }}" == 'false' ]]; then
-            scp -o StrictHostKeyChecking=no -i private_key service/advertisement-service/build/libs/*.jar ${USER}@${HOST}:~/advertisement-service.jar
+            scp -o StrictHostKeyChecking=no -i private_key jars/advertisement-service-*.jar ${USER}@${HOST}:~/advertisement-service.jar
           fi
           if [[ "${{ needs.changes.outputs.coupon }}" == 'false' ]]; then
-            scp -o StrictHostKeyChecking=no -i private_key service/coupon-service/build/libs/*.jar ${USER}@${HOST}:~/coupon-service.jar
+            scp -o StrictHostKeyChecking=no -i private_key jars/coupon-service-*.jar ${USER}@${HOST}:~/coupon-service.jar
           fi
           if [[ "${{ needs.changes.outputs.delivery-time }}" == 'false' ]]; then
-            scp -o StrictHostKeyChecking=no -i private_key service/delivery-time-service/build/libs/*.jar ${USER}@${HOST}:~/delivery-time-service.jar
+            scp -o StrictHostKeyChecking=no -i private_key jars/delivery-time-service-*.jar ${USER}@${HOST}:~/delivery-time-service.jar
           fi
           if [[ "${{ needs.changes.outputs.restaurant }}" == 'false' ]]; then
-            scp -o StrictHostKeyChecking=no -i private_key service/restaurant-service/build/libs/*.jar ${USER}@${HOST}:~/restaurant-service.jar
+            scp -o StrictHostKeyChecking=no -i private_key jars/restaurant-service-*.jar ${USER}@${HOST}:~/restaurant-service.jar
           fi
       - name: 기타 서비스들 실행
         env:
