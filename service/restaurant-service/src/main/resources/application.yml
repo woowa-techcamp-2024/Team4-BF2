@@ -23,7 +23,10 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: none
-
+  elasticsearch:
+    uris: http://localhost:9200
+    username: elastic
+    password: your_elastic_password
 ---
 spring:
   config:
