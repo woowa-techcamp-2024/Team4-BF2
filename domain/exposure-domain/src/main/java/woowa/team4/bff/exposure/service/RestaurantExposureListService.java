@@ -43,7 +43,7 @@ public class RestaurantExposureListService {
         List<Long> restaurantIds = searchResponse.getIds();
         log.info("[search] restaurantIds: {}", restaurantIds);
         // 비동기 호출
-        cacheApiCaller.sendAsyncMono(new RankingRequest(command.keyword()));
+        cacheApiCaller.sendAsyncMono(new RankingRequest(command.keyword())).subscribe();
         List<ExternalApiResult> externalApiResults = getExternalResult(restaurantIds,
                 command.keyword())
                 .stream()
