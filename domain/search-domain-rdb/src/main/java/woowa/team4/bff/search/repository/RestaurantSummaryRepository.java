@@ -28,4 +28,8 @@ public class RestaurantSummaryRepository {
     public List<RestaurantSummary> findByRestaurantIds(List<Long> restaurantIds){
         return restaurantSummaryEntityRepository.findByIds(restaurantIds);
     }
+
+    public RestaurantSummary findByRestaurantId(Long restaurantIds){
+        return restaurantSummaryEntityRepository.findByIds(List.of(restaurantIds)).getFirst();
+    }
 }

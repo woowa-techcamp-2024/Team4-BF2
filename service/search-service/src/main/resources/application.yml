@@ -53,7 +53,12 @@ spring:
   elasticsearch:
     uris: ${ELASTICSEARCH_URL}
     username: ${ELASTICSEARCH_USERNAME}
-    password: ${ELASTICSEARCH_PASSWORD}
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+    redis:
+      password: ${REDIS_PASSWORD}
 
 external-api:
   search-service:
