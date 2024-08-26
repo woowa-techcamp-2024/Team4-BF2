@@ -24,22 +24,6 @@ spring:
     hibernate:
       ddl-auto: none
 
-  elasticsearch:
-    uris: http://localhost:9200
-    username: elastic
-    password: your_elastic_password
-  data:
-    elasticsearch:
-      repositories:
-        enabled: true
-    redis:
-      host: localhost
-      port: 6379
-
-logging:
-  level:
-    tracer: TRACE
-
 ---
 spring:
   config:
@@ -52,10 +36,6 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
     hibernate:
       ddl-auto: none
   elasticsearch:
@@ -67,6 +47,7 @@ spring:
       repositories:
         enabled: true
 ---
+
 spring:
   config:
     activate:

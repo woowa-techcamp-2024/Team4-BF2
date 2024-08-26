@@ -6,16 +6,15 @@ on:
       - dev
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
 
-      - name: JDK 17 설정
+      - name: JDK 21 설정
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'zulu'
 
       - name: gradlew 실행 권한 부여
@@ -24,22 +23,119 @@ jobs:
       - name: JAR 빌드
         run: ./gradlew clean build
 
-      - name: JAR를 EC2로 전송
-        env:
-          PRIVATE_KEY: ${{ secrets.DEV_EC2_SSH_KEY }}
-          HOST: ${{ secrets.DEV_EC2_HOST }}
-          USER: ${{ secrets.DEV_EC2_USER }}
+      - name: 빌드된 JAR 파일 확인
         run: |
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          scp -o StrictHostKeyChecking=no -i private_key mono/build/libs/*.jar ${USER}@${HOST}:~/app.jar
+          echo "빌드된 JAR 파일 목록:"
+          find service/*/build/libs -name "*.jar"
 
-      - name: EC2에서 JAR 실행
+      - name: 변경된 서비스 확인
+        id: check_changes
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            restaurant-exposure:
+              - 'service/restaurant-exposure-service/**'
+            search:
+              - 'service/search-service/**'
+            cache:
+              - 'service/cache-service/**'
+            advertisement:
+              - 'service/advertisement-service/**'
+            coupon:
+              - 'service/coupon-service/**'
+            delivery-time:
+              - 'service/delivery-time-service/**'
+            restaurant:
+              - 'service/restaurant-service/**'
+
+      - name: SSH 키 설정
         env:
           PRIVATE_KEY: ${{ secrets.DEV_EC2_SSH_KEY }}
-          HOST: ${{ secrets.DEV_EC2_HOST }}
+        run: |
+          echo "$PRIVATE_KEY" > private_key
+          chmod 600 private_key
+
+      - name: 가게노출 서비스 배포
+        if: steps.check_changes.outputs.restaurant-exposure == 'true'
+        env:
+          HOST: ${{ secrets.DEV_EC2_HOST1 }}
           USER: ${{ secrets.DEV_EC2_USER }}
         run: |
+          scp -o StrictHostKeyChecking=no -i private_key service/restaurant-exposure-service/build/libs/*.jar ${USER}@${HOST}:~/restaurant-exposure-service.jar
           ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
-            pkill -f 'java -jar app.jar --spring.profiles.active=dev' || true
-            nohup java -jar app.jar --spring.profiles.active=dev > app.log 2>&1 &
+            pkill -f 'java -jar restaurant-exposure-service.jar' || true
+            rm -rf estaurant-exposure-service.log
+            source ~/.bash_profile
+            nohup java -jar restaurant-exposure-service.jar --spring.profiles.active=dev > restaurant-exposure-service.log 2>&1 &
           EOF
+
+      - name: 검색 서비스 배포
+        if: steps.check_changes.outputs.search == 'true'
+        env:
+          HOST: ${{ secrets.DEV_EC2_HOST2 }}
+          USER: ${{ secrets.DEV_EC2_USER }}
+        run: |
+          scp -o StrictHostKeyChecking=no -i private_key service/search-service/build/libs/*.jar ${USER}@${HOST}:~/search-service.jar
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
+            pkill -f 'java -jar search-service.jar' || true
+            rm -rf search-service.log
+            source ~/.bash_profile
+            nohup java -jar search-service.jar --spring.profiles.active=dev > search-service.log 2>&1 &
+          EOF
+
+      - name: 기타 서비스 배포
+        if: |
+          steps.check_changes.outputs.cache == 'true' ||
+          steps.check_changes.outputs.advertisement == 'true' ||
+          steps.check_changes.outputs.coupon == 'true' ||
+          steps.check_changes.outputs.delivery-time == 'true' ||
+          steps.check_changes.outputs.restaurant == 'true'
+        env:
+          HOST: ${{ secrets.DEV_EC2_HOST3 }}
+          USER: ${{ secrets.DEV_EC2_USER }}
+        run: |
+          if [[ "${{ steps.check_changes.outputs.cache }}" == 'true' ]]; then
+            scp -o StrictHostKeyChecking=no -i private_key service/cache-service/build/libs/*.jar ${USER}@${HOST}:~/cache-service.jar
+            ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
+              pkill -f 'java -jar cache-service.jar' || true
+              rm -rf cache-service.log
+              source ~/.bash_profile
+              nohup java -jar cache-service.jar --spring.profiles.active=dev > cache-service.log 2>&1 &
+          EOF
+          fi
+          if [[ "${{ steps.check_changes.outputs.advertisement }}" == 'true' ]]; then
+            scp -o StrictHostKeyChecking=no -i private_key service/advertisement-service/build/libs/*.jar ${USER}@${HOST}:~/advertisement-service.jar
+            ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
+              pkill -f 'java -jar advertisement-service.jar' || true
+              rm -rf advertisement-service.log
+              source ~/.bash_profile
+              nohup java -jar advertisement-service.jar --spring.profiles.active=dev > advertisement-service.log 2>&1 &
+          EOF
+          fi
+          if [[ "${{ steps.check_changes.outputs.coupon }}" == 'true' ]]; then
+            scp -o StrictHostKeyChecking=no -i private_key service/coupon-service/build/libs/*.jar ${USER}@${HOST}:~/coupon-service.jar
+            ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
+              pkill -f 'java -jar coupon-service.jar' || true
+              rm -rf coupon-service.log
+              source ~/.bash_profile
+              nohup java -jar coupon-service.jar --spring.profiles.active=dev > coupon-service.log 2>&1 &
+          EOF
+          fi
+          if [[ "${{ steps.check_changes.outputs.delivery-time }}" == 'true' ]]; then
+            scp -o StrictHostKeyChecking=no -i private_key service/delivery-time-service/build/libs/*.jar ${USER}@${HOST}:~/delivery-time-service.jar
+            ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
+              pkill -f 'java -jar delivery-time-service.jar' || true
+              rm -rf delivery-time-service.log
+              source ~/.bash_profile
+              nohup java -jar delivery-time-service.jar --spring.profiles.active=dev > delivery-time-service.log 2>&1 &
+          EOF
+          fi
+          if [[ "${{ steps.check_changes.outputs.restaurant }}" == 'true' ]]; then
+            scp -o StrictHostKeyChecking=no -i private_key service/restaurant-service/build/libs/*.jar ${USER}@${HOST}:~/restaurant-service.jar
+            ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
+              pkill -f 'java -jar restaurant-service.jar' || true
+              rm -rf restaurant-service.log
+              source ~/.bash_profile
+              nohup java -jar restaurant-service.jar --spring.profiles.active=dev > restaurant-service.log 2>&1 &
+          EOF
+          fi
