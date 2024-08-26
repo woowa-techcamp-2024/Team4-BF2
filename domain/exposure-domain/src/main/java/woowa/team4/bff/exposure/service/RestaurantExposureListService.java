@@ -1,5 +1,6 @@
 package woowa.team4.bff.exposure.service;
 
+import java.util.Comparator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,10 @@ public class RestaurantExposureListService {
         List<ExternalApiResult> externalApiResults = getExternalResult(restaurantIds,
                 command.keyword())
                 .stream()
+                .sorted(
+                        Comparator.comparing(ExternalApiResult::getAdRank)
+                                .thenComparing(ExternalApiResult::getMin)
+                )
                 .skip(DEFAULT_PAGE_SIZE * command.pageNumber())
                 .limit(DEFAULT_PAGE_SIZE)
                 .toList();
