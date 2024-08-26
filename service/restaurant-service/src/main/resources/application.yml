@@ -58,6 +58,14 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: none
+  elasticsearch:
+    uris: ${ELASTICSEARCH_URL}
+    username: ${ELASTICSEARCH_USERNAME}
+    password: ${ELASTICSEARCH_PASSWORD}
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
 ---
 spring:
   config:

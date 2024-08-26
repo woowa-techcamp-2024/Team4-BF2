@@ -63,6 +63,9 @@ spring:
     username: ${ELASTICSEARCH_USERNAME}
     password: ${ELASTICSEARCH_PASSWORD}
   data:
+    elasticsearch:
+      repositories:
+        enabled: true
     redis:
       password: ${REDIS_PASSWORD}
 
