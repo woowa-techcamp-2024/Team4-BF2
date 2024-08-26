@@ -1,4 +1,4 @@
-package woowa.team4.bff.search.service;
+package woowa.team4.bff.worker.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -15,8 +15,7 @@ import woowa.team4.bff.search.repository.RestaurantMenusRepository;
 
 @Service
 @RequiredArgsConstructor
-public class ElasticsearchIndexRegenerator {
-
+public class ElasticsearchEventHandler {
     private final RestaurantMenusRepository restaurantMenusRepository;
 
     @Async

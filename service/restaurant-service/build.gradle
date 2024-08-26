@@ -39,6 +39,7 @@ dependencies {
     implementation project(":domain:menu-domain-rdb")
     implementation project(":domain:restaurant-domain-rdb")
     implementation project(":domain:review-domain-rdb")
+    implementation project(":worker:worker-es")
 }
 
 tasks.named('test') {
