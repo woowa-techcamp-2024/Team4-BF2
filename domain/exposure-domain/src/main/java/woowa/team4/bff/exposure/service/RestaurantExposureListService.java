@@ -41,7 +41,6 @@ public class RestaurantExposureListService {
         SearchResponse searchResponse = searchApiCaller.send(new SearchRequest(command.keyword(),
                 command.deliveryLocation(), command.pageNumber()));
         List<Long> restaurantIds = searchResponse.getIds();
-        log.info("[search] restaurantIds: {}", restaurantIds);
         // 비동기 호출
         cacheApiCaller.sendAsyncMono(new RankingRequest(command.keyword())).subscribe();
         List<ExternalApiResult> externalApiResults = getExternalResult(restaurantIds,
