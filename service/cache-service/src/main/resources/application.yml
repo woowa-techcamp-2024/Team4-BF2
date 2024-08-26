@@ -31,7 +31,8 @@ spring:
 external-api:
   cache-service:
     endpoints: http://localhost:7001/api/v1/cache
-
+  ranking-service:
+    endpoints: http://localhost:7001/api/v1/ranking
 ---
 spring:
   config:
@@ -53,7 +54,8 @@ spring:
 external-api:
   cache-service:
     endpoints: ${CACHE_SERVICE_ENDPOINT}
-
+  ranking-service:
+    endpoints: ${RANKING_SERVICE_ENDPOINT}
 ---
 
 spring:

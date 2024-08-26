@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import woowa.team4.bff.api.client.cache.config.CacheClientConfiguration;
 import woowa.team4.bff.api.client.cache.request.CacheRequest;
+import woowa.team4.bff.api.client.cache.request.RankingRequest;
 import woowa.team4.bff.api.client.cache.response.CacheResponse;
 import woowa.tema4.bff.api.client.caller.AsyncClientApiCaller;
 import woowa.tema4.bff.api.client.caller.SyncClientApiCaller;
@@ -41,6 +42,16 @@ public class CacheApiCaller {
             CacheRequest cacheRequest) {
         return webClientCaller.post(
                 cacheClientConfiguration.getUrl(),
+                cacheRequest,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+    }
+
+    public Mono<Void> sendAsyncMono(
+            RankingRequest cacheRequest) {
+        return webClientCaller.post(
+                cacheClientConfiguration.getRankingUrl(),
                 cacheRequest,
                 new ParameterizedTypeReference<>() {
                 }
