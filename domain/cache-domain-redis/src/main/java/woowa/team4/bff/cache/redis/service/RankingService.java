@@ -19,32 +19,44 @@ import woowa.team4.bff.cache.redis.domain.SearchRankingResponse;
 public class RankingService {
     private final RedisTemplate<String, String> redisTemplate;
     private final String RANKING_KEY_PREFIX = "search_ranking:";
-    private final long RANKING_EXPIRATION = 2; // 1시간
+    private final long RANKING_EXPIRATION = 30; // 30분
 
-    private String getCurrentHourKey() {
-        return RANKING_KEY_PREFIX + LocalDateTime.now().minusHours(1).format(DateTimeFormatter.ofPattern("yyyyMMddHH"));
+    private String getCurrentIntervalKey() {
+        LocalDateTime now = LocalDateTime.now();
+        int minutes = now.getMinute();
+        // 분의 10분 자리를 남기고 10분을 뺀다
+        int adjustedMinutes = minutes - (minutes % 10);
+        return RANKING_KEY_PREFIX + now.minusMinutes(10)
+                .withMinute(adjustedMinutes)
+                .format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
     }
 
-    private String getNextHourKey() {
-        return RANKING_KEY_PREFIX + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHH"));
+    private String getNextIntervalKey() {
+        LocalDateTime now = LocalDateTime.now();
+        int minutes = now.getMinute();
+        // 분의 10의 자리만 남긴다
+        int adjustedMinutes = minutes - (minutes % 10);
+        return RANKING_KEY_PREFIX + now
+                .withMinute(adjustedMinutes)
+                .format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
     }
 
-    @Scheduled(cron = "0 0 * * * *") // 매시 정각에 실행
+    @Scheduled(cron = "0 0/10 * * * *") // 10분마다 실행
     public void switchRankingKey() {
-        String currentHourKey = getCurrentHourKey();
-        // 현재 시간 키에 대한 만료 시간 설정
-        redisTemplate.expire(currentHourKey, RANKING_EXPIRATION, TimeUnit.HOURS);
+        String currentIntervalKey = getCurrentIntervalKey();
+        // 현재 간격 키에 대한 만료 시간 설정
+        redisTemplate.expire(currentIntervalKey, RANKING_EXPIRATION, TimeUnit.MINUTES);
     }
 
     public void incrementSearchCount(String keyword) {
-        String nextHourKey = getNextHourKey();
-        redisTemplate.opsForZSet().incrementScore(nextHourKey, keyword, 1);
+        String nextIntervalKey = getNextIntervalKey();
+        redisTemplate.opsForZSet().incrementScore(nextIntervalKey, keyword, 1);
     }
 
     public List<SearchRankingResponse> getTop10SearchKeywords() {
-        String currentHourKey = getNextHourKey();
+        String currentIntervalKey = getNextIntervalKey();
         Set<ZSetOperations.TypedTuple<String>> typedTuples =
-                redisTemplate.opsForZSet().reverseRangeWithScores(currentHourKey, 0, 9);
+                redisTemplate.opsForZSet().reverseRangeWithScores(currentIntervalKey, 0, 9);
 
         List<SearchRankingResponse> result = new ArrayList<>();
         int rank = 1;
