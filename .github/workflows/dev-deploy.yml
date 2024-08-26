@@ -58,14 +58,14 @@ jobs:
       - name: 서비스 배포 함수 정의
         run: |
           deploy_service() {
-            local service_name=$1
-            local host=$2
-            local jar_path=$3
-            local user=${{ secrets.DEV_EC2_USER }}
+            local service_name="$1"
+            local host="$2"
+            local jar_path="$3"
+            local user="${{ secrets.DEV_EC2_USER }}"
 
             echo "Deploying $service_name to $host"
-            scp -o StrictHostKeyChecking=no -i private_key $jar_path ${user}@${host}:~/${service_name}.jar
-            ssh -o StrictHostKeyChecking=no -i private_key ${user}@${host} << EOF
+            scp -o StrictHostKeyChecking=no -i private_key "$jar_path" "${user}@${host}:~/${service_name}.jar"
+            ssh -o StrictHostKeyChecking=no -i private_key "${user}@${host}" << EOF
               # 기존 프로세스 종료
               pid=\$(pgrep -f "java -jar ${service_name}.jar")
               if [ ! -z "\$pid" ]; then
@@ -83,14 +83,14 @@ jobs:
                   kill -9 \$pid
                 fi
               fi
-              
+          
               echo "Removing old log file..."
               rm -f ${service_name}.log
-              
+          
               echo "Starting new process..."
               source ~/.bash_profile
               nohup java -jar ${service_name}.jar --spring.profiles.active=dev > ${service_name}.log 2>&1 &
-              
+          
               echo "Waiting for service to start..."
               for i in {1..60}; do
                 if grep -q "Started .* in .*. seconds" ${service_name}.log; then
@@ -102,7 +102,7 @@ jobs:
               done
               echo "Service did not start within the expected time"
               exit 1
-            EOF
+          EOF
           }
 
       - name: 가게노출 서비스 배포
