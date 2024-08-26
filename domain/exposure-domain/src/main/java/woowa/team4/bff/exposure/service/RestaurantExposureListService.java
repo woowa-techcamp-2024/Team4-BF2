@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import woowa.team4.bff.api.client.advertisement.response.AdvertisementResponse;
+import woowa.team4.bff.api.client.cache.caller.CacheApiCaller;
+import woowa.team4.bff.api.client.cache.request.RankingRequest;
 import woowa.team4.bff.api.client.cache.response.CacheResponse;
 import woowa.team4.bff.api.client.caller.SearchApiCaller;
 import woowa.team4.bff.api.client.coupon.response.CouponResponse;
@@ -31,6 +33,7 @@ public class RestaurantExposureListService {
     private static final long DEFAULT_PAGE_SIZE = 25L;
 
     private final SearchApiCaller searchApiCaller;
+    private final CacheApiCaller cacheApiCaller;
     private final AsyncExternalApiCaller asyncExternalApiCaller;
 
     public List<ExposureRestaurantSummary> search(SearchCommand command) {
@@ -39,6 +42,7 @@ public class RestaurantExposureListService {
         List<Long> restaurantIds = searchResponse.getIds();
         log.info("[search] restaurantIds: {}", restaurantIds);
         // 비동기 호출
+        cacheApiCaller.sendAsyncMono(new RankingRequest(command.keyword()));
         List<ExternalApiResult> externalApiResults = getExternalResult(restaurantIds,
                 command.keyword())
                 .stream()

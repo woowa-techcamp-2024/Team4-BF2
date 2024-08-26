@@ -16,7 +16,14 @@ public class CacheClientConfiguration {
     @Value("${external-api.cache-service.endpoints}")
     private String endpoints;
 
+    @Value("${external-api.ranking-service.endpoints}")
+    private String rankingEndpoints;
+
     public String getUrl() {
         return endpoints;
+    }
+
+    public String getRankingUrl() {
+        return rankingEndpoints;
     }
 }

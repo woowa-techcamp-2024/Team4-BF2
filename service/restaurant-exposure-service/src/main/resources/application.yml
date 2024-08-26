@@ -37,6 +37,8 @@ external-api:
     endpoints: http://localhost:8083/api/v1/deliveries
   cache-service:
     endpoints: http://localhost:7001/api/v1/cache
+  ranking-service:
+    endpoints: http://localhost:7001/api/v1/ranking
   restaurant-service:
     endpoints: http://localhost:7002/api/v1/restaurant
   search-service:
@@ -66,6 +68,8 @@ external-api:
     endpoints: ${DELIVERY_SERVICE_ENDPOINT}
   cache-service:
     endpoints: ${CACHE_SERVICE_ENDPOINT}
+  ranking-service:
+    endpoints: ${RANKING_SERVICE_ENDPOINT}
   restaurant-service:
     endpoints: ${RESTAURANT_SERVICE_ENDPOINT}
   search-service:
