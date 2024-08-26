@@ -3,6 +3,8 @@ package woowa.team4.bff.advertisementservice;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdvertisementController {
 
     private final Random random = new Random();
+    private final ConcurrentHashMap<String, ConcurrentHashMap<Long, AdvertisementResponse>> advertisementCache = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, AtomicInteger> keywordRanks = new ConcurrentHashMap<>();
 
     @PostMapping
     public List<AdvertisementResponse> getAdvertisements(
@@ -31,9 +35,18 @@ public class AdvertisementController {
             throw new RuntimeException(e);
         }
 
+        String keyword = request.getKeyword();
+        ConcurrentHashMap<Long, AdvertisementResponse> keywordCache = advertisementCache.computeIfAbsent(keyword, k -> new ConcurrentHashMap<>());
+        AtomicInteger rank = keywordRanks.computeIfAbsent(keyword, k -> new AtomicInteger(0));
+
         for (Long id : request.getIds()) {
-            int rank = 0;
-            responses.add(new AdvertisementResponse(id, ++rank, random.nextBoolean()));
+            AdvertisementResponse response = keywordCache.computeIfAbsent(id,
+                    key -> {
+                        boolean hasAd = random.nextBoolean();
+                        int adRank = hasAd ? rank.incrementAndGet() : Integer.MAX_VALUE;
+                        return new AdvertisementResponse(key, adRank, hasAd);
+                    });
+            responses.add(response);
         }
 
         return responses;
