@@ -1,5 +1,6 @@
 package woowa.team4.bff.common.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ import woowa.team4.bff.common.utils.ApiUtils.ApiResult;
 /**
  * 전역 예외 처리를 위한 클래스이다. 이 클래스는 애플리케이션에서 발생하는 다양한 예외를 잡아 적절한 HTTP 응답으로 변환한다.
  */
+@Slf4j
 @ControllerAdvice
 public class GeneralExceptionHandler {
 
@@ -65,6 +67,7 @@ public class GeneralExceptionHandler {
     @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class,
             MethodArgumentNotValidException.class})
     public ResponseEntity<?> handleBadRequestException(Exception e) {
+        log.error("잘못된 요청", e);
         if (e instanceof MethodArgumentNotValidException) {
             return newResponse(
                     ((MethodArgumentNotValidException) e).getBindingResult().getAllErrors().get(0)
@@ -115,6 +118,7 @@ public class GeneralExceptionHandler {
      */
     @ExceptionHandler({Exception.class, RuntimeException.class})
     public ResponseEntity<?> handleException(Exception e) {
+        log.error("서버 오류", e);
         return newResponse(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

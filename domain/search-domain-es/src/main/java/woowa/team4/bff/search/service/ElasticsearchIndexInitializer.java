@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import woowa.team4.bff.search.document.RestaurantMenusDocument;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,7 +68,12 @@ public class ElasticsearchIndexInitializer implements CommandLineRunner {
         Map<String, RestaurantMenusDocument> restaurantMap = new HashMap<>();
         CSVParser parser = new CSVParserBuilder().withSeparator(',').withQuoteChar('"').build();
 
-        try (CSVReader reader = new CSVReaderBuilder(new InputStreamReader(getClass().getResourceAsStream("/" + filename)))
+        InputStream resourceStream = getClass().getResourceAsStream("/" + filename);
+        if (resourceStream == null) {
+            log.info("{} 파일이 없습니다. 건너뛸게요!", filename);
+            return restaurantMap;
+        }
+        try (CSVReader reader = new CSVReaderBuilder(new InputStreamReader(resourceStream))
                 .withCSVParser(parser)
                 .build()) {
             String[] line;
@@ -89,7 +95,12 @@ public class ElasticsearchIndexInitializer implements CommandLineRunner {
     private void readMenus(String filename, Map<String, RestaurantMenusDocument> restaurantMap) throws IOException, CsvValidationException {
         CSVParser parser = new CSVParserBuilder().withSeparator(',').withQuoteChar('"').build();
 
-        try (CSVReader reader = new CSVReaderBuilder(new InputStreamReader(getClass().getResourceAsStream("/" + filename)))
+        InputStream resourceStream = getClass().getResourceAsStream("/" + filename);
+        if (resourceStream == null) {
+            log.info("{} 파일이 없습니다. 건너뛸게요!", filename);
+            return;
+        }
+        try (CSVReader reader = new CSVReaderBuilder(new InputStreamReader(resourceStream))
                 .withCSVParser(parser)
                 .build()) {
             String[] line;
@@ -120,6 +131,7 @@ public class ElasticsearchIndexInitializer implements CommandLineRunner {
             if (count % BATCH_SIZE == 0) {
                 elasticsearchOperations.bulkIndex(queries, elasticsearchOperations.getIndexCoordinatesFor(RestaurantMenusDocument.class));
                 queries.clear();
+                log.info("Bulk indexing {} documents", count);
             }
         }
 

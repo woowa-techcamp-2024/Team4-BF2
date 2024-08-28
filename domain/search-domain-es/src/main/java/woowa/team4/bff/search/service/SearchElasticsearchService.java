@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.stereotype.Service;
 import woowa.team4.bff.interfaces.SearchService;
 import woowa.team4.bff.search.document.RestaurantMenusDocument;
@@ -39,6 +40,7 @@ public class SearchElasticsearchService implements SearchService {
                                 .query(nestedQuery -> nestedQuery.match(match -> match.field("menus.menuName").query(keyword))))
                         )))
                 .withSort(sort -> sort.score(score -> score.order(SortOrder.Desc)))
+                .withSourceFilter(FetchSourceFilter.of(new String[]{"restaurantId"}, null))
                 .withPageable(Pageable.ofSize(DEFAULT_MAX_SIZE))
                 .build();
     }
