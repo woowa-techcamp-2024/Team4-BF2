@@ -1,6 +1,11 @@
 package woowa.team4.bff.exposure.service;
 
+import static java.util.stream.Collectors.*;
+
 import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,18 +18,10 @@ import woowa.team4.bff.api.client.caller.SearchApiCaller;
 import woowa.team4.bff.api.client.coupon.response.CouponResponse;
 import woowa.team4.bff.api.client.delivery.response.DeliveryTimeResponse;
 import woowa.team4.bff.api.client.request.SearchRequest;
-import woowa.team4.bff.api.client.response.SearchResponse;
 import woowa.team4.bff.domain.ExposureRestaurantSummary;
 import woowa.team4.bff.exposure.command.SearchCommand;
 import woowa.team4.bff.exposure.external.caller.AsyncExternalApiCaller;
 import woowa.team4.bff.exposure.external.result.ExternalApiResult;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 @Slf4j
 @Service
@@ -37,29 +34,31 @@ public class RestaurantExposureListService {
     private final CacheApiCaller cacheApiCaller;
     private final AsyncExternalApiCaller asyncExternalApiCaller;
 
-    public List<ExposureRestaurantSummary> search(SearchCommand command) {
-        SearchResponse searchResponse = searchApiCaller.send(new SearchRequest(command.keyword(),
-                command.deliveryLocation(), command.pageNumber()));
-        List<Long> restaurantIds = searchResponse.getIds();
-        // 비동기 호출
-        cacheApiCaller.sendAsyncMono(new RankingRequest(command.keyword())).subscribe();
-        List<ExternalApiResult> externalApiResults = getExternalResult(restaurantIds,
-                command.keyword())
-                .stream()
-                .sorted(
-                        Comparator.comparing(ExternalApiResult::getAdRank)
-                                .thenComparing(ExternalApiResult::getMin)
-                )
-                .skip(DEFAULT_PAGE_SIZE * command.pageNumber())
-                .limit(DEFAULT_PAGE_SIZE)
-                .toList();
-
-        return mergeSummariesWithExternalResults(externalApiResults);
+    public Mono<List<ExposureRestaurantSummary>> search(SearchCommand command) {
+        return searchApiCaller.sendAsyncMono(new SearchRequest(command.keyword(),
+                        command.deliveryLocation(), command.pageNumber()))
+                .flatMap(searchResponse -> {
+                    List<Long> restaurantIds = searchResponse.getIds();
+                    // 비동기 호출
+                    cacheApiCaller.sendAsyncMono(new RankingRequest(command.keyword())).subscribe();
+                    return getExternalResult(restaurantIds, command.keyword())
+                            .flatMap(externalApiResults -> Mono.just(externalApiResults
+                                    .stream()
+                                    .sorted(
+                                            Comparator.comparing(ExternalApiResult::getAdRank)
+                                                    .thenComparing(ExternalApiResult::getMin)
+                                    )
+                                    .skip(DEFAULT_PAGE_SIZE * command.pageNumber())
+                                    .limit(DEFAULT_PAGE_SIZE)
+                                    .toList()
+                            ))
+                            .map(this::mergeSummariesWithExternalResults);
+                });
     }
 
-    public List<ExternalApiResult> getExternalResult(
+    public Mono<List<ExternalApiResult>> getExternalResult(
             final List<Long> restaurantIds, final String keyword) {
-        return searchAsynchronouslyWebFlux(restaurantIds, keyword).block();
+        return searchAsynchronouslyWebFlux(restaurantIds, keyword);
     }
 
     /**
@@ -68,7 +67,7 @@ public class RestaurantExposureListService {
      * @param restaurantIds
      */
     public Mono<List<ExternalApiResult>> searchAsynchronouslyWebFlux(List<Long> restaurantIds,
-                                                                     String keyword) {
+            String keyword) {
         // 캐시 외부 API 요청
         Mono<List<CacheResponse>> restaurantSummaryMono = asyncExternalApiCaller
                 .getCacheWebFlux(restaurantIds)
@@ -150,10 +149,14 @@ public class RestaurantExposureListService {
                     return restaurantIds.stream()
                             .map(id -> ExternalApiResult.builder()
                                     .restaurantId(id)
-                                    .restaurantUuid(restaurantSummaryMap.get(id).getRestaurantUuid())
-                                    .restaurantName(restaurantSummaryMap.get(id).getRestaurantName())
-                                    .restaurantThumbnailUrl(restaurantSummaryMap.get(id).getRestaurantThumbnailUrl())
-                                    .minimumOrderAmount(restaurantSummaryMap.get(id).getMinimumOrderAmount())
+                                    .restaurantUuid(
+                                            restaurantSummaryMap.get(id).getRestaurantUuid())
+                                    .restaurantName(
+                                            restaurantSummaryMap.get(id).getRestaurantName())
+                                    .restaurantThumbnailUrl(restaurantSummaryMap.get(id)
+                                            .getRestaurantThumbnailUrl())
+                                    .minimumOrderAmount(
+                                            restaurantSummaryMap.get(id).getMinimumOrderAmount())
                                     .reviewCount(restaurantSummaryMap.get(id).getReviewCount())
                                     .rating(restaurantSummaryMap.get(id).getRating())
                                     .menus(restaurantSummaryMap.get(id).getMenus())
