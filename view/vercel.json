@@ -1,0 +1,20 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/v1/restaurant-summary/cache",
+      "destination": "http://3.34.104.102:8080/api/v1/restaurant-summary/cache"
+    },
+    {
+      "source": "/api/v1/restaurants",
+      "destination": "http://3.38.180.124:7002/api/v1/restaurants"
+    },
+    {
+      "source": "/api/v1/menus/:path*",
+      "destination": "http://3.38.180.124:7002/api/v1/menus/:path*"
+    },
+    {
+      "source": "/api/v1/ranking",
+      "destination": "http://3.38.180.124:7001/api/v1/ranking"
+    }
+  ]
+}
