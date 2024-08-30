@@ -63,9 +63,18 @@ EC2 small 3대, EC2 medium 3대로 평균 **0.3초** 이내의 응답율을 기�
 - 사람들이 사용하지 않는 프로젝트를 만드는 것보다 기술에 초점을 맞추어 프로젝트를 진행하였습니다.
 - 배달의 민족의 다양한 기능 중 사용자들이 주문하기 위해 행하는 첫 동작인 가게 찾기 기능을 구현해보았습니다.
   <br>
-    *
+  *
   *[자세히 보기...](https://github.com/woowa-techcamp-2024/Team4-BF2/wiki/%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EA%B8%B0%ED%9A%8D)
   **
+
+## 📱 화면
+
+![BFF-검색화면](https://github.com/user-attachments/assets/2985ced5-7a6f-413f-8b30-25f5928d15dd)
+![BFF-지역검색](https://github.com/user-attachments/assets/0dd653ef-d011-4815-aebf-45a4bf8a8bc3)
+![BFF-무한스크롤](https://github.com/user-attachments/assets/55051dc7-0949-46e3-9aee-40237c6feac3)
+![BFF-인기검색어](https://github.com/user-attachments/assets/60f52ef4-82f2-46da-a685-3b7902332dd8)
+![BFF-가게등록](https://github.com/user-attachments/assets/08c48542-d702-4eba-8c36-f39ad5060a3c)
+![BFF-메뉴등록](https://github.com/user-attachments/assets/b5b3d265-c5db-4919-b6b1-38d856873513)
 
 ## 🛠️ 아키텍처
 
@@ -85,10 +94,12 @@ EC2 small 3대, EC2 medium 3대로 평균 **0.3초** 이내의 응답율을 기�
 </div>
 </details>
 
-### 🔎 검색성능 최대 600배(?) 개선!
+### 🔎 검색성능 최대 6000%(?) 개선!
 
-- MySQL의 Like 연산과 ElasticSearch를 성능을 비교하였습니다.
-- 전체적인 성능을 고려하여 ElasticSearch를 사용하였습니다.
+- MySQL에 Index를 추가하여 MySQL에서 속도 개선을 진행하였습니다.
+- MySQL의 Like 연산과 Elastic Search를 성능을 비교하였습니다.
+- Elastic Search를 사용할 경우 추가적인 리소스를 사용해야된다는 단점이 있었습니다.
+- 검색의 질, 검색의 속도를 고려하여 **Elastic Search**를 최종적으로 사용하였습니다.
   <br>
 
 <details>
@@ -102,6 +113,7 @@ EC2 small 3대, EC2 medium 3대로 평균 **0.3초** 이내의 응답율을 기�
 
 - 가게, 메뉴, 리뷰 서비스에 이벤트를 도입하였습니다.
 - 각각 도메인에 데이터 변경사항이 발생하면, 이벤트를 발행하여 검색 서비스, 캐시 서비스에도 반영되도록 하였습니다.
+- **Spring Application Event publisher**를 사용하였습니다.
   <br>
 
 <details>
@@ -127,8 +139,9 @@ EC2 small 3대, EC2 medium 3대로 평균 **0.3초** 이내의 응답율을 기�
 ### 🗂️ 데이터 베이스 부하를 줄이자: 캐시
 
 - Elastic Search에 검색 기준이 되는 최소 데이터만 보관, 검색에 결과로 id를 반환합니다.
-- 캐시 서비스에서 자주 검색되는 가게 id에 대해 정보들을 보관하였습니다.
-- 캐시 서버는 Redis로 작성되어 있습니다.
+- id를 기준으로 MySQL에 가게 정보를 조회하였습니다.
+- MySQL의 부하를 줄이기 위해 캐시 서비스에서 자주 검색되는 가게 id에 대해 정보들을 보관하였습니다.
+- 캐시는 Redis로 작성되어 있습니다.
   <br>
 
 <details>
@@ -150,7 +163,7 @@ EC2 small 3대, EC2 medium 3대로 평균 **0.3초** 이내의 응답율을 기�
 <summary>자세히 보기</summary>
 <div markdown="1">
 <img width="1127" alt="스크린샷 2024-08-29 오후 9 49 46" src="https://github.com/user-attachments/assets/9c7adcd2-f502-4c61-8beb-a4f570dcc918">
-<img width="1126" alt="스크린샷 2024-08-29 오후 9 50 21" src="https://github.com/user-attachments/assets/5de89475-a790-409a-a704-a1ee822dba5d">
+<img width="1126" alt="스크린샷 2024-08-30 오전 10 25 43" src="https://github.com/user-attachments/assets/c91ba9e5-f0bf-498d-b006-08633c8d8293">
 <img width="1126" alt="스크린샷 2024-08-29 오후 9 50 55" src="https://github.com/user-attachments/assets/e4afc0b0-f19f-4165-b75c-d9cca5235733">
 </div>
 </details>
